@@ -18,5 +18,5 @@ void LaunchWebsite()
 
 void LaunchEmail()
 {
-	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"mailto:chaz@brokenzipper.com?subject=The%20Cheat%20Feedback"]];
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"mailto:thecheat@brokenzipper.com?subject=The%20Cheat%20Feedback"]];
 }

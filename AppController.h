@@ -54,7 +54,10 @@
 - (IBAction)showNetTrafficWindow:(id)sender;
 
 - (IBAction)launchHelpFile:(id)sender;
+- (IBAction)launchEmailMenu:(id)sender;
 - (IBAction)launchWebsiteMenu:(id)sender;
+
+- (IBAction)checkForUpdate:(id)sender;
 
 - (NSArray *)serverList;
 

@@ -4,7 +4,7 @@
             ACTIONS = {launchEmailButton = id; launchWebsiteButton = id; }; 
             CLASS = AboutBoxController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {aboutWindow = NSWindow; }; 
+            OUTLETS = {aboutWindow = NSWindow; nameVersionText = NSTextField; }; 
             SUPERCLASS = NSWindowController; 
         }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }

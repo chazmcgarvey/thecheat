@@ -29,7 +29,6 @@
 - (void)windowDidLoad
 {
 	[self initialInterfaceSetup];
-	[self interfaceUpdate];
 }
 
 
@@ -37,14 +36,18 @@
 {
 	[playSoundsButton setState:(TCGlobalPlaySounds)? NSOnState:NSOffState];
 	[windowsOnTopButton setState:(TCGlobalWindowsOnTop)? NSOnState:NSOffState];
+	[updateAutomaticallyButton setState:(TCGlobalUpdateCheck)? NSOnState:NSOffState];
 	[allowRemoteButton setState:(TCGlobalAllowRemote)? NSOnState:NSOffState];
 	[listenPortTextField setIntValue:TCGlobalListenPort];
 	[broadcastNameTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:TCBroadcastNamePref]];
+	[hitsDisplayedTextField setIntValue:TCGlobalHitsDisplayed];
+	
+	[self interfaceUpdate];
 }
 
 - (void)interfaceUpdate
 {
-	if ( TCGlobalAllowRemote )
+	if ( [allowRemoteButton state] )
 	{
 		[listenPortTextField setEnabled:YES];
 		[broadcastNameTextField setEnabled:YES];
@@ -56,7 +59,7 @@
 	}
 }
 
-
+/*
 - (IBAction)playSoundsButton:(id)sender
 {
 	if ( [playSoundsButton state] == NSOnState )
@@ -85,6 +88,20 @@
 	}
 
 	[[NSNotificationCenter defaultCenter] postNotificationName:@"TCWindowsOnTopChanged" object:nil];
+}
+
+- (IBAction)updateAutomaticallyButton:(id)sender
+{
+	if ( [updateAutomaticallyButton state] == NSOnState )
+	{
+		TCGlobalUpdateCheck = YES;
+		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:TCUpdateCheckPref];
+	}
+	else
+	{
+		TCGlobalUpdateCheck = NO;
+		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:TCUpdateCheckPref];
+	}
 }
 
 - (IBAction)allowRemoteButton:(id)sender
@@ -121,6 +138,63 @@
 	[[NSUserDefaults standardUserDefaults] setObject:name forKey:TCBroadcastNamePref];
 
 	[delegate preferenceBroadcastNameChanged:name];
+}
+
+- (IBAction)hitsDisplayedTextField:(id)sender
+{
+	TCGlobalHitsDisplayed = [hitsDisplayedTextField intValue];
+	
+	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:TCGlobalHitsDisplayed] forKey:TCHitsDisplayedPref];
+}
+*/
+
+
+- (IBAction)change:(id)sender
+{
+	[self interfaceUpdate];
+}
+
+
+- (IBAction)revert:(id)sender
+{
+	[self initialInterfaceSetup];
+}
+
+- (IBAction)cancel:(id)sender
+{
+	[self initialInterfaceSetup];
+	[self close];
+}
+
+- (IBAction)save:(id)sender
+{
+	TCGlobalPlaySounds = [playSoundsButton state];
+	[[NSUserDefaults standardUserDefaults] setBool:TCGlobalPlaySounds forKey:TCPlaySoundsPref];
+	
+	// send window information to the delegate so the necessary adjustments can be made
+	[delegate preferenceSetWindowsOnTop:[windowsOnTopButton state]];
+	
+	TCGlobalWindowsOnTop = [windowsOnTopButton state];
+	[[NSUserDefaults standardUserDefaults] setBool:TCGlobalWindowsOnTop forKey:TCWindowsOnTopPref];
+	
+	TCGlobalUpdateCheck = [updateAutomaticallyButton state];
+	[[NSUserDefaults standardUserDefaults] setBool:TCGlobalUpdateCheck forKey:TCUpdateCheckPref];
+	
+	// send server information to the delegate so the server can be updated accordingly
+	[delegate preferenceSetAllowRemote:[allowRemoteButton state] listenPort:[listenPortTextField intValue] broadcastName:[broadcastNameTextField stringValue]];
+	
+	TCGlobalAllowRemote = [allowRemoteButton state];
+	[[NSUserDefaults standardUserDefaults] setBool:TCGlobalAllowRemote forKey:TCAllowRemotePref];
+	
+	TCGlobalListenPort = [listenPortTextField intValue];
+	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:TCGlobalListenPort] forKey:TCListenPortPref];
+	
+	[[NSUserDefaults standardUserDefaults] setObject:[broadcastNameTextField stringValue] forKey:TCBroadcastNamePref];
+	
+	TCGlobalHitsDisplayed = [hitsDisplayedTextField intValue];
+	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:TCGlobalHitsDisplayed] forKey:TCHitsDisplayedPref];
+	
+	[self close];
 }
 
 

@@ -32,9 +32,13 @@
 - (void)initialInterfaceSetup;
 - (void)interfaceUpdate;
 
+- (void)serverSetAllowRemote:(BOOL)allow listenPort:(int)port broadcastName:(NSString *)name;
+
+/*
 - (void)allowRemoteChanged:(BOOL)allow;
 - (void)listenPortChanged:(int)port;
 - (void)broadcastNameChanged:(NSString *)name;
+*/
 
 - (void)connectionListChanged;
 

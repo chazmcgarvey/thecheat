@@ -13,8 +13,13 @@
 
 @protocol PreferenceControlling
 
+- (void)preferenceSetWindowsOnTop:(BOOL)windowsOnTop;
+- (void)preferenceSetAllowRemote:(BOOL)allow listenPort:(int)port broadcastName:(NSString *)name;
+
+/*
 - (void)preferenceAllowRemoteChanged:(BOOL)allow;
 - (void)preferenceListenPortChanged:(int)port;
 - (void)preferenceBroadcastNameChanged:(NSString *)name;
+*/
 
 @end

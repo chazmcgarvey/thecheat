@@ -14,6 +14,7 @@
 @interface AboutBoxController : NSWindowController
 {
 	IBOutlet NSWindow		*aboutWindow;
+	IBOutlet NSTextField	*nameVersionText;
 }
 
 - (IBAction)launchWebsiteButton:(id)sender;

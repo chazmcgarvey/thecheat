@@ -12,6 +12,8 @@
 
 #include "cheat_shared.h"
 
+#import <Chaz/CMUpdateCheck.h>
+
 
 @implementation AboutBoxController
 
@@ -23,6 +25,7 @@
 
 - (void)windowDidLoad
 {
+	[nameVersionText setStringValue:[NSString stringWithFormat:@"%@ %@", [CMUpdateCheck appName], [CMUpdateCheck appVersion]]];
 	[aboutWindow center];
 }
 

@@ -35,10 +35,12 @@
 //104
 		1058C7A6FEA54F5311CA2CBB = {
 			children = (
+				6E90BC2805F7FB9000857F22,
 				1058C7A7FEA54F5311CA2CBB,
 			);
 			isa = PBXGroup;
 			name = "Linked Frameworks";
+			path = "";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -58,6 +60,7 @@
 			);
 			isa = PBXGroup;
 			name = "Other Frameworks";
+			path = "";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -116,10 +119,8 @@
 				6ED3E46705192F0C00A80003,
 				2A37F4AFFDCFA73011CA2CEA,
 				2A37F4B8FDCFA73011CA2CEA,
-				2A37F4C3FDCFA73011CA2CEA,
-				6ECC8E600579A3DC00AA179F,
+				6E8EE12505F7EA8100ED3F4F,
 				19C28FB0FE9D524F11CA2CBB,
-				6EF8EC08055A1730008BBE46,
 			);
 			isa = PBXGroup;
 			name = "The Cheat";
@@ -160,7 +161,6 @@
 		};
 		2A37F4AFFDCFA73011CA2CEA = {
 			children = (
-				6ECC8EE60579AE4A00AA179F,
 				32DBCF750370BD2300C91783,
 				2A37F4B0FDCFA73011CA2CEA,
 				6E51A986057330B900506538,
@@ -223,6 +223,7 @@
 		};
 		2A37F4B8FDCFA73011CA2CEA = {
 			children = (
+				6E8DD52805FC4EB600D2C0EA,
 				6E1E43700588275100526509,
 				2A37F4B6FDCFA73011CA2CEA,
 				6E51A97605732B9000506538,
@@ -230,21 +231,10 @@
 				6E0D40B005223D4E00A80003,
 				2A37F4B4FDCFA73011CA2CEA,
 				089C165FFE840EACC02AAC07,
-				6E3309E10575BA9D0093550E,
+				6EF8EC08055A1730008BBE46,
 			);
 			isa = PBXGroup;
 			name = Resources;
-			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		2A37F4C3FDCFA73011CA2CEA = {
-			children = (
-				1058C7A6FEA54F5311CA2CBB,
-				1058C7A8FEA54F5311CA2CBB,
-			);
-			isa = PBXGroup;
-			name = Frameworks;
 			path = "";
 			refType = 4;
 			sourceTree = "<group>";
@@ -516,19 +506,6 @@
 			settings = {
 			};
 		};
-		6E3309E10575BA9D0093550E = {
-			isa = PBXFileReference;
-			lastKnownFileType = image.pdf;
-			path = "Read Me.pdf";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		6E3309E30575BA9D0093550E = {
-			fileRef = 6E3309E10575BA9D0093550E;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		6E3F0D01050D4ACC00A80003 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -673,6 +650,75 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		6E8DD52305FC4EA100D2C0EA = {
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				6E8DD52D05FC4EC100D2C0EA,
+			);
+			isa = PBXCopyFilesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E8DD52805FC4EB600D2C0EA = {
+			isa = PBXFileReference;
+			lastKnownFileType = text.rtf;
+			path = "Read Me.rtf";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		6E8DD52905FC4EB600D2C0EA = {
+			fileRef = 6E8DD52805FC4EB600D2C0EA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		6E8DD52D05FC4EC100D2C0EA = {
+			fileRef = 6E8DD52805FC4EB600D2C0EA;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		6E8EE12505F7EA8100ED3F4F = {
+			children = (
+				1058C7A6FEA54F5311CA2CBB,
+				1058C7A8FEA54F5311CA2CBB,
+			);
+			isa = PBXGroup;
+			name = "Frameworks & Libraries";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		6E90BC2805F7FB9000857F22 = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.framework;
+			name = Chaz.framework;
+			path = /Users/chaz/Projects/Chaz/build/Chaz.framework;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		6E90BC2905F7FB9000857F22 = {
+			fileRef = 6E90BC2805F7FB9000857F22;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		6E90BC3305F7FB9F00857F22 = {
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				6E90BC3A05F7FBFC00857F22,
+			);
+			isa = PBXCopyFilesBuildPhase;
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		6E90BC3A05F7FBFC00857F22 = {
+			fileRef = 6E90BC2805F7FB9000857F22;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		6EAF23070527D7DB00A80003 = {
 			children = (
 				6EAF23080527D7FE00A80003,
@@ -709,44 +755,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		6ECC8E600579A3DC00AA179F = {
-			children = (
-				6ECC8EE40579AE4400AA179F,
-			);
-			isa = PBXGroup;
-			name = Libraries;
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		6ECC8EE40579AE4400AA179F = {
-			isa = PBXFileReference;
-			lastKnownFileType = archive.ar;
-			name = libchaz.a;
-			path = /Users/chaz/Projects/LibChaz/build/libchaz.a;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		6ECC8EE50579AE4400AA179F = {
-			fileRef = 6ECC8EE40579AE4400AA179F;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6ECC8EE60579AE4A00AA179F = {
-			fileEncoding = 30;
-			isa = PBXFileReference;
-			lastKnownFileType = sourcecode.c.h;
-			name = chaz.h;
-			path = /Users/chaz/Projects/LibChaz/build/chaz.h;
-			refType = 0;
-			sourceTree = "<absolute>";
-		};
-		6ECC8EE70579AE4A00AA179F = {
-			fileRef = 6ECC8EE60579AE4A00AA179F;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		6ED3E46305192E2B00A80003 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -779,11 +787,13 @@
 				6EF8EBEE055A1730008BBE46,
 				6EF8EBF7055A1730008BBE46,
 				6EF8EC05055A1730008BBE46,
+				6E90BC3305F7FB9F00857F22,
+				6E8DD52305FC4EA100D2C0EA,
 			);
 			buildRules = (
 			);
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = "";
+				FRAMEWORK_SEARCH_PATHS = /Users/chaz/Projects/Chaz/build;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_ENABLE_ASM_KEYWORD = YES;
 				GCC_ENABLE_CPP_EXCEPTIONS = NO;
@@ -793,9 +803,9 @@
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
 				HEADER_SEARCH_PATHS = "";
-				INFOPLIST_FILE = "Info-The_Cheat__Upgraded_.plist";
+				INFOPLIST_FILE = "Info-The_Cheat.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "\"/Users/chaz/Projects/The Cheat\" /Users/chaz/Projects/LibChaz/build";
+				LIBRARY_SEARCH_PATHS = "\"/Users/chaz/Projects/The Cheat\"";
 				MACOSX_DEPLOYMENT_TARGET = 10.2;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
@@ -838,7 +848,6 @@
 				6EF8EBED055A1730008BBE46,
 				6E51A9800573304C00506538,
 				6E51A98A057330B900506538,
-				6ECC8EE70579AE4A00AA179F,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -966,8 +975,8 @@
 				6EF8EBF3055A1730008BBE46,
 				6EF8EBF4055A1730008BBE46,
 				6E51A97905732B9000506538,
-				6E3309E30575BA9D0093550E,
 				6E1E43710588275100526509,
+				6E8DD52905FC4EB600D2C0EA,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1110,7 +1119,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6EF8EC06055A1730008BBE46,
-				6ECC8EE50579AE4400AA179F,
+				6E90BC2905F7FB9000857F22,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1123,8 +1132,8 @@
 		};
 		6EF8EC08055A1730008BBE46 = {
 			isa = PBXFileReference;
-			lastKnownFileType = text.plist;
-			path = "Info-The_Cheat__Upgraded_.plist";
+			lastKnownFileType = text.plist.xml;
+			path = "Info-The_Cheat.plist";
 			refType = 4;
 			sourceTree = "<group>";
 		};

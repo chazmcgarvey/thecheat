@@ -41,6 +41,7 @@
 
 	NSMutableArray		*searchResults;
 	NSMutableArray		*searchResultsUndone;
+	int					maxSearchResultsAmount;
 }
 
 + (NSConnection *)serverWithDelegate:(id)delegate socket:(int)sock;

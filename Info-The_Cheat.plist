@@ -18,7 +18,7 @@
 	<key>CFBundleExecutable</key>
 	<string>The Cheat</string>
 	<key>CFBundleGetInfoString</key>
-	<string>The Cheat 1.0</string>
+	<string>The Cheat 1.1</string>
 	<key>CFBundleIconFile</key>
 	<string>icon.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -30,7 +30,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
+	<string>1.1</string>
 	<key>CFBundleSignature</key>
 	<string>ThCh</string>
 	<key>NSMainNibFile</key>

@@ -2,7 +2,7 @@
     IBClasses = (
         {
             ACTIONS = {
-                launchDebugEmailMenu = id; 
+                checkForUpdate = id; 
                 launchHelpFile = id; 
                 launchWebsiteMenu = id; 
                 showAboutBoxWindow = id; 

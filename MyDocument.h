@@ -43,6 +43,7 @@
 
 	TCaddress			*searchResults;
 	int					searchResultsAmount;
+	int					maxSearchResultsAmount;
 
 	// to allow for connecting on new document
 	BOOL				everConnected;

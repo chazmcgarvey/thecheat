@@ -12,7 +12,8 @@
 
 #import "SearchResults.h"
 
-#include "chaz.h"
+// for comparing floats
+#import <Chaz/Misc.h>
 
 #include <string.h>
 #include <math.h>
@@ -20,6 +21,7 @@
 
 
 // Internal Functions
+int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 //BOOL inline compare_float( float a, float b );
 //BOOL inline compare_double( double a, double b );
 
@@ -276,8 +278,6 @@
 	TCaddress					*results = NULL;
 	int							resultsAmount = 0;
 	
-	NSLog( @"string search: %s", value );
-	
 	for (;;)
 	{
 		if ( (result = vm_region( processTask, &address, &size, VM_REGION_BASIC_INFO, (vm_region_info_t)(&info), &infoCnt, &object_name )) != KERN_SUCCESS )
@@ -303,7 +303,7 @@
 			
 			if ( result == KERN_SUCCESS )
 			{
-				int				i, top = dataLength - vsize;
+				//int				i, top = dataLength - vsize;
 				
 				if ( (results = realloc( results, TCAddressSize*resultsAmount + dataLength )) == NULL )
 				{
@@ -311,13 +311,17 @@
 					exit(0);
 				}
 				
-				for ( i = 0; i < top; i++ )
+				resultsAmount += bmsearch( (char *)value, vsize, (char *)data, dataLength, (void *)address, (void **)((char *)results+TCAddressSize*resultsAmount) );
+				//resultsAmount += TBM( (char *)value, vsize, data, dataLength, (void **)((char *)results+TCAddressSize*resultsAmount) );
+				//resultsAmount += SMITH( data, dataLength, (char *)value, vsize, (void **)((char *)results+TCAddressSize*resultsAmount) );
+				
+				/*for ( i = 0; i < top; i++ )
 				{
 					if ( strncmp( value, data+i, vsize ) == 0 )
 					{
 						results[resultsAmount++] = (TCaddress)address + i;
 					}
-				}
+				}*/
 			}
 			
 			free( data );
@@ -524,7 +528,7 @@
 			data = (int32_t *)malloc( size );
 			dataLength = size;
 			
-			NSLog( @"address: %.8X size: %i", address, size );
+			//NSLog( @"address: %.8X size: %i", address, size );
 			
 			if ( (result = vm_read_overwrite( processTask, address, size, (vm_address_t)data, &dataLength )) != KERN_SUCCESS && result != KERN_PROTECTION_FAILURE )
 			{
@@ -542,7 +546,7 @@
 					NSLog( @"ERROR: could not expand buffer" );
 					exit(0);
 				}
-				
+
 				for ( i = 0; i < top; i++ )
 				{
 					if ( *(data+i) == value )
@@ -563,7 +567,6 @@
 	
 	NSLog( @"found %i of %i", resultsAmount, value );
 }
-
 
 - (void)firstSearchDecimalFloat:(float)value
 {
@@ -616,7 +619,7 @@
 				
 				for ( i = 0; i < top; i++ )
 				{
-					if ( cl_compare_float_eps( *(data+i), value, 0.1f ) == 0 )
+					if ( CMCompareFloatsWithEpsilon( *(data+i), value, 0.1f ) == 0 )
 					{
 						results[resultsAmount++] = (TCaddress)address + i * sizeof(value);
 					}
@@ -688,7 +691,7 @@
 				
 				for ( i = 0; i < top; i++ )
 				{
-					if ( cl_compare_double_eps( *(data+i), value, 0.1 ) == 0 )
+					if ( CMCompareDoublesWithEpsilon( *(data+i), value, 0.1 ) == 0 )
 					{
 						results[resultsAmount++] = (TCaddress)address + i * sizeof(value);
 					}
@@ -712,7 +715,7 @@
 {
 	kern_return_t				result;
 	
-	int8_t						data;
+	char						*data;
 	vm_size_t					dataLength;
 	
 	TCaddress					*results;
@@ -728,7 +731,7 @@
 		return;
 	}
 	
-	if ( (results = (TCaddress *)malloc( TCAddressSize*lastResultsAmount )) == NULL )
+	if ( (data = (char *)malloc( vsize )) == NULL )
 	{
 		NSLog( @"ERROR: could not create buffer" );
 		
@@ -736,15 +739,24 @@
 		return;
 	}
 	
+	if ( (results = (TCaddress *)malloc( TCAddressSize*lastResultsAmount )) == NULL )
+	{
+		NSLog( @"ERROR: could not create buffer" );
+		
+		[self sendError:@"The server cancelled the search because it ran out of memory." fatal:NO];
+		free( data );
+		return;
+	}
+	
 	for ( i = 0; i < lastResultsAmount; i++ )
 	{
 		TCaddress		address = lastResultsData[i];
 		
-		dataLength = sizeof(data);
+		//dataLength = sizeof(data);
 		
-		if ( (result = vm_read_overwrite( processTask, address, sizeof(data), (vm_address_t)(&data), &dataLength )) == KERN_SUCCESS )
+		if ( (result = vm_read_overwrite( processTask, address, vsize, (vm_address_t)(data), &dataLength )) == KERN_SUCCESS )
 		{
-			if ( data == value[0] )
+			if ( memcmp( data, value, dataLength ) == 0 )
 			{
 				results[resultsAmount++] = address;
 			}
@@ -761,6 +773,8 @@
 	
 	realloc( results, TCAddressSize*resultsAmount );
 	[searchResults addObject:[SearchResults resultsWithType:TYPE_INTEGER size:SIZE_8_BIT data:results amount:resultsAmount]];
+	
+	free( data );
 	
 	NSLog( @"found %i of %i", resultsAmount, value );
 }
@@ -972,7 +986,7 @@
 		
 		if ( (result = vm_read_overwrite( processTask, address, sizeof(data), (vm_address_t)(&data), &dataLength )) == KERN_SUCCESS )
 		{
-			if ( cl_compare_float_eps( data, value, 0.1f ) == 0 )
+			if ( CMCompareFloatsWithEpsilon( data, value, 0.1f ) == 0 )
 			{
 				results[resultsAmount++] = address;
 			}
@@ -1029,7 +1043,7 @@
 		
 		if ( (result = vm_read_overwrite( processTask, address, sizeof(data), (vm_address_t)(&data), &dataLength )) == KERN_SUCCESS )
 		{
-			if ( cl_compare_double_eps( data, value, 0.1 ) == 0 )
+			if ( CMCompareDoublesWithEpsilon( data, value, 0.1 ) == 0 )
 			{
 				results[resultsAmount++] = address;
 			}
@@ -1055,8 +1069,6 @@
 {
 	int					failCount = 0;
 	int					i;
-	
-	NSLog( @"change string: %s", value );
 	
 	for ( i = 0; i < count; i++ )
 	{
@@ -1260,8 +1272,8 @@
 
 	header.checksum = RandomChecksum();
 	header.function = 7;
-	header.size = sizeof(amount) + TCAddressSize*amount;
-	//            AMOUNT           DATA
+	header.size = sizeof(amount) + sizeof(maxSearchResultsAmount) + TCAddressSize*maxSearchResultsAmount;
+	//            AMOUNT           MAX AMOUNT                       DATA
 
 	lengthAfter = length = header.size + sizeof(header);
 
@@ -1275,7 +1287,8 @@
 
 	COPY_TO_BUFFER( ptr, &header, sizeof(header) );
 	COPY_TO_BUFFER( ptr, &amount, sizeof(amount) );
-	COPY_TO_BUFFER( ptr, data, TCAddressSize*amount );
+	COPY_TO_BUFFER( ptr, &maxSearchResultsAmount, sizeof(maxSearchResultsAmount) );
+	COPY_TO_BUFFER( ptr, data, TCAddressSize*maxSearchResultsAmount );
 
 	if ( SendBuffer( sockfd, buffer, &length ) == -1 || lengthAfter != length )
 	{
@@ -1571,6 +1584,8 @@
 
 	COPY_FROM_BUFFER( &type, ptr, sizeof(type) );
 	COPY_FROM_BUFFER( &size, ptr, sizeof(size) );
+	
+	COPY_FROM_BUFFER( &maxSearchResultsAmount, ptr, sizeof(maxSearchResultsAmount) );
 
 	if ( ![searchResults lastObject] )
 	{
@@ -1582,7 +1597,7 @@
 				{
 					case SIZE_8_BIT:
 					{
-						[self firstSearchString8bit:ptr size:(dataSize - (ptr - data))];
+						[self firstSearchString8bit:ptr size:(dataSize - (ptr - data) - 1)];
 					}
 						break;
 				}
@@ -2052,6 +2067,27 @@
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%   Internal Functions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
+
+
+#define ASIZE 256
+int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] )
+{
+	int count = 0;
+	int i, j, k, skip[ASIZE];
+	
+	if( m==0 ) return 0;
+	for( k=0; k<ASIZE; k++ ) skip[k] = m;
+	for( k=0; k<m-1; k++ ) skip[(int)pat[k]] = m-k-1;
+	
+	for( k=m-1; k < n; k += skip[(int)text[k] & (ASIZE-1)] ) {
+		for( j=m-1, i=k; j>=0 && text[i] == pat[j]; j-- ) i--;
+		if( j == (-1) )
+			/* SAVE LOCATION */
+			loc[count++] = (void *)( base+i+1 );
+			//return( text+i+1 );
+	}
+	return count;
+}
 
 /*
 BOOL compare_float( float a, float b )

@@ -41,8 +41,9 @@
 {
 	//[netTrafficWindow setResizeIncrements:NSMakeSize( 1.0, 17.0 )];
 	
-	[self allowRemoteChanged:TCGlobalAllowRemote];
-	[self listenPortChanged:TCGlobalListenPort];
+	[self serverSetAllowRemote:TCGlobalAllowRemote listenPort:TCGlobalListenPort broadcastName:TCGlobalBroadcastName];
+	//[self allowRemoteChanged:TCGlobalAllowRemote];
+	//[self listenPortChanged:TCGlobalListenPort];
 	[self setConnectionCount:[delegate netTrafficConnectionCount]];
 	[serverListTable reloadData];
 }
@@ -71,6 +72,22 @@
 }
 
 
+- (void)serverSetAllowRemote:(BOOL)allow listenPort:(int)port broadcastName:(NSString *)name
+{
+	if ( allow )
+	{
+		[listenPortText setStringValue:[NSString stringWithFormat:@"Listening on port %i.", port]];
+		[broadcastNameText setStringValue:[NSString stringWithFormat:@"Broadcasting service as \"%@.\"", name]];
+	}
+	else
+	{
+		[broadcastNameText setStringValue:@"Not accepting new connections from remote clients."];
+		[listenPortText setStringValue:@"Listening for local connections only."];
+	}
+}
+
+
+/*
 - (void)allowRemoteChanged:(BOOL)allow
 {
 	if ( allow )
@@ -100,6 +117,7 @@
 		[broadcastNameText setStringValue:[NSString stringWithFormat:@"Broadcasting service as \"%@.\"", name]];
 	}
 }
+*/
 
 
 - (void)connectionListChanged

@@ -21,6 +21,8 @@
 
 #import "ServerHolder.h"
 
+#import <Chaz/CMUpdateCheck.h>
+
 
 @implementation AppController
 
@@ -36,16 +38,20 @@
 
 	[defaults setObject:[NSNumber numberWithBool:TCGlobalPlaySounds] forKey:TCPlaySoundsPref];
 	[defaults setObject:[NSNumber numberWithBool:TCGlobalWindowsOnTop] forKey:TCWindowsOnTopPref];
+	[defaults setObject:[NSNumber numberWithBool:TCGlobalUpdateCheck] forKey:TCUpdateCheckPref];
 	[defaults setObject:[NSNumber numberWithBool:TCGlobalAllowRemote] forKey:TCAllowRemotePref];
 	[defaults setObject:[NSNumber numberWithInt:TCGlobalListenPort] forKey:TCListenPortPref];
 	[defaults setObject:[NSString stringWithFormat:@"%@'s Computer", NSFullUserName()] forKey:TCBroadcastNamePref];
+	[defaults setObject:[NSNumber numberWithInt:TCGlobalHitsDisplayed] forKey:TCHitsDisplayedPref];
 
 	[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
 
-	TCGlobalPlaySounds = [[NSUserDefaults standardUserDefaults] integerForKey:TCPlaySoundsPref];
-	TCGlobalWindowsOnTop = [[NSUserDefaults standardUserDefaults] integerForKey:TCWindowsOnTopPref];
-	TCGlobalListenPort = [[NSUserDefaults standardUserDefaults] integerForKey:TCListenPortPref];
+	TCGlobalPlaySounds = [[NSUserDefaults standardUserDefaults] boolForKey:TCPlaySoundsPref];
+	TCGlobalWindowsOnTop = [[NSUserDefaults standardUserDefaults] boolForKey:TCWindowsOnTopPref];
+	TCGlobalUpdateCheck = [[NSUserDefaults standardUserDefaults] boolForKey:TCUpdateCheckPref];
 	TCGlobalAllowRemote = [[NSUserDefaults standardUserDefaults] boolForKey:TCAllowRemotePref];
+	TCGlobalListenPort = [[NSUserDefaults standardUserDefaults] integerForKey:TCListenPortPref];
+	TCGlobalHitsDisplayed = [[NSUserDefaults standardUserDefaults] integerForKey:TCHitsDisplayedPref];
 }
 
 - (id)init
@@ -54,8 +60,9 @@
 	{
 		servers = [[NSMutableArray alloc] init];
 
+		// start the server with saved settings
 		[self listenOnPort:TCGlobalListenPort remote:TCGlobalAllowRemote];
-		[self broadcastWithName:TCGlobalBroadcastName];
+		if ( TCGlobalAllowRemote ) [self broadcastWithName:TCGlobalBroadcastName];
 		
 		// set up the network browser
 		browser = [[NSNetServiceBrowser alloc] init];
@@ -68,6 +75,15 @@
 	}
 
 	return self;
+}
+
+
+- (void)applicationDidFinishLaunching:(NSNotification *)aNotification
+{
+	if ( TCGlobalUpdateCheck )
+	{
+		[CMUpdateCheck checkWithURL:@"http://www.brokenzipper.com/software.plist" verbose:NO];
+	}
 }
 
 
@@ -101,14 +117,11 @@
 
 - (void)broadcastWithName:(NSString *)name
 {
-	if ( TCGlobalAllowRemote )
-	{
-		[self stopBroadcast];
+	[self stopBroadcast];
 		
-		service = [[NSNetService alloc] initWithDomain:@"local." type:@"_cheat._tcp." name:name port:TCGlobalListenPort];
-		[service setDelegate:self];
-		[service publish];
-	}
+	service = [[NSNetService alloc] initWithDomain:@"local." type:@"_cheat._tcp." name:name port:TCGlobalListenPort];
+	[service setDelegate:self];
+	[service publish];
 }
 
 - (void)stopBroadcast
@@ -151,12 +164,23 @@
 - (IBAction)launchHelpFile:(id)sender
 {
 	//[[NSWorkspace sharedWorkspace] openFile:[[NSBundle mainBundle] pathForResource:@"Read Me" ofType:@"html"] withApplication:@"Safari"];
-	[[NSWorkspace sharedWorkspace] openURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Read Me" ofType:@"pdf"]]];
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Read Me" ofType:@"rtf"]]];
+}
+
+- (IBAction)launchEmailMenu:(id)sender
+{
+	LaunchEmail();
 }
 
 - (IBAction)launchWebsiteMenu:(id)sender
 {
 	LaunchWebsite();
+}
+
+
+- (IBAction)checkForUpdate:(id)sender
+{
+	[CMUpdateCheck checkWithURL:@"http://www.brokenzipper.com/software.plist"];
 }
 
 
@@ -187,6 +211,38 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
 
+- (void)preferenceSetWindowsOnTop:(BOOL)windowsOnTop
+{
+	if ( TCGlobalWindowsOnTop != windowsOnTop )
+	{
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"TCWindowsOnTopChanged" object:nil];
+	}
+}
+
+- (void)preferenceSetAllowRemote:(BOOL)allow listenPort:(int)port broadcastName:(NSString *)name
+{
+	if ( TCGlobalAllowRemote != allow || TCGlobalListenPort != port )
+	{
+		[self listenOnPort:port remote:allow];
+	}
+	if ( allow )
+	{
+		if ( !TCGlobalAllowRemote || ![TCGlobalBroadcastName isEqualToString:name] )
+		{
+			[self broadcastWithName:name];
+		}
+	}
+	else
+	{
+		[self stopBroadcast];
+	}
+	[netTrafficController serverSetAllowRemote:allow listenPort:port broadcastName:name];
+	//[netTrafficController allowRemoteChanged:allow];
+	//[netTrafficController listenPortChanged:port];
+	//[netTrafficController broadcastNameChanged:name];
+}
+
+/*
 - (void)preferenceAllowRemoteChanged:(BOOL)allow
 {
 	[self listenOnPort:TCGlobalListenPort remote:allow];
@@ -217,6 +273,7 @@
 
 	[netTrafficController broadcastNameChanged:name];
 }
+*/
 
 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -379,7 +436,7 @@
 	
 	if ( [[errorDict objectForKey:@"NSNetServicesErrorCode"] intValue] == NSNetServicesCollisionError )
 	{
-		[self broadcastWithName:[NSString stringWithFormat:@"%@ %i", TCGlobalBroadcastName, TCGlobalAlternateBroadcastNameCount++]];
+		[self broadcastWithName:[NSString stringWithFormat:@"%@ %i", [sender name], TCGlobalAlternateBroadcastNameCount++]];
 	}
 	else
 	{

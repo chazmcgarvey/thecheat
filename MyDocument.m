@@ -259,6 +259,7 @@ void TCPlaySound( NSString *name );
 	[searchButton setEnabled:NO];
 	[clearSearchButton setEnabled:NO];
 	[self setStatusText:@"Not Connected" duration:0];
+	[statusText setToolTip:@""];
 	[statusBar stopAnimation:self];
 	[addressTable setEnabled:NO];
 	[changeButton setTitle:@"Change..."];
@@ -282,6 +283,7 @@ void TCPlaySound( NSString *name );
 	[self updateSearchButton];
 	[clearSearchButton setEnabled:NO];
 	[self setStatusText:@"Connected" duration:0];
+	[statusText setToolTip:@""];
 	[statusBar stopAnimation:self];
 	[addressTable setEnabled:NO];
 	[changeButton setTitle:@"Change..."];
@@ -304,7 +306,7 @@ void TCPlaySound( NSString *name );
 	[self updateSearchBoxes];
 	[self updateSearchButton];
 	[clearSearchButton setEnabled:YES];
-	if ( searchResultsAmount < TCMaxSearchResults )
+	if ( searchResultsAmount < maxSearchResultsAmount )
 	{
 		if ( searchResultsAmount == 1 )
 		{
@@ -318,10 +320,12 @@ void TCPlaySound( NSString *name );
 		{
 			[self setStatusText:[NSString stringWithFormat:@"Results: %i", searchResultsAmount] duration:0];
 		}
+		[statusText setToolTip:@""];
 	}
 	else
 	{
-		[self setStatusText:[NSString stringWithFormat:@"Results: >%i", TCMaxSearchResults] duration:0];
+		[self setStatusText:[NSString stringWithFormat:@"Results: >%i", maxSearchResultsAmount] duration:0];
+		[statusText setToolTip:[NSString stringWithFormat:@"Results: %i", searchResultsAmount]];
 	}
 	[statusBar stopAnimation:self];
 	[addressTable setEnabled:YES];
@@ -347,6 +351,7 @@ void TCPlaySound( NSString *name );
 	[searchButton setEnabled:NO];
 	[clearSearchButton setEnabled:NO];
 	[self setStatusText:@"Searching..." duration:0];
+	[statusText setToolTip:@""];
 	[statusBar startAnimation:self];
 	[addressTable setEnabled:NO];
 	[changeButton setTitle:@"Change..."];
@@ -396,6 +401,7 @@ void TCPlaySound( NSString *name );
 	[searchButton setEnabled:NO];
 	[clearSearchButton setEnabled:NO];
 	[self setStatusText:@"Changing Later..." duration:0];
+	[statusText setToolTip:@""];
 	[statusBar startAnimation:self];
 	[addressTable setEnabled:NO];
 	[changeButton setTitle:@"Cancel Change"];
@@ -420,6 +426,7 @@ void TCPlaySound( NSString *name );
 	[searchButton setEnabled:NO];
 	[clearSearchButton setEnabled:NO];
 	[self setStatusText:@"Repeating Change..." duration:0];
+	[statusText setToolTip:@""];
 	[statusBar startAnimation:self];
 	[addressTable setEnabled:NO];
 	[changeButton setTitle:@"Stop Change"];
@@ -468,6 +475,7 @@ void TCPlaySound( NSString *name );
 	[searchButton setEnabled:NO];
 	[clearSearchButton setEnabled:NO];
 	[self setStatusText:@"Redoing..." duration:0];
+	[statusText setToolTip:@""];
 	[statusBar startAnimation:self];
 	[addressTable setEnabled:NO];
 	[changeButton setTitle:@"Change..."];
@@ -853,10 +861,11 @@ void TCPlaySound( NSString *name );
 	[self destroyResults];
 
 	COPY_FROM_BUFFER( &searchResultsAmount, ptr, sizeof(searchResultsAmount) );
+	COPY_FROM_BUFFER( &maxSearchResultsAmount, ptr, sizeof(maxSearchResultsAmount) );
 
 	if ( searchResultsAmount > 0 )
 	{
-		int				memSize = TCAddressSize*searchResultsAmount;
+		int				memSize = TCAddressSize*maxSearchResultsAmount;
 		
 		if ( (searchResults = (TCaddress *)malloc( memSize )) == NULL )
 		{
@@ -985,7 +994,7 @@ void TCPlaySound( NSString *name );
 	TCsize			size = [[sizePopup selectedItem] tag];
 	
 	char			*data, *ptr;
-	int				dataSize = sizeof(type) + sizeof(size);
+	int				dataSize = sizeof(type) + sizeof(size) + sizeof(TCGlobalHitsDisplayed);
 	
 	data = (char *)malloc( dataSize );
 	ptr = data;
@@ -993,6 +1002,9 @@ void TCPlaySound( NSString *name );
 	// copy the size and type of the variable.
 	COPY_TO_BUFFER( ptr, &type, sizeof(type) );
 	COPY_TO_BUFFER( ptr, &size, sizeof(size) );
+	
+	// copy the number of results to return.
+	COPY_TO_BUFFER( ptr, &TCGlobalHitsDisplayed, sizeof(TCGlobalHitsDisplayed) );
 	
 	NSLog( @"type: %i, size: %i", type, size );
 	
@@ -1731,7 +1743,7 @@ void TCPlaySound( NSString *name );
 
 - (int)numberOfRowsInTableView:(NSTableView *)table
 {
-	return (searchResultsAmount <= TCMaxSearchResults) ? searchResultsAmount : TCMaxSearchResults;
+	return (searchResultsAmount <= maxSearchResultsAmount) ? searchResultsAmount : maxSearchResultsAmount;
 }
 
 - (id)tableView:(NSTableView *)table objectValueForTableColumn:(NSTableColumn *)column row:(int)row
