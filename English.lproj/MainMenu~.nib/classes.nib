@@ -1,25 +1,72 @@
 {
     IBClasses = (
         {
-            ACTIONS = {changeButton = id; processPopup = id; searchButton = id; typePopup = id; }; 
+            ACTIONS = {
+                launchDebugEmailMenu = id; 
+                launchEmailMenu = id; 
+                launchHelpFile = id; 
+                launchWebsiteMenu = id; 
+                showAboutBoxWindow = id; 
+                showNetTrafficWindow = id; 
+                showPreferenceWindow = id; 
+            }; 
             CLASS = AppController; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {redoMenu = id; undoMenu = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {
+            ACTIONS = {
+                changeButton = id; 
+                disconnectButton = id; 
+                pauseButton = id; 
+                processMenuItem = id; 
+                searchButton = id; 
+                searchUnknownButton = id; 
+                serverMenuItem = id; 
+                serverMenuLocal = id; 
+                sizeMenu16bit = id; 
+                sizeMenu32bit = id; 
+                sizeMenu64bit = id; 
+                sizeMenu8bit = id; 
+                startButton = id; 
+                typeMenuFloat = id; 
+                typeMenuInteger = id; 
+                typeMenuString = id; 
+                typeMenuUnknown = id; 
+            }; 
+            CLASS = MyDocument; 
             LANGUAGE = ObjC; 
             OUTLETS = {
                 addressTable = id; 
                 changeButton = id; 
                 changeTextField = id; 
+                cheatWindow = id; 
+                processMenu = id; 
                 processPopup = id; 
                 searchButton = id; 
+                searchPopup = id; 
                 searchTextField = id; 
+                searchUnknownButton = id; 
+                serverMenu = id; 
+                serverPopup = id; 
+                sizeMenu = id; 
                 sizePopup = id; 
+                startButton = id; 
                 statusBar = id; 
                 statusText = id; 
+                typeMenu = id; 
                 typePopup = id; 
-                window = id; 
+                typeTabs = id; 
+                variableValueText = id; 
             }; 
-            SUPERCLASS = NSObject; 
-        }, 
-        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+            SUPERCLASS = NSDocument; 
+        }
     ); 
     IBVersion = 1; 
 }

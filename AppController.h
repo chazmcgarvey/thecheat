@@ -10,60 +10,47 @@
 
 #import <Cocoa/Cocoa.h>
 
+#import "PreferenceControlling.h"
+#import "NetTrafficControlling.h"
+#import "ListenerDelegate.h"
+#import "ServerDelegate.h"
 
-// constants
-enum
+#include "cheat_globals.h"
+
+
+@class AboutBoxController;
+@class PreferenceController;
+@class NetTrafficController;
+
+
+@interface AppController : NSObject < PreferenceControlling, NetTrafficControlling, ListenerDelegate, ServerDelegate >
 {
-	TYPE_STRING, TYPE_INTEGER, TYPE_FLOAT
-};
+	BOOL					waitingToListen;
+	NSConnection			*connection;
+	int						connectionPort;
+	BOOL					connectionRemote;
+	int						sockfd;
+	NSNetService			*service, *oldService;
 
-enum
-{
-	SIZE_8_BIT, SIZE_16_BIT, SIZE_32_BIT, SIZE_64_BIT
-};
+	NSMutableArray			*servers;
 
-
-@interface AppController : NSObject
-{
-	BOOL			cheating;
-	
-	NSArray			*processList;
-	
-	NSMutableArray	*addressList;
-	BOOL			searching;
-	
-	IBOutlet id		window;
-	IBOutlet id		processPopup;
-	IBOutlet id		searchTextField;
-	IBOutlet id		changeTextField;
-	IBOutlet id		searchButton;
-	IBOutlet id		changeButton;
-	IBOutlet id		typePopup;
-	IBOutlet id		sizePopup;
-	IBOutlet id		statusText;
-	IBOutlet id		statusBar;
-	IBOutlet id		addressTable;
+	AboutBoxController		*aboutBoxController;
+	PreferenceController	*preferenceController;
+	NetTrafficController	*netTrafficController;
 }
 
-- (void)reset;
+- (void)listenOnPort:(int)port remote:(BOOL)remote;
+- (void)stopListener;
 
-- (void)firstSearch:(id)nothing;
-- (void)search:(id)nothing;
+- (void)broadcastWithName:(NSString *)name;
+- (void)stopBroadcast;
 
-- (void)change;
+- (IBAction)showAboutBoxWindow:(id)sender;
+- (IBAction)showPreferenceWindow:(id)sender;
+- (IBAction)showNetTrafficWindow:(id)sender;
 
-- (void)updateProcessPopup;
-- (void)updateTypePopup;
-- (void)updateSizePopup;
-- (void)updateSearchButton;
-- (void)updateChangeButton;
-- (void)updateStatusText;
-
-- (void)rebuildProcessList;
-
-- (IBAction)processPopup:(id)sender;
-- (IBAction)typePopup:(id)sender;
-- (IBAction)searchButton:(id)sender;
-- (IBAction)changeButton:(id)sender;
+- (IBAction)launchHelpFile:(id)sender;
+- (IBAction)launchWebsiteMenu:(id)sender;
+- (IBAction)launchDebugEmailMenu:(id)sender;
 
 @end

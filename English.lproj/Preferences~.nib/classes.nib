@@ -1,0 +1,27 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                allowRemoteButton = id; 
+                broadcastNameTextField = id; 
+                listenPortTextField = id; 
+                playSoundsButton = id; 
+                windowsOnTopButton = id; 
+            }; 
+            CLASS = PreferenceController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                allowRemoteButton = id; 
+                broadcastNameTextField = id; 
+                delegate = id; 
+                listenPortTextField = id; 
+                playSoundsButton = id; 
+                prefsWindow = id; 
+                windowsOnTopButton = id; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}

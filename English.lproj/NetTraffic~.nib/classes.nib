@@ -1,0 +1,21 @@
+{
+    IBClasses = (
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {killConnectionButton = id; }; 
+            CLASS = NetTrafficController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                broadcastNameText = id; 
+                connectionCountText = id; 
+                delegate = id; 
+                killConnectionButton = id; 
+                listenPortText = id; 
+                netTrafficWindow = id; 
+                serverListTable = id; 
+            }; 
+            SUPERCLASS = NSWindowController; 
+        }
+    ); 
+    IBVersion = 1; 
+}
