@@ -21,15 +21,15 @@
 	</dict>
 	<key>IBFramework Version</key>
 	<string>349.0</string>
+	<key>IBLockedObjects</key>
+	<array>
+		<integer>285</integer>
+	</array>
 	<key>IBOldestOS</key>
 	<integer>2</integer>
 	<key>IBOpenObjects</key>
 	<array>
-		<integer>610</integer>
 		<integer>285</integer>
-		<integer>192</integer>
-		<integer>143</integer>
-		<integer>400</integer>
 	</array>
 	<key>IBSystem Version</key>
 	<string>7C107</string>

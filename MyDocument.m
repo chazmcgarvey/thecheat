@@ -302,22 +302,24 @@ void TCPlaySound( NSString *name );
 	lastStatus = status;
 	status = STATUS_CHANGING;
 	
-	[serverPopup setEnabled:NO];
-	[self updatePauseButton];
-	[pauseButton setEnabled:NO];
-	[processPopup setEnabled:NO];
-	[typePopup setEnabled:NO];
-	[sizePopup setEnabled:NO];
-	[searchTextField setEnabled:NO];
-	[searchRadioMatrix setEnabled:NO];
-	[searchButton setEnabled:NO];
-	[clearSearchButton setEnabled:NO];
-	[self setStatusText:@"Changing…" duration:0];
-	[statusBar startAnimation:self];
-	[addressTable setEnabled:NO];
-	[changeButton setEnabled:NO];
-	
-	[[serverMenu itemAtIndex:0] setTitle:@"Disconnect"];
+	if ( lastStatus != STATUS_CHANGING_CONTINUOUSLY )
+	{
+		[serverPopup setEnabled:NO];
+		[self updatePauseButton];
+		[pauseButton setEnabled:NO];
+		[processPopup setEnabled:NO];
+		[typePopup setEnabled:NO];
+		[sizePopup setEnabled:NO];
+		[searchTextField setEnabled:NO];
+		[searchRadioMatrix setEnabled:NO];
+		[searchButton setEnabled:NO];
+		[clearSearchButton setEnabled:NO];
+		[statusBar startAnimation:self];
+		[addressTable setEnabled:NO];
+		[changeButton setEnabled:NO];
+		
+		[[serverMenu itemAtIndex:0] setTitle:@"Disconnect"];
+	}
 }
 
 - (void)setStatusChangingLater
@@ -359,7 +361,7 @@ void TCPlaySound( NSString *name );
 	[searchRadioMatrix setEnabled:NO];
 	[searchButton setEnabled:NO];
 	[clearSearchButton setEnabled:NO];
-	[self setStatusText:@"Repeated Change" duration:0];
+	[self setStatusText:@"Repeating Change…" duration:0];
 	[statusBar startAnimation:self];
 	[addressTable setEnabled:NO];
 	[changeButton setTitle:@"Stop Change"];
@@ -465,30 +467,25 @@ void TCPlaySound( NSString *name );
 
 - (void)setStatusText:(NSString *)msg duration:(NSTimeInterval)seconds color:(NSColor *)color
 {
-	if ( seconds == 0 )
+	if ( statusTextTimer )
 	{
-		[statusText setTextColor:color];
-		[statusText setStringValue:msg];
+		[statusTextTimer invalidate];
+		[statusTextTimer release], statusTextTimer = nil;
 	}
 	else
 	{
-		if ( statusTextTimer )
-		{
-			[statusTextTimer invalidate];
-			[statusTextTimer release];
-		}
-		else
-		{
-			[savedStatusText release];
-			[savedStatusColor release];
-			savedStatusText = [[statusText stringValue] retain];
-			savedStatusColor = [[statusText textColor] retain];
-		}
-		
-		[statusText setTextColor:color];
-		[statusText setStringValue:msg];
+		[savedStatusText release];
+		[savedStatusColor release];
+		savedStatusText = [[statusText stringValue] retain];
+		savedStatusColor = [[statusText textColor] retain];
+	}
+	
+	[statusText setTextColor:color];
+	[statusText setStringValue:msg];
+	
+	if ( seconds != 0.0 )
+	{
 		statusTextTimer = [[NSTimer scheduledTimerWithTimeInterval:seconds target:self selector:@selector(statusTextTimer:) userInfo:nil repeats:NO] retain];
-		
 	}
 }
 
@@ -787,7 +784,7 @@ void TCPlaySound( NSString *name );
 	}
 	
 	[self setStatusToLast];
-	[self setStatusText:@"Search Finished" duration:1.5];
+	//[self setStatusText:@"Search Finished" duration:1.5];
 	[cheatWindow makeFirstResponder:searchTextField];
 }
 
@@ -818,10 +815,16 @@ void TCPlaySound( NSString *name );
 
 - (void)receivedChangeFinished
 {
-	TCPlaySound( @"Tink" );
-	
 	[self setStatusToLast];
-	[self setStatusText:@"Change Finished" duration:1.5];
+
+	if ( status == STATUS_CHANGING_CONTINUOUSLY )
+	{
+		[self setStatusText:@"Change Occured" duration:1.5];
+	}
+	else
+	{
+		TCPlaySound( @"Tink" );
+	}
 }
 
 - (void)receivedError:(NSData *)data
@@ -1287,7 +1290,7 @@ void TCPlaySound( NSString *name );
 	{
 		[self setStatusCheating];
 	}
-	else if ( status = STATUS_CHEATING )
+	else if ( status == STATUS_CHEATING )
 	{
 		[NSApp beginSheet:changeSheet modalForWindow:cheatWindow modalDelegate:self didEndSelector:@selector(changeSheet:returned:context:) contextInfo:NULL];
 		//[NSApp runModalForWindow:changeSheet];

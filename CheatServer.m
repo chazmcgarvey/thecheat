@@ -12,13 +12,16 @@
 
 #import "SearchResults.h"
 
+#include "chaz.h"
+
 #include <string.h>
 #include <math.h>
+#include <errno.h>
 
 
 // Internal Functions
-BOOL inline compare_float( float a, float b );
-BOOL inline compare_double( double a, double b );
+//BOOL inline compare_float( float a, float b );
+//BOOL inline compare_double( double a, double b );
 
 
 @implementation CheatServer
@@ -613,7 +616,7 @@ BOOL inline compare_double( double a, double b );
 				
 				for ( i = 0; i < top; i++ )
 				{
-					if ( compare_float( *(data+i), value ) )
+					if ( cl_compare_float_eps( *(data+i), value, 0.1f ) == 0 )
 					{
 						results[resultsAmount++] = (TCaddress)address + i * sizeof(value);
 					}
@@ -685,7 +688,7 @@ BOOL inline compare_double( double a, double b );
 				
 				for ( i = 0; i < top; i++ )
 				{
-					if ( compare_double( *(data+i), value ) )
+					if ( cl_compare_double_eps( *(data+i), value, 0.1 ) == 0 )
 					{
 						results[resultsAmount++] = (TCaddress)address + i * sizeof(value);
 					}
@@ -969,7 +972,7 @@ BOOL inline compare_double( double a, double b );
 		
 		if ( (result = vm_read_overwrite( processTask, address, sizeof(data), (vm_address_t)(&data), &dataLength )) == KERN_SUCCESS )
 		{
-			if ( compare_float( data, value ) )
+			if ( cl_compare_float_eps( data, value, 0.1f ) == 0 )
 			{
 				results[resultsAmount++] = address;
 			}
@@ -1026,7 +1029,7 @@ BOOL inline compare_double( double a, double b );
 		
 		if ( (result = vm_read_overwrite( processTask, address, sizeof(data), (vm_address_t)(&data), &dataLength )) == KERN_SUCCESS )
 		{
-			if ( compare_double( data, value ) )
+			if ( cl_compare_double_eps( data, value, 0.1 ) == 0 )
 			{
 				results[resultsAmount++] = address;
 			}
@@ -1844,35 +1847,66 @@ BOOL inline compare_double( double a, double b );
 	{
 		int			wait_status;
 		
-		if ( ptrace( PT_ATTACH, processID, 0, 0 ) != -1 )
+		NS_DURING
 		{
-			if ( waitpid( processID, &wait_status, WUNTRACED ) == processID )
+			if ( ptrace( PT_ATTACH, processID, 0, 0 ) != -1 )
 			{
-				if ( WIFSTOPPED(wait_status) )
+				if ( waitpid( processID, &wait_status, WUNTRACED ) == processID )
 				{
-					processPaused = YES;
-					[self sendPauseFinished:YES];
+					if ( WIFSTOPPED(wait_status) )
+					{
+						processPaused = YES;
+						[self sendPauseFinished:YES];
+					}
+					else
+					{
+						NSLog( @"ERROR: process couldn't be paused" );
+						[self sendPauseFinished:NO];
+						[self sendError:@"Could not pause target because of an unknown error." fatal:NO];
+					}
 				}
 				else
 				{
 					NSLog( @"ERROR: process couldn't be paused" );
 					[self sendPauseFinished:NO];
-					[self sendError:@"Process couldn't be paused." fatal:NO];
+					[self sendError:@"Could not pause target because of an unknown error." fatal:NO];
 				}
 			}
 			else
 			{
 				NSLog( @"ERROR: process couldn't be paused" );
 				[self sendPauseFinished:NO];
-				[self sendError:@"Process couldn't be paused." fatal:NO];
+				
+				switch ( errno )
+				{
+					case ESRCH:
+						[self sendError:@"Could not pause target because there is no valid target to pause." fatal:NO];
+						break;
+						
+					case EINVAL:
+						[self sendError:@"Could not pause target because a process cannot pause itself." fatal:NO];
+						break;
+						
+					case EBUSY:
+						[self sendError:@"Could not pause target because the target is being controlled by another instance or application." fatal:NO];
+						break;
+						
+					case EPERM:
+						[self sendError:@"Could not pause target because this type of application cannot be paused." fatal:NO];
+						break;
+						
+					default:
+						[self sendError:@"Could not pause target because of an unknown error." fatal:NO];
+						break;
+				}
 			}
 		}
-		else
+		NS_HANDLER
 		{
-			NSLog( @"ERROR: process couldn't be paused" );
 			[self sendPauseFinished:NO];
-			[self sendError:@"Process couldn't be paused." fatal:NO];
+			[self sendError:[NSString stringWithFormat:@"Could not pause target because an exception (%@) was raised: %@", [localException name], [localException reason]] fatal:NO];
 		}
+		NS_ENDHANDLER
 	}
 	else
 	{
@@ -2019,7 +2053,7 @@ BOOL inline compare_double( double a, double b );
 %%%%%%%%%%%%%%%%%%%%%%   Internal Functions
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-
+/*
 BOOL compare_float( float a, float b )
 {
 	float const		feps = 0.0001f;
@@ -2032,4 +2066,4 @@ BOOL compare_double( double a, double b )
 	double const	deps = 0.0000001;
 	
 	return deps > fabs( a - b );
-}
+}*/

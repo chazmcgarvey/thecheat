@@ -5,24 +5,6 @@
 	};
 	objectVersion = 39;
 	objects = {
-		080E96D9FE201CDB7F000001 = {
-			fileRef = 2A37F4B9FDCFA73011CA2CEA;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		080E96DAFE201CDB7F000001 = {
-			fileRef = 2A37F4B6FDCFA73011CA2CEA;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		080E96DBFE201CDB7F000001 = {
-			fileRef = 2A37F4B4FDCFA73011CA2CEA;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		089C165FFE840EACC02AAC07 = {
 			children = (
 				089C1660FE840EACC02AAC07,
@@ -40,12 +22,6 @@
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		089C1661FE840EACC02AAC07 = {
-			fileRef = 089C165FFE840EACC02AAC07;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 //080
 //081
@@ -85,35 +61,11 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		1058C7A9FEA54F5311CA2CBB = {
-			fileRef = 1058C7A7FEA54F5311CA2CBB;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 //100
 //101
 //102
 //103
 //104
-//170
-//171
-//172
-//173
-//174
-		1758732AFF379DA111CA2CBB = {
-			expectedFileType = wrapper.application;
-			fallbackIsa = PBXFileReference;
-			isa = PBXApplicationReference;
-			path = "The Cheat.app";
-			refType = 3;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-//170
-//171
-//172
-//173
-//174
 //190
 //191
 //192
@@ -121,7 +73,6 @@
 //194
 		19C28FB0FE9D524F11CA2CBB = {
 			children = (
-				1758732AFF379DA111CA2CBB,
 				6EF8EC09055A1730008BBE46,
 			);
 			isa = PBXGroup;
@@ -153,7 +104,6 @@
 			mainGroup = 2A37F4AAFDCFA73011CA2CEA;
 			projectDirPath = "";
 			targets = (
-				2A37F4C6FDCFA73011CA2CEA,
 				6EF8EBD9055A1730008BBE46,
 			);
 		};
@@ -167,6 +117,7 @@
 				2A37F4AFFDCFA73011CA2CEA,
 				2A37F4B8FDCFA73011CA2CEA,
 				2A37F4C3FDCFA73011CA2CEA,
+				6ECC8E600579A3DC00AA179F,
 				19C28FB0FE9D524F11CA2CBB,
 				6EF8EC08055A1730008BBE46,
 			);
@@ -209,6 +160,7 @@
 		};
 		2A37F4AFFDCFA73011CA2CEA = {
 			children = (
+				6ECC8EE60579AE4A00AA179F,
 				32DBCF750370BD2300C91783,
 				2A37F4B0FDCFA73011CA2CEA,
 				6E51A986057330B900506538,
@@ -334,178 +286,6 @@
 			refType = 0;
 			sourceTree = "<absolute>";
 		};
-		2A37F4C6FDCFA73011CA2CEA = {
-			buildPhases = (
-				2A37F4C7FDCFA73011CA2CEA,
-				2A37F4C9FDCFA73011CA2CEA,
-				2A37F4CEFDCFA73011CA2CEA,
-				2A37F4D1FDCFA73011CA2CEA,
-			);
-			buildSettings = {
-				CC = "/usr/bin/gcc-3.3";
-				CPLUSPLUS = "/usr/bin/g++-3.3";
-				FRAMEWORK_SEARCH_PATHS = "";
-				HEADER_SEARCH_PATHS = "";
-				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
-				OPTIMIZATION_CFLAGS = "-O3";
-				OTHER_CFLAGS = "-std=c99";
-				OTHER_LDFLAGS = "";
-				PRECOMPILE_PREFIX_HEADER = YES;
-				PREFIX_HEADER = The_Cheat_Prefix.h;
-				PRODUCT_NAME = "The Cheat";
-				SECTORDER_FLAGS = "";
-				WARNING_CFLAGS = "-Wmost -Wno-four-char-constants -Wno-unknown-pragmas";
-				WRAPPER_EXTENSION = app;
-			};
-			dependencies = (
-			);
-			isa = PBXApplicationTarget;
-			name = "The Cheat";
-			productInstallPath = "$(HOME)/Applications";
-			productName = "The Cheat";
-			productReference = 1758732AFF379DA111CA2CBB;
-			productSettingsXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>
-<!DOCTYPE plist PUBLIC \"-//Apple Computer//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
-<plist version=\"1.0\">
-<dict>
-	<key>CFBundleDevelopmentRegion</key>
-	<string>English</string>
-	<key>CFBundleDocumentTypes</key>
-	<array>
-		<dict>
-			<key>CFBundleTypeName</key>
-			<string>The Cheat</string>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>NSDocumentClass</key>
-			<string>MyDocument</string>
-		</dict>
-	</array>
-	<key>CFBundleExecutable</key>
-	<string>The Cheat</string>
-	<key>CFBundleGetInfoString</key>
-	<string>The Cheat 1.0</string>
-	<key>CFBundleIconFile</key>
-	<string>icon_b.icns</string>
-	<key>CFBundleIdentifier</key>
-	<string>com.brokenzipper.TheCheat</string>
-	<key>CFBundleInfoDictionaryVersion</key>
-	<string>6.0</string>
-	<key>CFBundleName</key>
-	<string>The Cheat</string>
-	<key>CFBundlePackageType</key>
-	<string>APPL</string>
-	<key>CFBundleShortVersionString</key>
-	<string>1.0</string>
-	<key>CFBundleSignature</key>
-	<string>ThCh</string>
-	<key>CFBundleVersion</key>
-	<string>1B02</string>
-	<key>NSMainNibFile</key>
-	<string>MainMenu</string>
-	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
-</dict>
-</plist>
-";
-		};
-		2A37F4C7FDCFA73011CA2CEA = {
-			buildActionMask = 2147483647;
-			files = (
-				32DBCF760370BD2300C91783,
-				2A37F4C8FDCFA73011CA2CEA,
-				6E4E0992050BB21400A80003,
-				6E4E0995050BB21400A80003,
-				6E3F0D03050D4ACC00A80003,
-				6E0BDF7E0511568D00A80003,
-				6ED3E46505192E2B00A80003,
-				6E71F41D051BCCC600A80003,
-				6E146B13051FA42C00A80003,
-				6E0D40AE05223CCE00A80003,
-				6E0D40B6052243D500A80003,
-				6E0D40BA0522449500A80003,
-				6E0D40C205224FD000A80003,
-				6E0D40C605225DA100A80003,
-				6E0D40CC0522815100A80003,
-				6E0D40D00522820D00A80003,
-				6EBCEEE80523E23700A80003,
-				6EAF230A0527D7FE00A80003,
-				6EFB422F052F601400A80003,
-				6E51A97E0573304C00506538,
-				6E51A988057330B900506538,
-			);
-			isa = PBXHeadersBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2A37F4C8FDCFA73011CA2CEA = {
-			fileRef = 2A37F4AEFDCFA73011CA2CEA;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		2A37F4C9FDCFA73011CA2CEA = {
-			buildActionMask = 2147483647;
-			files = (
-				080E96D9FE201CDB7F000001,
-				080E96DAFE201CDB7F000001,
-				080E96DBFE201CDB7F000001,
-				089C1661FE840EACC02AAC07,
-				6E0D40B205223D4E00A80003,
-				6E0D40BE052245E700A80003,
-				6ED02FE8055758FF007B5502,
-				6E51A97805732B9000506538,
-				6E3309E20575BA9D0093550E,
-			);
-			isa = PBXResourcesBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2A37F4CEFDCFA73011CA2CEA = {
-			buildActionMask = 2147483647;
-			files = (
-				2A37F4CFFDCFA73011CA2CEA,
-				2A37F4D0FDCFA73011CA2CEA,
-				6E4E0993050BB21400A80003,
-				6E4E0994050BB21400A80003,
-				6E3F0D04050D4ACC00A80003,
-				6ED3E46605192E2B00A80003,
-				6E71F41E051BCCC600A80003,
-				6E146B14051FA42C00A80003,
-				6E0D40AF05223CCE00A80003,
-				6E0D40B7052243D500A80003,
-				6E0D40BB0522449500A80003,
-				6EAF230B0527D7FE00A80003,
-				6EFB4230052F601400A80003,
-				6E51A97F0573304C00506538,
-				6E51A989057330B900506538,
-			);
-			isa = PBXSourcesBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		2A37F4CFFDCFA73011CA2CEA = {
-			fileRef = 2A37F4ACFDCFA73011CA2CEA;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-				);
-			};
-		};
-		2A37F4D0FDCFA73011CA2CEA = {
-			fileRef = 2A37F4B0FDCFA73011CA2CEA;
-			isa = PBXBuildFile;
-			settings = {
-				ATTRIBUTES = (
-				);
-			};
-		};
-		2A37F4D1FDCFA73011CA2CEA = {
-			buildActionMask = 2147483647;
-			files = (
-				1058C7A9FEA54F5311CA2CBB,
-			);
-			isa = PBXFrameworksBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 //2A0
 //2A1
 //2A2
@@ -523,12 +303,6 @@
 			path = The_Cheat_Prefix.pch;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		32DBCF760370BD2300C91783 = {
-			fileRef = 32DBCF750370BD2300C91783;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 //320
 //321
@@ -585,12 +359,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		6E0BDF7E0511568D00A80003 = {
-			fileRef = 6E0BDF7D0511568D00A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		6E0D40AC05223CCE00A80003 = {
 			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
@@ -606,18 +374,6 @@
 			path = NetTrafficController.m;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		6E0D40AE05223CCE00A80003 = {
-			fileRef = 6E0D40AC05223CCE00A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6E0D40AF05223CCE00A80003 = {
-			fileRef = 6E0D40AD05223CCE00A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		6E0D40B005223D4E00A80003 = {
 			children = (
@@ -636,12 +392,6 @@
 			path = English.lproj/NetTraffic.nib;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		6E0D40B205223D4E00A80003 = {
-			fileRef = 6E0D40B005223D4E00A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		6E0D40B3052243B800A80003 = {
 			children = (
@@ -677,18 +427,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		6E0D40B6052243D500A80003 = {
-			fileRef = 6E0D40B4052243D500A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6E0D40B7052243D500A80003 = {
-			fileRef = 6E0D40B5052243D500A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		6E0D40B80522449500A80003 = {
 			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
@@ -704,18 +442,6 @@
 			path = CheatListener.m;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		6E0D40BA0522449500A80003 = {
-			fileRef = 6E0D40B80522449500A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6E0D40BB0522449500A80003 = {
-			fileRef = 6E0D40B90522449500A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		6E0D40BC052245E700A80003 = {
 			children = (
@@ -734,12 +460,6 @@
 			path = English.lproj/Preferences.nib;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		6E0D40BE052245E700A80003 = {
-			fileRef = 6E0D40BC052245E700A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		6E0D40BF05224F4B00A80003 = {
 			children = (
@@ -762,12 +482,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		6E0D40C205224FD000A80003 = {
-			fileRef = 6E0D40C005224FD000A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		6E0D40C405225DA100A80003 = {
 			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
@@ -775,12 +489,6 @@
 			path = PreferenceControlling.h;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		6E0D40C605225DA100A80003 = {
-			fileRef = 6E0D40C405225DA100A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		6E0D40CA0522815100A80003 = {
 			expectedFileType = sourcecode.c.h;
@@ -790,12 +498,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		6E0D40CC0522815100A80003 = {
-			fileRef = 6E0D40CA0522815100A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		6E0D40CE0522820D00A80003 = {
 			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
@@ -803,12 +505,6 @@
 			path = ClientDelegate.h;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		6E0D40D00522820D00A80003 = {
-			fileRef = 6E0D40CE0522820D00A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		6E146B11051FA42C00A80003 = {
 			expectedFileType = sourcecode.c.h;
@@ -826,30 +522,12 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		6E146B13051FA42C00A80003 = {
-			fileRef = 6E146B11051FA42C00A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6E146B14051FA42C00A80003 = {
-			fileRef = 6E146B12051FA42C00A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		6E3309E10575BA9D0093550E = {
 			expectedFileType = image.pdf;
 			isa = PBXFileReference;
 			path = "Read Me.pdf";
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		6E3309E20575BA9D0093550E = {
-			fileRef = 6E3309E10575BA9D0093550E;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		6E3309E30575BA9D0093550E = {
 			fileRef = 6E3309E10575BA9D0093550E;
@@ -872,18 +550,6 @@
 			path = cheat_net.m;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		6E3F0D03050D4ACC00A80003 = {
-			fileRef = 6E3F0D01050D4ACC00A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6E3F0D04050D4ACC00A80003 = {
-			fileRef = 6E3F0D02050D4ACC00A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		6E4E098C050BB21400A80003 = {
 			expectedFileType = sourcecode.c.h;
@@ -917,30 +583,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		6E4E0992050BB21400A80003 = {
-			fileRef = 6E4E098C050BB21400A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6E4E0993050BB21400A80003 = {
-			fileRef = 6E4E098D050BB21400A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6E4E0994050BB21400A80003 = {
-			fileRef = 6E4E098E050BB21400A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6E4E0995050BB21400A80003 = {
-			fileRef = 6E4E098F050BB21400A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		6E51A97605732B9000506538 = {
 			children = (
 				6E51A97705732B9000506538,
@@ -958,12 +600,6 @@
 			path = English.lproj/AboutBox.nib;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		6E51A97805732B9000506538 = {
-			fileRef = 6E51A97605732B9000506538;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		6E51A97905732B9000506538 = {
 			fileRef = 6E51A97605732B9000506538;
@@ -986,18 +622,6 @@
 			path = AboutBoxController.m;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		6E51A97E0573304C00506538 = {
-			fileRef = 6E51A97C0573304C00506538;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6E51A97F0573304C00506538 = {
-			fileRef = 6E51A97D0573304C00506538;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		6E51A9800573304C00506538 = {
 			fileRef = 6E51A97C0573304C00506538;
@@ -1027,18 +651,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		6E51A988057330B900506538 = {
-			fileRef = 6E51A986057330B900506538;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6E51A989057330B900506538 = {
-			fileRef = 6E51A987057330B900506538;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		6E51A98A057330B900506538 = {
 			fileRef = 6E51A986057330B900506538;
 			isa = PBXBuildFile;
@@ -1066,18 +678,6 @@
 			path = cheat_globals.m;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		6E71F41D051BCCC600A80003 = {
-			fileRef = 6E71F41B051BCCC600A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6E71F41E051BCCC600A80003 = {
-			fileRef = 6E71F41C051BCCC600A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		6EAF23070527D7DB00A80003 = {
 			children = (
@@ -1107,18 +707,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		6EAF230A0527D7FE00A80003 = {
-			fileRef = 6EAF23080527D7FE00A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6EAF230B0527D7FE00A80003 = {
-			fileRef = 6EAF23090527D7FE00A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		6EBCEEE60523E23700A80003 = {
 			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
@@ -1127,8 +715,40 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		6EBCEEE80523E23700A80003 = {
-			fileRef = 6EBCEEE60523E23700A80003;
+		6ECC8E600579A3DC00AA179F = {
+			children = (
+				6ECC8EE40579AE4400AA179F,
+			);
+			isa = PBXGroup;
+			name = Libraries;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		6ECC8EE40579AE4400AA179F = {
+			expectedFileType = archive.ar;
+			isa = PBXFileReference;
+			name = libchaz.a;
+			path = /Users/chaz/Projects/LibChaz/build/libchaz.a;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		6ECC8EE50579AE4400AA179F = {
+			fileRef = 6ECC8EE40579AE4400AA179F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		6ECC8EE60579AE4A00AA179F = {
+			expectedFileType = sourcecode.c.h;
+			fileEncoding = 30;
+			isa = PBXFileReference;
+			name = chaz.h;
+			path = /Users/chaz/Projects/LibChaz/build/chaz.h;
+			refType = 0;
+			sourceTree = "<absolute>";
+		};
+		6ECC8EE70579AE4A00AA179F = {
+			fileRef = 6ECC8EE60579AE4A00AA179F;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -1139,12 +759,6 @@
 			path = icon_b.icns;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		6ED02FE8055758FF007B5502 = {
-			fileRef = 6ED02FE7055758FF007B5502;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		6ED3E46305192E2B00A80003 = {
 			expectedFileType = sourcecode.c.h;
@@ -1161,18 +775,6 @@
 			path = MenuExtras.m;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		6ED3E46505192E2B00A80003 = {
-			fileRef = 6ED3E46305192E2B00A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6ED3E46605192E2B00A80003 = {
-			fileRef = 6ED3E46405192E2B00A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		6ED3E46705192F0C00A80003 = {
 			children = (
@@ -1194,8 +796,6 @@
 			buildRules = (
 			);
 			buildSettings = {
-				CC = "/usr/bin/gcc-3.3";
-				CPLUSPLUS = "/usr/bin/g++-3.3";
 				FRAMEWORK_SEARCH_PATHS = "";
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_ENABLE_ASM_KEYWORD = YES;
@@ -1208,19 +808,20 @@
 				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = "Info-The_Cheat__Upgraded_.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = "";
+				LIBRARY_SEARCH_PATHS = "\"/Users/chaz/Projects/The Cheat\" /Users/chaz/Projects/LibChaz/build";
 				MACOSX_DEPLOYMENT_TARGET = 10.2;
-				OTHER_CFLAGS = "-fasm-blocks";
+				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "The Cheat";
 				SECTORDER_FLAGS = "";
 				WARNING_CFLAGS = "-Wmost";
 				WRAPPER_EXTENSION = app;
+				ZERO_LINK = NO;
 			};
 			dependencies = (
 			);
 			isa = PBXNativeTarget;
-			name = "The Cheat (Upgraded)";
+			name = "The Cheat";
 			productInstallPath = "$(HOME)/Applications";
 			productName = "The Cheat";
 			productReference = 6EF8EC09055A1730008BBE46;
@@ -1250,6 +851,7 @@
 				6EF8EBED055A1730008BBE46,
 				6E51A9800573304C00506538,
 				6E51A98A057330B900506538,
+				6ECC8EE70579AE4A00AA179F,
 			);
 			isa = PBXHeadersBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1534,6 +1136,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6EF8EC06055A1730008BBE46,
+				6ECC8EE50579AE4400AA179F,
 			);
 			isa = PBXFrameworksBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1574,18 +1177,6 @@
 			path = SearchResults.m;
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		6EFB422F052F601400A80003 = {
-			fileRef = 6EFB422D052F601400A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6EFB4230052F601400A80003 = {
-			fileRef = 6EFB422E052F601400A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 	};
 	rootObject = 2A37F4A9FDCFA73011CA2CEA;

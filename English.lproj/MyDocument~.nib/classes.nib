@@ -9,6 +9,7 @@
                 okButton = id; 
                 pauseButton = id; 
                 processMenuItem = id; 
+                recurringChangeButton = id; 
                 redoMenu = id; 
                 searchButton = id; 
                 serverMenuDisconnect = id; 
