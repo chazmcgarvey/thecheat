@@ -1,0 +1,14 @@
+
+// CheatURLHandler.scriptTerminology
+
+{
+	Name = "CheatURLHandler";
+	Description = "Handles cheat:// URLs";
+	
+	Commands = {
+		"GetURL" = {
+			Name = "Get URL";
+			Description = "Launches a new cheat session with a remote server.";
+		};
+	};
+}

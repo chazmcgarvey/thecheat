@@ -1,22 +1,65 @@
 {
     IBClasses = (
+        {
+            ACTIONS = {copy = id; cut = id; delete = id; paste = id; }; 
+            CLASS = BetterTableView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSTableView; 
+        }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
-            ACTIONS = {apply = id; cancel = id; change = id; revert = id; save = id; }; 
-            CLASS = PreferenceController; 
+            ACTIONS = {
+                ibDisplayValuesButton = id; 
+                ibSetAskForSave = id; 
+                ibSetFadeSmoothly = id; 
+                ibSetResultsDisplayed = id; 
+                ibSetValueUpdate = id; 
+                ibStartEditingVarsButton = id; 
+                ibSwitchVariablesButton = id; 
+                ibWindowOrderButton = id; 
+            }; 
+            CLASS = GeneralPrefs; 
             LANGUAGE = ObjC; 
             OUTLETS = {
-                allowRemoteButton = id; 
-                broadcastNameTextField = id; 
-                delegate = id; 
-                hitsDisplayedTextField = id; 
-                listenPortTextField = id; 
-                playSoundsButton = id; 
-                prefsWindow = id; 
-                updateAutomaticallyButton = id; 
-                windowsOnTopButton = id; 
+                ibAskForSaveButton = NSButton; 
+                ibDisplayValuesButton = NSButton; 
+                ibFadeSmoothlyButton = NSButton; 
+                ibResultsDisplayedField = NSTextField; 
+                ibStartEditingVarsButton = NSButton; 
+                ibSwitchVariablesButton = NSButton; 
+                ibValueUpdateField = NSTextField; 
+                ibWindowOrderButton = NSButton; 
             }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {
+            CLASS = PreferenceController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {ibGeneralView = NSView; ibServerView = NSView; ibUpdateCheckView = NSView; }; 
             SUPERCLASS = NSWindowController; 
+        }, 
+        {
+            ACTIONS = {ibSetBroadcast = id; ibSetListenPort = id; ibStartServer = id; }; 
+            CLASS = ServerPrefs; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                ibDefaultPortText = NSTextField; 
+                ibNameField = NSTextField; 
+                ibPortField = NSTextField; 
+                ibSessionTable = NSTableView; 
+                ibStartButton = NSButton; 
+                ibStatusField = StatusTextField; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = StatusTextField; LANGUAGE = ObjC; SUPERCLASS = NSTextField; }, 
+        {
+            ACTIONS = {ibAutoCheckButton = id; ibCheckNowButton = id; }; 
+            CLASS = UpdatePrefs; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {ibAutoCheckButton = NSButton; }; 
+            SUPERCLASS = NSObject; 
         }
     ); 
     IBVersion = 1; 

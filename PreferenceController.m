@@ -1,12 +1,22 @@
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Project:   The Cheat
-//
-// File:      PreferenceController.m
-// Created:   Wed Sep 24 2003
-//
-// Copyright: 2003 Chaz McGarvey.  All rights reserved.
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// **********************************************************************
+// The Cheat - A universal game cheater for Mac OS X
+// (C) 2003-2005 Chaz McGarvey (BrokenZipper)
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 1, or (at your option)
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+// 
 
 #import "PreferenceController.h"
 
@@ -14,103 +24,123 @@
 @implementation PreferenceController
 
 
-- (id)initWithDelegate:(id)del
+- (id)init
 {
 	if ( self = [super initWithWindowNibName:@"Preferences"] )
 	{
 		[self setWindowFrameAutosaveName:@"TCPreferencWindowPosition"];
-		
-		delegate = del;
 	}
-
 	return self;
 }
 
+- (void)dealloc
+{
+	[_toolbar release];
+	[_contentView release];
+	[super dealloc];
+}
+
+
 - (void)windowDidLoad
 {
+	_toolbar = [[NSToolbar alloc] initWithIdentifier:@"TCPreferencesToolbar"];
+	[_toolbar setDelegate:self];
+	[_toolbar setVisible:YES];
+	[[self window] setToolbar:_toolbar];
+	
+	_contentView = [[[self window] contentView] retain];
+	
 	[self initialInterfaceSetup];
 }
 
 
 - (void)initialInterfaceSetup
 {
-	[playSoundsButton setState:(TCGlobalPlaySounds)? NSOnState:NSOffState];
-	[windowsOnTopButton setState:(TCGlobalWindowsOnTop)? NSOnState:NSOffState];
-	[updateAutomaticallyButton setState:(TCGlobalUpdateCheck)? NSOnState:NSOffState];
-	[allowRemoteButton setState:(TCGlobalAllowRemote)? NSOnState:NSOffState];
-	[listenPortTextField setIntValue:TCGlobalListenPort];
-	[broadcastNameTextField setStringValue:[[NSUserDefaults standardUserDefaults] objectForKey:TCBroadcastNamePref]];
-	[hitsDisplayedTextField setIntValue:TCGlobalHitsDisplayed];
-	
-	[self interfaceUpdate];
+	[self chooseGeneral:self];
 }
 
-- (void)interfaceUpdate
+
+- (void)chooseGeneral:(id)object
 {
-	if ( [allowRemoteButton state] )
-	{
-		[listenPortTextField setEnabled:YES];
-		[broadcastNameTextField setEnabled:YES];
-	}
-	else
-	{
-		[listenPortTextField setEnabled:NO];
-		[broadcastNameTextField setEnabled:NO];
+	NSWindow *window = [self window];
+	[self switchToView:ibGeneralView];
+	[window setTitle:@"General"];
+	if ( MacOSXVersion() >= 0x1030 ) {
+		[_toolbar setSelectedItemIdentifier:@"General"];
 	}
 }
 
-
-- (IBAction)change:(id)sender
+- (void)chooseServer:(id)object
 {
-	[self interfaceUpdate];
+	NSWindow *window = [self window];
+	[self switchToView:ibServerView];
+	[window setTitle:@"Server"];
+	if ( MacOSXVersion() >= 0x1030 ) {
+		[_toolbar setSelectedItemIdentifier:@"Server"];
+	}
+}
+
+- (void)chooseUpdate:(id)object
+{
+	NSWindow *window = [self window];
+	[self switchToView:ibUpdateCheckView];
+	[window setTitle:@"Update Check"];
+	if ( MacOSXVersion() >= 0x1030 ) {
+		[_toolbar setSelectedItemIdentifier:@"Update Check"];
+	}
+}
+
+- (void)switchToView:(NSView *)view
+{
+	NSWindow *window = [self window];
+	NSRect frame = [window frame];
+	float xdif, ydif;
+	
+	if ( view == [window contentView] ) {
+		return;
+	}
+	
+	xdif = [view frame].size.width - [[window contentView] frame].size.width;
+	ydif = [view frame].size.height - [[window contentView] frame].size.height;
+	
+	frame.size.width += xdif;
+	frame.size.height += ydif;
+	frame.origin.y -= ydif;
+	
+	// switch to the new view
+	[window setContentView:_contentView];
+	[window setFrame:frame display:YES animate:YES];
+	[window setContentView:view];
+	[window makeFirstResponder:view];
 }
 
 
-- (IBAction)revert:(id)sender
+- (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSString *)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag
 {
-	[self initialInterfaceSetup];
+	NSToolbarItem		*item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
+	
+	[item setLabel:itemIdentifier];
+	[item setPaletteLabel:itemIdentifier];
+	[item setImage:[NSImage imageNamed:itemIdentifier]];
+	[item setTarget:self];
+	[item setAction:NSSelectorFromString( [NSString stringWithFormat:@"choose%@:", itemIdentifier] )];
+	
+    return [item autorelease];
 }
 
-- (IBAction)apply:(id)sender
+- (NSArray *)toolbarAllowedItemIdentifiers:(NSToolbar*)toolbar
 {
-	TCGlobalPlaySounds = [playSoundsButton state];
-	[[NSUserDefaults standardUserDefaults] setBool:TCGlobalPlaySounds forKey:TCPlaySoundsPref];
-	
-	// send window information to the delegate so the necessary adjustments can be made
-	[delegate preferenceSetWindowsOnTop:[windowsOnTopButton state]];
-	
-	TCGlobalWindowsOnTop = [windowsOnTopButton state];
-	[[NSUserDefaults standardUserDefaults] setBool:TCGlobalWindowsOnTop forKey:TCWindowsOnTopPref];
-	
-	TCGlobalUpdateCheck = [updateAutomaticallyButton state];
-	[[NSUserDefaults standardUserDefaults] setBool:TCGlobalUpdateCheck forKey:TCUpdateCheckPref];
-	
-	// send server information to the delegate so the server can be updated accordingly
-	[delegate preferenceSetAllowRemote:[allowRemoteButton state] listenPort:[listenPortTextField intValue] broadcastName:[broadcastNameTextField stringValue]];
-	
-	TCGlobalAllowRemote = [allowRemoteButton state];
-	[[NSUserDefaults standardUserDefaults] setBool:TCGlobalAllowRemote forKey:TCAllowRemotePref];
-	
-	TCGlobalListenPort = [listenPortTextField intValue];
-	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:TCGlobalListenPort] forKey:TCListenPortPref];
-	
-	[[NSUserDefaults standardUserDefaults] setObject:[broadcastNameTextField stringValue] forKey:TCBroadcastNamePref];
-	
-	TCGlobalHitsDisplayed = [hitsDisplayedTextField intValue];
-	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:TCGlobalHitsDisplayed] forKey:TCHitsDisplayedPref];
+	return [NSArray arrayWithObjects:@"General", @"Update", @"Server", nil];
 }
 
-
-- (IBAction)cancel:(id)sender
+- (NSArray *)toolbarDefaultItemIdentifiers:(NSToolbar*)toolbar
 {
-	[self initialInterfaceSetup];
-	[self close];
+	return [NSArray arrayWithObjects:@"General", @"Update", @"Server", nil];
 }
 
-- (IBAction)save:(id)sender
+- (NSArray *)toolbarSelectableItemIdentifiers:(NSToolbar *)toolbar
 {
-	[self apply:self];
-	[self close];
+	return [NSArray arrayWithObjects:@"General", @"Update", @"Server", nil];
 }
 
 

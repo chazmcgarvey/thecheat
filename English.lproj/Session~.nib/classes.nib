@@ -1,5 +1,12 @@
 {
     IBClasses = (
+        {
+            ACTIONS = {switchToFullScreen = id; }; 
+            CLASS = CMOpenGLView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSOpenGLView; 
+        }, 
+        {CLASS = CMStatusView; LANGUAGE = ObjC; SUPERCLASS = NSTextField; }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
             ACTIONS = {
@@ -51,6 +58,57 @@
                 typePopup = NSPopUpButton; 
             }; 
             SUPERCLASS = NSDocument; 
+        }, 
+        {
+            ACTIONS = {
+                cancelButton = id; 
+                changeButton = id; 
+                clearSearchButton = id; 
+                okButton = id; 
+                pauseButton = id; 
+                processMenuItem = id; 
+                recurringChangeButton = id; 
+                redo = id; 
+                searchButton = id; 
+                serverMenuDisconnect = id; 
+                serverMenuItem = id; 
+                serverMenuLocal = id; 
+                sizePopup = id; 
+                typePopup = id; 
+                undo = id; 
+            }; 
+            CLASS = SessionController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                addressTable = NSTableView; 
+                cancelButton = NSButton; 
+                changeButton = NSButton; 
+                changeSecondsCombo = NSComboBox; 
+                changeSheet = NSWindow; 
+                changeTextField = NSTextField; 
+                cheatWindow = NSWindow; 
+                clearSearchButton = NSButton; 
+                decimalSizeMenu = NSMenu; 
+                descriptionText = NSTextField; 
+                integerSizeMenu = NSMenu; 
+                okButton = NSButton; 
+                pauseButton = NSButton; 
+                processMenu = NSMenu; 
+                processPopup = NSPopUpButton; 
+                recurringChangeButton = NSButton; 
+                searchButton = NSButton; 
+                searchRadioMatrix = NSMatrix; 
+                searchTextField = NSTextField; 
+                serverMenu = NSMenu; 
+                serverPopup = NSPopUpButton; 
+                sizePopup = NSPopUpButton; 
+                statusBar = NSProgressIndicator; 
+                statusText = CMStatusView; 
+                stringSizeMenu = NSMenu; 
+                typeMenu = NSMenu; 
+                typePopup = NSPopUpButton; 
+            }; 
+            SUPERCLASS = NSWindowController; 
         }
     ); 
     IBVersion = 1; 

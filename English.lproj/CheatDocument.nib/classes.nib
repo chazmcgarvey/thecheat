@@ -1,0 +1,97 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {copy = id; cut = id; delete = id; paste = id; }; 
+            CLASS = BetterTableView; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSTableView; 
+        }, 
+        {
+            ACTIONS = {
+                ibAddCheatVariable = id; 
+                ibAddSearchVariable = id; 
+                ibCancelDump = id; 
+                ibCancelSearch = id; 
+                ibCheat = id; 
+                ibClearSearch = id; 
+                ibDumpMemory = id; 
+                ibEndCustomServerSheet = id; 
+                ibEndEditVariablesSheet = id; 
+                ibEndPasswordSheet = id; 
+                ibEndPropertiesSheet = id; 
+                ibPauseTarget = id; 
+                ibRedo = id; 
+                ibResumeTarget = id; 
+                ibRunCustomServerSheet = id; 
+                ibRunEditVariablesSheet = id; 
+                ibRunPasswordSheet = id; 
+                ibRunPropertiesSheet = id; 
+                ibSearch = id; 
+                ibSetCheatRepeats = id; 
+                ibSetCustomCheater = id; 
+                ibSetIntegerSign = id; 
+                ibSetLocalCheater = id; 
+                ibSetNoCheater = id; 
+                ibSetOperator = id; 
+                ibSetProcess = id; 
+                ibSetRemoteCheater = id; 
+                ibSetRepeatInterval = id; 
+                ibSetValueUsed = id; 
+                ibSetVariableEnabled = id; 
+                ibSetVariableType = id; 
+                ibStopCheat = id; 
+                ibToggleSearchCheat = id; 
+                ibUndo = id; 
+            }; 
+            CLASS = CheatDocument; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                ibCheatButton = NSButton; 
+                ibCheatContentView = NSView; 
+                ibCheatInfoField = NSTextField; 
+                ibCheatInfoText = NSTextField; 
+                ibCheatRepeatAuxText = NSTextField; 
+                ibCheatRepeatButton = NSButton; 
+                ibCheatRepeatField = NSTextField; 
+                ibCheatVariableTable = NSTableView; 
+                ibCustomServerSheet = NSWindow; 
+                ibEditVariablesSheet = NSWindow; 
+                ibNewValueField = NSTextField; 
+                ibPasswordField = NSTextField; 
+                ibPasswordSheet = NSWindow; 
+                ibPlaceView = NSView; 
+                ibPortField = NSTextField; 
+                ibProcessPopup = NSPopUpButton; 
+                ibPropertiesSheet = NSWindow; 
+                ibSearchButton = NSButton; 
+                ibSearchClearButton = NSButton; 
+                ibSearchContentView = NSView; 
+                ibSearchIntegerSignMatrix = NSMatrix; 
+                ibSearchOperatorPopup = NSPopUpButton; 
+                ibSearchTypePopup = NSPopUpButton; 
+                ibSearchValueField = NSTextField; 
+                ibSearchValueUsedMatrix = NSMatrix; 
+                ibSearchVariableButton = NSButton; 
+                ibSearchVariableTable = VariableTable; 
+                ibServerField = NSTextField; 
+                ibServerPopup = NSPopUpButton; 
+                ibStatusBar = NSProgressIndicator; 
+                ibStatusText = StatusTextField; 
+                ibVariableEnableButton = NSButton; 
+                ibWindow = NSWindow; 
+                ibWindowTitleField = NSTextField; 
+            }; 
+            SUPERCLASS = NSDocument; 
+        }, 
+        {
+            ACTIONS = {fadeToCheatMode = id; fadeToSessionMode = id; }; 
+            CLASS = FirstResponder; 
+            LANGUAGE = ObjC; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = NSObject; LANGUAGE = ObjC; }, 
+        {CLASS = StatusTextField; LANGUAGE = ObjC; SUPERCLASS = NSTextField; }, 
+        {CLASS = VariableTable; LANGUAGE = ObjC; SUPERCLASS = BetterTableView; }
+    ); 
+    IBVersion = 1; 
+}

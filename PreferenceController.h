@@ -1,46 +1,44 @@
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Project:   The Cheat
-//
-// File:      PreferenceController.h
-// Created:   Wed Sep 24 2003
-//
-// Copyright: 2003 Chaz McGarvey.  All rights reserved.
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// **********************************************************************
+// The Cheat - A universal game cheater for Mac OS X
+// (C) 2003-2005 Chaz McGarvey (BrokenZipper)
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 1, or (at your option)
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+// 
 
 #import <Cocoa/Cocoa.h>
-#import <Chaz/Chaz.h>
+#import "ChazLog.h"
 
-#import "PreferenceControlling.h"
-
-#include "cheat_globals.h"
+#include "cheat_global.h"
 
 
 @interface PreferenceController : NSWindowController
 {
-	id				delegate;
+	NSToolbar		*_toolbar;
 	
-	IBOutlet id		prefsWindow;
-	IBOutlet id		playSoundsButton;
-	IBOutlet id		windowsOnTopButton;
-	IBOutlet id		updateAutomaticallyButton;
-	IBOutlet id		allowRemoteButton;
-	IBOutlet id		broadcastNameTextField;
-	IBOutlet id		listenPortTextField;
-	IBOutlet id		hitsDisplayedTextField;
+	NSView			*_contentView;
+	IBOutlet NSView *ibGeneralView;
+	IBOutlet NSView *ibServerView;
+	IBOutlet NSView *ibUpdateCheckView;
 }
 
-- (id)initWithDelegate:(id)del;
+- (void)chooseGeneral:(id)object;
+- (void)chooseServer:(id)object;
+- (void)chooseUpdate:(id)object;
+- (void)switchToView:(NSView *)view;
 
 - (void)initialInterfaceSetup;
-- (void)interfaceUpdate;
-
-- (IBAction)change:(id)sender;
-
-- (IBAction)revert:(id)sender;
-- (IBAction)apply:(id)sender;
-
-- (IBAction)cancel:(id)sender;
-- (IBAction)save:(id)sender;
 
 @end

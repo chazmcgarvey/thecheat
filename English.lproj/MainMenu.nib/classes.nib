@@ -6,9 +6,9 @@
                 launchEmailMenu = id; 
                 launchHelpFile = id; 
                 launchWebsiteMenu = id; 
-                newSessionWindow = id; 
+                newBlankCheatWindow = id; 
+                newSearchWindow = id; 
                 showAboutBoxWindow = id; 
-                showNetTrafficWindow = id; 
                 showPreferenceWindow = id; 
             }; 
             CLASS = AppController; 
@@ -16,7 +16,18 @@
             SUPERCLASS = NSApplication; 
         }, 
         {
-            ACTIONS = {redoMenu = id; undoMenu = id; }; 
+            ACTIONS = {
+                ibAddCheatVariable = id; 
+                ibCancelSearch = id; 
+                ibClearSearch = id; 
+                ibDumpMemory = id; 
+                ibPauseTarget = id; 
+                ibRedo = id; 
+                ibRunEditVariablesSheet = id; 
+                ibRunPropertiesSheet = id; 
+                ibToggleSearchCheat = id; 
+                ibUndo = id; 
+            }; 
             CLASS = FirstResponder; 
             LANGUAGE = ObjC; 
             SUPERCLASS = NSObject; 

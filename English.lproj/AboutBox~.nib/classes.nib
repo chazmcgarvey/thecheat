@@ -1,10 +1,15 @@
 {
     IBClasses = (
         {
-            ACTIONS = {launchEmailButton = id; launchWebsiteButton = id; }; 
+            ACTIONS = {ibEmailButton = id; ibWebsiteButton = id; }; 
             CLASS = AboutBoxController; 
             LANGUAGE = ObjC; 
-            OUTLETS = {aboutWindow = NSWindow; nameVersionText = NSTextField; }; 
+            OUTLETS = {
+                ibDateText = NSTextField; 
+                ibEmailButton = NSButton; 
+                ibNameVersionText = NSTextField; 
+                ibWebsiteButton = NSButton; 
+            }; 
             SUPERCLASS = NSWindowController; 
         }, 
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }

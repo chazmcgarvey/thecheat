@@ -1,106 +1,82 @@
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Project:   The Cheat
-//
-// File:      CheatServer.h
-// Created:   Sun Sep 07 2003
-//
-// Copyright: 2003 Chaz McGarvey.  All rights reserved.
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// **********************************************************************
+// The Cheat - A universal game cheater for Mac OS X
+// (C) 2003-2005 Chaz McGarvey (BrokenZipper)
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 1, or (at your option)
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+// 
 
 #import <Cocoa/Cocoa.h>
-#import <Chaz/Chaz.h>
+#import "ChazLog.h"
 
-#import "ServerDelegate.h"
+#import "MySocket.h"
 
-#include <mach/vm_map.h>
-#include <mach/mach_traps.h>
-
-#include <malloc/malloc.h>
-
-#include <sys/types.h>
-#include <sys/ptrace.h>
-#include <sys/wait.h>
-#include <unistd.h>
-
-#include "cheat_types.h"
-#include "cheat_net.h"
-
-
-@class SearchResults;
+#import "ServerChild.h"
 
 
 @interface CheatServer : NSObject
 {
-	id					rootProxy;
-	int					sockfd;
-
-	pid_t				processID;
-	vm_map_t			processTask;
-
-	BOOL				processPaused;
-
-	NSMutableArray		*searchResults;
-	NSMutableArray		*searchResultsUndone;
-	int					searchResultsAmountDisplayed;
+	MySocket *_socket; // the socket that listens for connections
+	NSNetService *_netService; // for rendezvous broadcasting
+	
+	int _port; // port the socket is listening on
+	NSString *_name; // name the service is being broadcast as
+	
+	NSMutableArray *_children; // the server spawns
+	
+	id _delegate;
 }
 
-+ (NSConnection *)serverWithDelegate:(id)delegate socket:(int)sock;
-+ (void)serverThread:(NSArray *)array;
+// initialization
+- (id)initWithDelegate:(id)delegate;
 
-- (id)initWithRootProxy:(id)proxy;
+// starting and stopping the server
+// it will automatically be stopped on dealloc.
+// pass nil for name to not broadcast.
+- (BOOL)listenOnPort:(int)port broadcast:(NSString *)name;
+- (void)stop;
 
-- (void)handleSocket:(int)sock;
-- (void)run;
+// accessing children
+// children are spawned by the server to handle remote sessions.
+// they are instances of the ServerChild class.
+- (int)childCount;
+- (NSArray *)children;
+- (void)removeChildAtIndex:(unsigned)index;
 
-- (void)setAddress:(NSString *)address;
-- (void)setAction:(NSString *)action;
+// accessors
+- (BOOL)isListening;
+- (NSString *)host;
+- (int)port;
+- (NSString *)broadcast;
 
-- (void)firstSearchString8bit:(char const *)value size:(int)vsize;
-- (void)firstSearchIntegerChar:(int8_t)value;
-- (void)firstSearchIntegerShort:(int16_t)value;
-- (void)firstSearchIntegerLong:(int32_t)value;
-- (void)firstSearchDecimalFloat:(float)value;
-- (void)firstSearchDecimalDouble:(double)value;
-
-- (void)searchString8bit:(char const *)value size:(int)vsize;
-- (void)searchIntegerChar:(int8_t)value;
-- (void)searchIntegerShort:(int16_t)value;
-- (void)searchIntegerLong:(int32_t)value;
-- (void)searchDecimalFloat:(float)value;
-- (void)searchDecimalDouble:(double)value;
-
-- (void)changeString8bit:(char const *)value size:(int)vsize addresses:(TCaddress *)addresses count:(int)count;
-- (void)changeIntegerChar:(int8_t)value addresses:(TCaddress *)addresses count:(int)count;
-- (void)changeIntegerShort:(int16_t)value addresses:(TCaddress *)addresses count:(int)count;
-- (void)changeIntegerLong:(int32_t)value addresses:(TCaddress *)addresses count:(int)count;
-- (void)changeDecimalFloat:(float)value addresses:(TCaddress *)addresses count:(int)count;
-- (void)changeDecimalDouble:(double)value addresses:(TCaddress *)addresses count:(int)count;
-
-- (void)sendProcessList;
-- (void)sendSearchFinished;
-- (void)sendVariableList:(TCaddress const *)data amount:(int)amount;
-- (void)sendChangeFinished;
-- (void)sendError:(NSString *)msg fatal:(BOOL)fatal;
-- (void)sendVariableValue:(u_int32_t)index;
-- (void)sendUndoFinished;
-- (void)sendRedoFinished;
-- (void)sendUndoRedoStatus;
-- (void)sendAppLaunched:(NSDictionary *)appInfo;
-- (void)sendAppQuit:(NSDictionary *)appInfo;
-- (void)sendTargetAppQuit;
-- (void)sendPauseFinished:(BOOL)paused;
-
-- (void)handleClearSearch;
-- (void)handleSearch:(char const *)data size:(int)dataSize;
-- (void)handleChange:(char const *)data size:(int)dataSize;
-- (void)handlePauseTarget;
-- (void)handleUndo;
-- (void)handleRedo;
-- (void)handleSetTargetPID:(char const *)data size:(int)size;
-
-- (void)unpause;
-- (void)setPID:(pid_t)pid;
+- (id)delegate;
+- (void)setDelegate:(id)delegate;
 
 @end
 
+
+@interface NSObject ( CheatServerDelegate )
+
+// when the server dies while running...  would this ever happen?  I doubt it.
+- (void)serverDisconnectedUnexpectedly:(CheatServer *)theServer;
+
+// broadcast failed, this is much more likely to happen.
+// note that the server will continue running.
+- (void)server:(CheatServer *)theServer failedToBroadcastName:(NSString *)theName;
+
+// a connection was made or lost with the server...
+- (void)serverChildrenChanged:(CheatServer *)theServer;
+
+@end

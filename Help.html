@@ -1,0 +1,411 @@
+<html>
+<head>
+
+<style type="text/css">
+<!--
+a:link, a:visited {
+	color: #3333ff;
+	text-decoration: none;
+}
+a:hover {
+	color: #9999ff;
+	text-decoration: none;
+}
+a:active {
+	color: #660000;
+	text-decoration: none;
+}
+
+body {
+	font: 14px Lucida Grande, sans-serif;
+	text-align: justify;
+	color: #000000;
+	background-color: #ffffff;
+	padding: 10px 10px 10px 10px;
+}
+
+p {
+	text-indent: 2em;
+}
+
+hr {
+	color: #999999;
+	border-style: dashed;
+}
+
+code {
+	font: 12px Monaco, monospace;
+	color: #006600;
+}
+
+.ind {
+	margin: 0 0 0 2em;
+}
+
+.header {
+	font-size: 16px;
+	font-weight: bold;
+	text-transform: capitalize;
+	border: 1px solid #CCCCCC;
+	padding: 2px 1em 2px 1em;
+}
+
+.tip {
+	font-size: 12px;
+	background-color: #EEEEEE;
+	border: 1px solid #CCCCCC;
+	padding: 5px 20px 5px 20px;
+	margin: 0px 100px 0px 100px;
+}
+-->
+</style>
+
+</head>
+<body>
+
+<a name="0" />
+<br />
+<div align="center"><img src="icon.icns" width="128" height="128" /></div>
+<div align="right" style="font-size: 12px;">
+<i><b>The Cheat Help File</b><br />Chaz McGarvey<br />22 Febuary, 2005</i>
+</div>
+<br />
+
+<div class="header">Table of Contents</div>
+
+<p><div class="ind"><a href="#1">1. How to get help with The Cheat</a>
+	<div class="ind"><a href="#1-1">1.1 About this file</a></div>
+</div></p>
+<p><div class="ind"><a href="#2">2. What is The Cheat?</a>
+	<div class="ind"><a href="#2-1">2.1 How The Cheat works</a></div>
+	<div class="ind"><a href="#2-2">2.2 Is cheating dangerous?</a></div>
+	<div class="ind"><a href="#2-3">2.3 About the program author</a></div>
+</div></p>
+<p><div class="ind"><a href="#3">3. The fundamentals of cheating</a>
+	<div class="ind"><a href="#3-1">3.1 What is cheating?</a></div>
+	<div class="ind"><a href="#3-2">3.2 What is a variable?</a></div>
+	<div class="ind"><a href="#3-3">3.3 Addresses, hexadecimal</a></div>
+</div></p>
+<p><div class="ind"><a href="#4">4. The user interface</a></div>
+</p>
+<p><div class="ind"><a href="#5">5. Searching for variables</a>
+	<div class="ind"><a href="#5-1">5.1 Basic searching strategy</a></div>
+	<div class="ind"><a href="#5-2">5.2 Variable types</a>
+		<div class="ind"><a href="#5-2-1">5.2.1 Integers</a></div>
+		<div class="ind"><a href="#5-2-2">5.2.2 Floating point numbers</a></div>
+		<div class="ind"><a href="#5-2-3">5.2.3 ASCII strings</a></div>
+	</div>
+	<div class="ind"><a href="#5-3">5.3 Advanced searching techniques</a>
+		<div class="ind"><a href="#5-3-1">5.3.1 Search operators</a></div>
+		<div class="ind"><a href="#5-3-2">5.3.2 Last value searching</a></div>
+	</div>
+</div></p>
+<p><div class="ind"><a href="#6">6. Changing variables</a>
+	<div class="ind"><a href="#6-1">6.1 Managing variables</a></div>
+	<div class="ind"><a href="#6-2">6.2 Saving cheat files</a></div>
+	<div class="ind"><a href="#6-3">6.3 Repeating cheats</a></div>
+</div></p>
+<p><div class="ind"><a href="#7">7. Menu commands</a>
+	<div class="ind"><a href="#7-1">7.1 Cheat Properties&#8230 &#8984I</a></div>
+	<div class="ind"><a href="#7-2">7.2 Pause Target &#8984P</a></div>
+	<div class="ind"><a href="#7-3">7.3 Clear Search &#8984&#9003</a></div>
+	<div class="ind"><a href="#7-4">7.4 Dump Memory &#8984D</a></div>
+	<div class="ind"><a href="#7-5">7.5 Add New Variable</a></div>
+	<div class="ind"><a href="#7-6">7.6 Edit Variables &#8984&#8617</a></div>
+	<div class="ind"><a href="#7-7">7.7 Show [...] Mode &#8984T</a></div>
+	<div class="ind"><a href="#7-8">7.8 Other Server&#8230 &#8984K</a></div>
+</div></p>
+<p><div class="ind"><a href="#8">8. Customizing The Cheat</a>
+	<div class="ind"><a href="#8-1">8.1 General settings</a></div>
+	<div class="ind"><a href="#8-2">8.2 Update check</a></div>
+</div></p>
+<p><div class="ind"><a href="#9">9. Remote cheating</a>
+	<div class="ind"><a href="#9-1">9.1 Starting the cheat server</a></div>
+	<div class="ind"><a href="#9-2">9.2 Managing connections</a></div>
+	<div class="ind"><a href="#9-3">9.3 Troubleshooting problems</a></div>
+</div></p>
+
+<a name="1" />
+<div class="header">1. How To Get Help with The Cheat</div>
+
+<p>The Cheat is designed with expert users in mind.  The interface is tailored for rapid use, and it wastes few words in describing its functions.  Nevertheless, the interface is simple and intuitive once you know a little bit about what is going on.  New users should have little trouble in picking up the basics of cheating, and there are many resources available to you to help you get started.  Here are some resources to check out:
+
+<div class="ind"><a href="http://www.brokenzipper.com/thecheat/">Tutorials/FAQs</a></div>
+<div class="ind"><a href="http://forum.brokenzipper.com/">User Support Forum</a></div>
+<div class="ind"><a href="mailto:chaz@brokenzipper.com">Email Me</a></div></p>
+
+<hr />
+
+<a name="1-1" />
+<p>Your main resource as a new user is this file.  This is the most convenient place to get quick help because it is built right into The Cheat, and it points to all of the other resources.  This file contains comprehensive information about using The Cheat and should be consulted before any other resources.  This document is organized to maximize convenience and usefulness.  It can be read straight-through from top to bottom if you have a lot of time on your hands, or you can refer to certain sections whenever you are faced with a question or problem.</p>
+
+<p>Use the table of contents at the top of this page to jump to the sections which interest you.  You can get back to the top of this page using the links labeled "top" which appear at the end of each section.  I have also used a few typographical conventions to make the reading easier.  Variable addresses and variable values will appear in this <code>green mono font</code>.  I have also <i>italicized</i> user interface identifiers to help you follow instructions when they are given.  For example, you might see "From the menu, choose <i>Cheater -> Edit Variables</i>, and set the <i>New Value</i> field to <code>128</code>."</p>
+
+<div class="tip">
+<span style="font-size: 14px; font-weight: bold;">Tip:</span>  You will also see a few "tip" boxes throughout this document.  They typically contain information that is not crucial to understanding, but will surely be beneficial if you take the time to read them.  They will often expand upon certain points.
+</div>
+
+<p>If you come across any material in this document which is unclear or unreasonably vague, please <a href="mailto:chaz@brokenzipper.com">let me know</a>.  Otherwise, enjoy the ride.</p>
+
+<p align="right"><a href="#0">top</a></p>
+
+<a name="2" />
+<div class="header">2. What is The Cheat?</div>
+
+<p>The Cheat is an application referred to as a <b>universal game trainer</b>.  It allows you to alter many different aspects of computer games.  For example, you can change things like the amount of lives your character has, the amount of ammo, the level you're on, the abilities you have, your location in the game, and more.  This all occurs in real-time while the game is running, and it will work for almost any game.  If you are interested in The Cheat from a more technical standpoint, there is also some information available on my web site about the <a href="http://www.brokenzipper.com/developer/">virtual memory system</a>, and of course The Cheat is also open source.</p>
+
+<a name="2-1" />
+<p>To do what it does, The Cheat accesses the memory of other applications.  It first reads through the entire address space, searching for variables based on input you provide.  Search results are then narrowed down by scanning the memory again after the value of the variable you are searching for has changed.  After a few searches, there should only be one variable remaining (ideally).  The Cheat will then allow you to change this variable to whatever you want.  The rest of this document will focus on the best ways to find variables, since that is the trickiest part.</p>
+
+<a name="2-2" />
+<p>Mac OS X includes support for protected memory which disables programs from accessing the memory of the system and other programs.  This causes a more stable system because faulty applications won't be able to trash the memory of other applications which could cause crashes and lockups.  Since The Cheat is able to get around this protection, might this be bad for stability?  Potentially, yes.  However, The Cheat only changes the memory of other programs where you tell it to.  If you are careful, your games should never crash.  Furthermore, assuming you don't run The Cheat as root (which would be a Bad Thing), The Cheat will not be able to alter any system-critical processes, so it would actually be very difficult if not impossible to crash or mess up your system using The Cheat.</p>
+
+<a name="2-3" />
+<p>The Cheat was written by some random guy named Chaz McGarvey.  He is also the guy who is writing this help file, so he will now refer to himself in first-person.  Currently, I'm 19 years old.  Programming is just a hobby of mine; I've never really taken any classes or anything.  I just think it's fun, so I do it sometimes.  I'm going to school at the University of Utah, studying to become who knows what.  Besides programming, I enjoy sleeping and participating in anything that occurs in the water.  A few of my more ambitious goals include taking over the world and being involved with the colonization of Mars.  I also have an <a href="mailto:chaz@brokenzipper.com">email address</a> and a <a href="http://www.brokenzipper.com/">web site</a> if you care to take advantage of either.</p>
+
+<p align="right"><a href="#0">top</a></p>
+
+<a name="3" />
+<div class="header">3. The Fundamentals of Cheating</div>
+
+<p>The process behind cheating is almost as old as computer games themselves.  The idea is this: everything that a computer game "knows" is stored in memory.  The advent of virtual memory has blurred the line between physical memory and hard disk space, but the distinction doesn't apply on a fundamental level.  Given the fact that we know the game is storing what it knows in memory, and also assuming that it's possible to go in there and alter that memory behind the game's back, we can conclude that we have the ability to make the game do whatever we want, up to the limits put upon us by the game's code.</p>
+
+<a name="3-1" />
+<p>Simply put, <b>cheating</b> is altering the memory of a game in order to make it do what we want.  It's time to define some other terms which will surely be used throughout this document and whenever you talk with someone about cheating.</p>
+
+<p>The <b>address space</b> refers to all of the memory that a program is using.  It is the memory that will be searched and changed.  It is important to note that not all addresses in the address space are being used; you'll see why this is important when you learn abut changing variables.</p>
+
+<a name="3-2" />
+<p>A <b>variable</b> is analogous to a "variable" in mathematics.  A variable has two components: an address and a value.  The <b>value</b> is a storable concept, usually a number (i.e. <code>73</code>, <code>0</code>, and <code>73453.236</code> are all values).  The <b>address</b> is a location in the address space where the value is stored.  Given the mathematical expression <code>X=56</code>, the value is <code>56</code> and the address is <code>X</code>.  It takes both the address and the value to define a variable.</p>
+
+<p>Because of how computers are designed, an address will never be as simple as just <code>X</code>.  An address for a computer is actually just a number which points to a location within a program's address space.  Today's 32-bit computers can use addresses from 0 thru 2<sup>32</sup>-1 (that's over four billion different addresses).  A move toward 64-bit processing is occurring, although 32-bit programs on a 64-bit computer will still only be able to access 2<sup>32</sup> addresses.</p>
+
+<a name="3-3" />
+<p>The Cheat uses <b>hexadecimal</b> notation to display addresses.  Hexadecimal is a number system based on 16 digits.  It is often denoted with the "<code>0x</code>" prefix.  The digits used are <code>0</code> thru <code>F</code>.  For example, <code>0x9</code> is equal to <code>9</code> in decimal, and <code>0xA</code> is equal to <code>10</code> in decimal.  <code>0xF</code> is equal to <code>15</code> in decimal, etc.  It is not necessary to understand this notation to use The Cheat.  You just need to be able to recognize an address when you see one.  If you want to learn more about hexadecimal, <a href="http://www.google.com/search?hl=en&q=hexadecimal">Google</a> should be able to help you out.</p>
+
+<hr />
+
+<p>One of the challenges of cheating is knowing what memory to change in order to produce the desired effect.  You have roughly 0.0000000931% chance to randomly guess the correct address.  The Cheat exists to increase those odds.  Nevertheless, cheating is not for the faint of heart.  It can very easily become an exercise in frustration if you lose your cool.</p>
+
+<p>What a variable fundamentally represents is something in a game that changes.  You, as a cheater, want to be able to change that "something" to whatever you want.  In order to do that, we first have to find the address of that variable.  How do we do this, you ask?  Well, by searching of course.  Searching is covered in detail <a href="#5">a little later</a>.  After the variable's address is found, it is only a matter of changing the value to whatever you want, which is also covered <a href="#6">later</a>.  See, cheating really isn't very complicated is it?</p>
+
+<p align="right"><a href="#0">top</a></p>
+
+<a name="4" />
+<div class="header">4. The User Interface</div>
+
+<p>As has been mentioned in the introduction, the interface of The Cheat has been designed with experts in mind.  It is relatively intuitive for people who have used a game trainer before and know how they work.  Therefore, the best way to learn how to use The Cheat is to get to know the process involved in cheating games!</p>
+
+<p>Cheating involves both <a href="#5">searching for variables</a> in memory and <a href="#6">changing those variables</a> to a new value of our choosing.  Both of these components are covered in detailed later in this document.  Because the tasks of searching and changing are fundamentally separate, The Cheat's interface likewise has two modes of operation.</p>
+
+<p>The default mode is the <i>Search Mode</i>.  This mode provides you with the tools you need to find variables in memory.  The other mode is the <i>Cheat Mode</i> which allows you to organize the variables that you have found and change them to new values.  You can toggle between these two modes by choosing <i><a href="#7-7">Cheater -> Show [...] Mode &#8984T</a></i> from the menu.</p>
+
+<p>The Cheat also provides other tools which aid in the entire cheating process.  Such tools are usually accessed from the <i>Cheater</i> menu.  Most commands can also be activated using an alternate key sequence, so you can keep your hands on the keyboard as much as possible if that's your thing.  For a description of the various menu items available to you, check out <a href="#7">section 7</a>.</p>
+
+<div class="tip">
+<span style="font-size: 14px; font-weight: bold;">Tip:</span> You can create multiple "sessions" in order to search for and cheat multiple variables at the same time.  Just choose <i>File -> New Search &#8984N</i>.  You can also choose <i>File -> New Blank Cheat &#8679&#8984N</i> to start a new session which defaults to <i>Cheat Mode</i>.
+</div>
+
+<p>As with any user interface, the best way to learn it is to get your hands dirty and to start playing around with it.  I could write a novel about using the interface, and it still wouldn't be worth 10 minutes of hands-on experience.</p>
+
+<p align="right"><a href="#0">top</a></p>
+
+<a name="5" />
+<div class="header">5. Searching for Variables</div>
+
+<p>The strategy behind finding variables is to do a search when the variable you are looking for has its value changed to something (anything) else.  When searching for variables, you always search for its value because it's the address which we don't know.  The address could be virtually anything, and it doesn't really matter what it is.  The value, on the other hand, we do usually know.</p>
+
+<a name="5-1" />
+<p>For example, assume I'm playing a first-person shooter, and the game displays how many bullets I have at the top of the screen.  You know that somewhere in memory, the game is keeping track of that number with a variable.  You know the value of the variable because its on the screen, but you don't know where in memory that variable resides.  Using this basic example, here is what you would do in order to find the address of that variable.</p>
+
+<p>At any convenient point in the game, just do a search for the current value of the ammunition variable.  For example, if I had 16 bullets I would search for <code>16</code>.  The only problem is there will be thousands of variables in memory which also happen to have that same value.  How do you know which variable refers to the ammunition?  You won't until you narrow down your results by performing another search.</p>
+
+<p>I would go back to the game and fire off a few bullets into space.  Now I have 13 bullets.  Now, by keeping your previous results in memory, you can compare only those results against this new value of <code>13</code>; so just do another search for the value <code>13</code>.</p>
+
+<div class="tip">
+<span style="font-size: 14px; font-weight: bold;">Tip:</span> Sometimes your search will not narrow down to exactly one result, even though you are only searching for one variable.  This may occur if the game happens to be storing that variable at multiple addresses.  Don't worry about this.  You can either change all remaining variables or narrow them down by observing value changes without searching.
+</div>
+
+<p>Each time you do a cross-search against the results you've obtained so far, your results will be narrowed down.  Keep narrowing down the results until you can see which variable is the ammunition variable.  You will be able to tell because you will see the value change as you shoot more bullets or pick up more ammunition.</p>
+
+<hr />
+
+<a name="5-2" />
+<p>There are actually several different types of variables that a game can use.  You are going to have to know a little bit about how variables are stored in memory to understand the different types of variables.  There are three basic types that The Cheat supports: integers, floating point numbers, and byte-streams.</p>
+
+<a name="5-2-1" />
+<p>The most common (and useful) variable type is the <b>integer</b>.  An integer variable can only hold either positive or negative whole numbers.  For example, <code>-56</code>, <code>0</code>, <code>3</code>, and <code>663453234223334</code> are all integers.  There are two things you need to know about integers.  First, an integer can be either signed or unsigned.  An integer that is <b>signed</b> can have both positive and negative values.  An <b>unsigned</b> integer on the other hand can only have positive values.</p>
+
+<p>The other thing you need to know about integers is that there is a finite number of values that any integer can have, and the number of available values depends upon the sign of the integer and how many bits in memory the integer "takes up."  <b>If you are freaking out right about now, please DON'T PANIC!</b>  I wouldn't be covering this if it wasn't necessary, but you don't need to remember all of this at once.  Take a few big breaths and relax.  You can always refer back to this section if you didn't quite get it the first time.</p>
+
+<p>The Cheat supports four different integer sizes: 8-bit, 16-bit, 32-bit, and 64-bit.  An 8-bit integer can hold 2<sup>8</sup> different values, which works out to be 256 values.  What those values can be depends on the sign of the integer.  If you have an 8-bit signed integer, that variable can hold a number between (and including) <code>-128</code> and <code>127</code>, which works out to exactly 256 different values if you do the math.  If you have an 8-bit unsigned integer, that variable can hold a number between (and including) <code>0</code> and <code>255</code>, which also works out to 256 different values.</p>
+
+<p>This concept can be extended to all integers.  A 16-bit integer can hold one of 2<sup>16</sup> (or 65536) values.  If the 16-bit integer is signed, the values can range from <code>-32768</code> to <code>32767</code>; likewise a 16-bit unsigned integer has values that range from <code>0</code> to <code>65535</code>.</p>
+
+<div class="tip">
+<span style="font-size: 14px; font-weight: bold;">Tip:</span> The tricky part about choosing which type of integer to use is that just because you'll never see values get greater than a certain amount, that doesn't mean the variable isn't capable of going higher.  For example, the logic of the game may prohibit a certain value to go higher than a certain point, say 1000, but the variable could still theoretically be a 32-bit integer even though it could be as little as a 16-bit integer.  <b>A 32-bit signed integer is the most common variable.</b>
+</div>
+
+<p>Fortunately, when searching for integer variables, it is not always necessary for you to use the correct sign and integer size in order to find the variable you are looking for.  For example, a 32-bit signed integer with a value of <code>1977</code> is actually equal to a 32-bit unsigned integer with the same value.  A lot of the time you will only discover whether an integer is signed or unsigned after you have found it and are trying to change the value.  For example, if you find a variable which you think is a signed integer, but it becomes a large positive number when you try to change it to a negative value, then you know it is actually unsigned.  The distinction between signed and unsigned rarely needs to be considered while searching.</p>
+
+<a name="5-2-2" />
+<p>The next variable type is the <b>floating point number</b>.  Like the integer, a floating point variable also has number values, but they can have fractional values.  For example, <code>-632.5</code>, <code>0.0002</code>, <code>636345.0</code>, and <code>885.6234234423</code> are all floating point numbers.  Floating points come in only two sizes: 32-bit (float) and 64-bit (double).</p>
+
+<p>Searching for floating points is considerably different than searching for integers.  For one thing, you have to use the correct size or you will not find the variable.  For example, a float with a value of <code>7.0</code> does NOT equal a double with the same value.  The only way to decide whether a floating point number is a float or a double is to look at the range of values the variable has.  A double can hold twice as much as a float can, which is probably why it's called "double."</p>
+
+<div class="tip">
+<span style="font-size: 14px; font-weight: bold;">Tip:</span> You do not need to be particularly accurate when searching for floats.  You only need to specify one extra digit after the decimal place.  This is why the results you get can vary sightly from the value you entered.</b>
+</div>
+
+<a name="5-2-3" />
+<p>The last variable type is a stream of bytes.  This is more commonly called an <b>ASCII string</b>.  ASCII just refers to the fact that the byte-stream is actually a string with special encoding.  In the case of an ASCII string, the encoded data consists of words and phrases.  It can also consist of numbers, but while the numbers are encoded as an ASCII string, the computer does not recognize it as a number.  To the computer, it's just a stream of bytes.  It is because of this that an integer with a value of <code>765</code> does NOT equal an ASCII string encoded with the same value.</p>
+
+<p>You will probably never use an ASCII string search when you are searching for number values.  The types of variables the ASCII string search finds are words, like perhaps the name of your character.</p>
+
+<hr />
+
+<a name="5-3" />
+<p>Let's revisit our made-up first-person shooter for the time being.  We now want to find the health variable so we can increase our health whenever we get low.  Our health is displayed along the bottom of the screen as a progress bar.  The bar shrinks when we get shot and grows when we pick up first aid kits.  The problem is that a progress bar doesn't give us anything we can directly search for.  In this case, we don't know the address or the value of the variable we are looking for.  We don't even know what type of variable it is!  How on earth are we supposed to find it!?</p>
+
+<p>In order to find such a beast, we may have to employ some wholesome guess-and-check techniques.  The first step is to figure out or guess which type of variable is running the progress bar.  It almost definitely is NOT an ASCII string; it is very likely a number of some sort.  It could be an integer with a built-in range (say, <code>0</code> means no health and <code>100</code> means full health).  It could also be a floating point number with a range from <code>0.0</code> to <code>1.0</code>.  There are many other possibilities as well.  The only way to find out the variable type is to try one and see if you can find the variable.  If you can't then try another type.  In this case, I would probably try an integer search first.</p>
+
+<a name="5-3-1" />
+<p>There is still a problem, though.  We still don't know what value to search for!  As it turns out, The Cheat has support for searching with different operators.  <b>Operators</b> take two values and tell you different things depending upon the operator.  There are four operators: equal, not equal, less than, and greater than.</p>
+
+<p>The <b>equal</b> operator records a hit if the value in memory is equal to the search value.  You would use this search operator if you knew the value of the variable you were looking for.  The same is true for the <b>not equal</b> operator.  As you would expect, a hit is recorded each time the value in memory does not equal the search value.</p>
+
+<p>The other two operators are most helpful in finding variable of which we don't know the value.  The <b>less than</b> operator records a hit for every value in memory that is numerically less than the search value.  I trust you can figure out what the <b>greater than</b> operator does.  It is important to note that these operators compare the numerical value of variables.  An ASCII string does not have a numerical value and can therefore not be used with these operators.  Integers and floating points are fair game, however.</p>
+
+<p>Let's put these operators to good use in our hypothetical first-person shooter.  We have a health bar which is about half full (or half empty if you prefer).  We don't know what the value is, but we do know that whatever it is, it's probably greater than zero.  So we do a greater than search with the value <code>0</code>, and we get a couple hundred thousand results.</p>
+
+<p>Recall that in order to find the variable, the value needs to change.  So we go back to the game and pick up a first aid kit, and the health bar grows like it's supposed to.  Notice that we are faced with another problem.  We only know two things.  The first thing we know is that the value is still greater than zero, but that doesn't help us because most of the variables that our first search found are probably still positive, too.  The other thing we know is that whatever the value is, it is now greater than what is was when we first searched.  This leads us to another handy tool.</p>
+
+<a name="5-3-2" />
+<p>The Cheat has the ability to perform searches based on previous values.  Instead of providing a search value to compare against, just use <i>Last Value</i>.  In the first-person shooter example, do a "greater than last value" search and The Cheat will return the variables from our previous results which have increased since our last search.</p>
+
+<p>Now get back to the game and blow yourself up so the health bar shrinks.  You will now want to do a "less than last value" search.  Repeat in this fashion to narrow down your results.  That's all there is to it!  If we were not able to find the variable this way, remember that we could still try a floating point search.</p>
+
+<p>That's all there is to searching.  You should be able to find almost any variable using the techniques described in this section.  Keep in mind that some variables are a lot trickier than others.  If you are an impatient person, it's alright to consider cheating something similar to therapy.  Some variables will take a long time to find, but the reward is usually justification enough.</p>
+
+<p align="right"><a href="#0">top</a></p>
+
+<a name="6" />
+<div class="header">6. Changing Variables</div>
+
+<p>Once you have successfully searched and found a variable, the worst part is far, far behind you.  Changing variables hardly needs its own section; there really isn't much to it.  Basically you just provide the new value to give to the variable, and apply the cheat.  There are a few things related to changing variables which should be discussed, however.</p>
+
+
+<a name="6-1" />
+<p>Variables which are added to the variable list are presented in a table which displays the type of variable it is, its address, and the value which is to be given to the variable when you apply the cheat.  Managing these variables is fairly simple.  You can enable and disable them.  Disabled variables are not changed when the cheat is applied.  You can also copy and paste variables between sessions.  There is a batch edit command which lets you edit multiple variables at the same time.  Of course, you can also delete variables.</p>
+
+<a name="6-2" />
+<p>You can also save "cheat" files if you want to save variables for use later.  Be careful, however.  Variables are NOT guaranteed to have the same address all of the time.  Some variables always have the same address and some do not.  It is impossible to tell which variables will have changing addresses, so you should do multiple searches for that variable at different times to see if it moves.  The variable you originally found will NOT work if it has moved and has a different address.  If it does move, the only way to use that variable is to search for it again.</p>
+
+<p>If you do save a "cheat" to file, information about the program being cheated is also saved.  You can also change the title of the window and give a short description about the cheat if you wish.</p>
+
+<div class="tip">
+<span style="font-size: 14px; font-weight: bold;">Tip:</span> The Cheat is an expert tool.  It exists to provide you with the tools to find and cheat variables, but it will not prevent you from doing something stupid with the tools.  For example, The Cheat lets you change the address of a variable to anything you want, and The Cheat will do its best to apply the cheat, even if you enter something stupid like <code>0x00000000</code>.  That is a the NULL pointer, and nothing exists at that address.  The Cheat may crash if you do something like this.  This is not dangerous to your system at all, but it does require you, the user, to know what you're doing.
+</div>
+
+<a name="6-3" />
+<p>Finally, The Cheat can also apply cheats at specified time intervals.  This is useful when you want to keep a variable constant.  For example, in my first-person shooter, I could tell The Cheat to set the health at maximum every second.  This has effectively provided me with a God-mode.  Since multiple variables can be changed for the same cheat, I could also do the same thing for my ammunition.  Now I can't be killed, and I can't run out of bullets.  Now all you need is to find a variable that allows you to walk through locked doors, and you're set!</p>
+
+<p align="right"><a href="#0">top</a></p>
+
+<a name="7" />
+<div class="header">7. Menu Commands</div>
+	
+<p>This section includes descriptions of all the non-obvious menu items you'll see in The Cheat.</p>
+
+<a name="7-1" />
+<p><i><b>Cheater -> Cheat Properties&#8230 &#8984I</b></i> activates a sheet which allows you to change the title of the session window and the cheat description.  This menu item is only available if a cheat session is active.</p>
+
+<a name="7-2" />
+<p><i><b>Cheater -> Pause Target &#8984P</b></i> uses the kill command to halt execution of the program being cheated.  In theory, this is a great way to pause your game without switching back and forth between the game and The Cheat.  In reality, it is sometimes better just to use the game's built-in pause feature.</p>
+
+<div class="tip">
+<span style="font-size: 14px; font-weight: bold;">Tip:</span> If you ever need to resume a game without The Cheat, you can use this command in Terminal.app:<br /><br >
+<div align="center">kill -s SIGCONT <i>pid</i></div><br />	
+Where <i>pid</i> is the process identifier of the process you want to resume.
+</div>
+
+<a name="7-3" />
+<p><i><b>Cheater -> Clear Search &#8984&#9003</b></i> is a shortcut way to clear the current search.  You can use this command in either Search or Cheat Modes.  It accomplishes the same thing as pushing the Clear Search button on the session window.</p>
+
+<a name="7-4" />
+<p><i><b>Cheater -> Add New Variable</b></i> is a submenu which contains menu items which will add certain types of blank variables.  You can then edit the address and values of these new variables.  Most of the time you will find variables by searching for them.</p>
+
+<a name="7-5" />
+<p><i><b>Cheater -> Dump Memory</b></i> activates the memory dump tool which allows you to "dump" a program's memory to a file.  Once in file form, you can use your preferred file comparison tools and whatnot for some advanced cheating.</p>
+
+<a name="7-6" />
+<p><i><b>Cheater -> Edit Variables &#8984&#8617</b></i> provides you with a way to edit a batch of variables instead of just one at a time.</p>
+
+<a name="7-7" />
+<p><i><b>Cheater -> Show [...] Mode &#8984T</b></i> toggles the mode of the session window between Search and Cheat Mode.  Refer to the section on the <a href="#4">user interface</a> to learn more about these two modes.</p>
+
+<a name="7-8" />
+<p><i><b>Other Server&#8230 &#8984K</b></i> appears inside the server popup menu on session windows.  It activates a sheet which allows you to enter the address and port of a cheat server to connect to.</p>
+
+<p align="right"><a href="#0">top</a></p>
+
+<a name="8" />
+<div class="header">8. Customizing The Cheat</div>
+
+<p>The Cheat does support a certain level of customizability.  This section describes what can be changed.  All of these settings can be changed by choosing the <i>Preferences</i> menu item, which is in the usual place.</p>
+
+<a name="8-1" />
+<p>The general settings effect mostly user interface and behavioral issues.  By default, The Cheat shows a very brief fade effect while switching between Search and Cheat Mode.  You can choose to disable this.  You can also choose to make The Cheat's session windows stay on top of other windows on the screen.  Unfortunately, full-screen games will cover the entire screen regardless of this setting.</p>
+
+<p>By default, The Cheat will automatically switch to Cheat Mode whenever you add variables to be cheated.  You can change this setting.  You can also tell The Cheat not to automatically start editing variables that are added to the Cheat Mode table of variables.  The Cheat is also set up to prompt you to save cheat files, and you can turn this off.</p>
+
+<p>The settings which effect the search results table allow you to turn off value-updating so you will not see current values.  The Cheat will only show you what the value was during the last search.  You can also specify how often the values are refreshed.  Lastly, you can specify how many results to show in the table.  The Cheat will display the first results it gets up to that limit.</p>
+
+<div class="tip">
+<span style="font-size: 14px; font-weight: bold;">Tip:</span> These settings do NOT effect the actual search results, they only effect how the results are displayed to you.  The reason there is a limit of the number of results displayed is because some searches can return so many results that there are too many for the table to draw without considerable glitching.
+</div>
+
+<a name="8-2" />
+<p>The Update feature of The Cheat helps you keep track of new versions of The Cheat when they are made available.  You can check the availability of new updates and you can also tell The Cheat to automatically check this for you every time it starts up.</p>
+
+<p>The rest of the settings relate to the remote cheating feature, which is discussed in the <a href="9">next section</a>.</p>
+
+<p align="right"><a href="#0">top</a></p>
+
+<a name="9" />
+<div class="header">9. Remote Cheating</div>
+
+<p>It's the classic cheater's horror story: you want to cheat a certain game, but you soon realize that the game only has a full-screen mode.  Bad luck, mate.  Or is it?</p>
+
+<p>Well, it <i>is</i> possible to cheat games which won't allow you to switch out of full-screen.  The good news is that it's just as easy as cheating a windowed game, but you knew there was a catch didn't you?  Of course there is!  You do have to have two networked computers capable of running The Cheat.</p>
+
+<p>The feature is affectionately known as <b>remote cheating</b>, and if you're a cheater with at least two computers with The Cheat, remote cheating is your new best friend.</p>
+
+<a name="9-1" />
+<p>In order for remote cheating to work, The Cheat comes with a built-in <b>cheat server</b>.  It's like a web server, only it serves... cheats!  Okay, bad analogy.  The point is that the cheat server needs to be running in order to allow other computers on your network to connect.  The server is off by default, so you will need to turn it on from the <i>Server</i> pane on the <i>Preferences</i> window.</p>
+
+<p>The cheat server is very simple to manage.  All it needs to start is an available TCP port.  You can also specify a broadcast name to broadcast your cheat server using Rendezvous, but this is optional.  Once the server has started, others can connect to it by selecting its broadcast name from the server popup menu on the session window or by using <i><a href="#7-8">Other Server&#8230  &#8984K</a></i>.  Alternatively, you can also use the URL given to you when the server is started.</p>
+
+<a name="9-2" />
+<p>Once the server is started, you can see the connections which are made in the connection table.  It will show you the IP address which the client is connected through as well as how much data the client is transferring.  You can disconnect clients by selecting them in the table and pressing the delete key on the keyboard.</p>
+
+<div class="tip">
+<span style="font-size: 14px; font-weight: bold;">Tip:</span> Once you are done using remote cheating, you should turn off the cheat server from the <i>Preferences</i> window.  It will only take up more of your system resources, and you don't want anyone else to be able to connect without you knowing, if you are on a public network.
+</div>
+
+<a name="9-3" />
+<p>If you can't get the cheat server to start, the most likely problem is that you are trying to bind to a port that is already in use on your computer.  Try a different port to see if that works.  If it does then just keep using that port.  Sometimes you might also get an informational dialog that tells you that the server was started, but it could not be broadcast.  This is because the name you are using to broadcast as is already being used.  You will have to choose another name if you want to use broadcasting.</p>
+
+<p>If you are have trouble connecting to a server that is running, you may be having firewall issues.  Make sure that the firewall software you are using allows TCP traffic in both ways through the port used by the cheat server.  If you want to make sure the server is actually working properly, you can try connecting locally using this URL: <a href="cheat://localhost">cheat://localhost</a>.  If your server is running on a non-standard port, you would use cheat://localhost:PORT.  Be sure to substitute PORT with the actual port number your server is using.</p>
+
+<p>That's all there is to remote cheating.  If you have any special problems, be sure to check out the <a href="#1">additional help resources</a> in the first section of this document.</p>
+
+<p align="right"><a href="#0">top</a></p>
+
+<div align="center" style="font-size: 10px;">
+<i>The contents of this document are licensed under the Creative Commons - Attribution / Share Alike license.<br />
+<a href="http://creativecommons.org/licenses/by-sa/2.0/">http://creativecommons.org/licenses/by-sa/2.0/</a></i>
+</div>
+
+</body>
+</html>

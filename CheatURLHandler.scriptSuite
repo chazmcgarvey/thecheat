@@ -1,0 +1,15 @@
+
+// CheatURLHandler.scriptSuite
+
+{
+	Name = CheatURLHandler;
+	AppleEventCode = "UrHD";
+	
+	Commands = {
+		"GetURL" = {
+			CommandClass = CheatURLCommand;
+			AppleEventCode = GURL;
+			AppleEventClassCode = GURL;
+		};
+	};
+}

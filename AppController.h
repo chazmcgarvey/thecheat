@@ -1,60 +1,52 @@
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Project:   The Cheat
-//
-// File:      AppController.h
-// Created:   Wed Aug 13 2003
-//
-// Copyright: 2003 Chaz McGarvey.  All rights reserved.
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// **********************************************************************
+// The Cheat - A universal game cheater for Mac OS X
+// (C) 2003-2005 Chaz McGarvey (BrokenZipper)
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 1, or (at your option)
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+// 
 
 #import <Cocoa/Cocoa.h>
-#import <Chaz/Chaz.h>
+#import "ChazLog.h"
+#include "cheat_global.h"
 
-#import "PreferenceControlling.h"
-#import "NetTrafficControlling.h"
-#import "ListenerDelegate.h"
-#import "ServerDelegate.h"
+#import "ChazUpdate.h"
 
-#include "cheat_globals.h"
+#import "CheatServer.h"
 
 
 @class AboutBoxController;
+@class HelpController;
 @class PreferenceController;
-@class NetTrafficController;
 
 
-@interface AppController : NSApplication < PreferenceControlling, NetTrafficControlling, ListenerDelegate, ServerDelegate >
+@interface AppController : NSApplication
 {
-	BOOL					waitingToListen;
-	NSConnection			*connection;
-	int						connectionPort;
-	BOOL					connectionRemote;
-	int						sockfd;
-	NSNetService			*service;
+	CheatServer *_server;
 
-	NSMutableArray			*servers;
-
-	AboutBoxController		*aboutBoxController;
-	PreferenceController	*preferenceController;
-	NetTrafficController	*netTrafficController;
-	
-	// global network browser
-	NSNetServiceBrowser		*browser;
-	NSMutableArray			*serverList;
+	AboutBoxController *_aboutBoxController;
+	HelpController *_helpController;
+	PreferenceController *_preferenceController;
 }
 
-- (void)listenOnPort:(int)port remote:(BOOL)remote;
-- (void)stopListener;
-
-- (void)broadcastWithName:(NSString *)name;
-- (void)stopBroadcast;
-
-- (IBAction)newSessionWindow:(id)sender;
+// Interface Actions
+- (IBAction)newSearchWindow:(id)sender;
+- (IBAction)newBlankCheatWindow:(id)sender;
 
 - (IBAction)showAboutBoxWindow:(id)sender;
 - (IBAction)showPreferenceWindow:(id)sender;
-- (IBAction)showNetTrafficWindow:(id)sender;
 
 - (IBAction)launchHelpFile:(id)sender;
 - (IBAction)launchEmailMenu:(id)sender;
@@ -62,6 +54,11 @@
 
 - (IBAction)checkForUpdate:(id)sender;
 
-- (NSArray *)serverList;
+// Server Stuff
+- (CheatServer *)cheatServer;
+- (BOOL)startCheatServer;
+- (void)stopCheatServer;
 
 @end
+
+

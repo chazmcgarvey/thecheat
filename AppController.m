@@ -1,26 +1,29 @@
 
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-// Project:   The Cheat
-//
-// File:      AppController.m
-// Created:   Wed Aug 13 2003
-//
-// Copyright: 2003 Chaz McGarvey.  All rights reserved.
-// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+// **********************************************************************
+// The Cheat - A universal game cheater for Mac OS X
+// (C) 2003-2005 Chaz McGarvey (BrokenZipper)
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 1, or (at your option)
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+// 
 
 #import "AppController.h"
 
-#include "cheat_shared.h"
-
-#import "SessionController.h"
+#import "CheatDocument.h"
 #import "AboutBoxController.h"
+#import "HelpController.h"
 #import "PreferenceController.h"
-#import "NetTrafficController.h"
-
-#import "CheatListener.h"
-#import "CheatServer.h"
-
-#import "ServerHolder.h"
 
 
 @implementation AppController
@@ -33,54 +36,36 @@
 
 + (void)initialize
 {
-	NSMutableDictionary		*defaults = [NSMutableDictionary dictionary];
-	char					temp[104];
+	NSMutableDictionary *defaults = [NSMutableDictionary dictionary];
 	
-	// set up logging
-//#ifndef TC_SHOW_LOGS
-	CMLogDisable();
-//#endif
+	TCFirstLaunchPref = [[NSString stringWithFormat:@"TC%@%@Pref", ChazAppName(), ChazAppVersion()] retain];
+	NSString *broadcastName = [NSString stringWithFormat:@"%@'s Computer", NSFullUserName()];
 	
-	// change the socket path to reside in the home directory of the current user
-	strncpy( temp, [NSHomeDirectory() lossyCString], 103 );
-	strncat( temp, TCDefaultListenPath, 103 - strlen(TCDefaultListenPath) );
-	strncpy( TCDefaultListenPath, temp, 103 );
+	// register user defaults
+	[defaults setObject:[NSNumber numberWithBool:NO] forKey:TCFirstLaunchPref];
+	[defaults setObject:[NSNumber numberWithBool:NO] forKey:TCWindowsOnTopPref];
+	[defaults setObject:[NSNumber numberWithBool:YES] forKey:TCUpdateCheckPref];
+	[defaults setObject:[NSNumber numberWithBool:YES] forKey:TCDisplayValuesPref];
+	[defaults setObject:[NSNumber numberWithFloat:1.0] forKey:TCValueUpdatePref];
+	[defaults setObject:[NSNumber numberWithInt:1000] forKey:TCHitsDisplayedPref];
+	[defaults setObject:[NSNumber numberWithBool:NO] forKey:TCRunServerPref];
+	[defaults setObject:broadcastName forKey:TCBroadcastNamePref];
+	[defaults setObject:[NSNumber numberWithInt:TCDefaultListenPort] forKey:TCListenPortPref];
+	[defaults setObject:[NSNumber numberWithFloat:gFadeAnimationDuration] forKey:TCFadeAnimationPref];
+	[defaults setObject:[NSNumber numberWithBool:YES] forKey:TCAskForSavePref];
+	[defaults setObject:[NSNumber numberWithBool:YES] forKey:TCSwitchVariablesPref];
+	[defaults setObject:[NSNumber numberWithBool:YES] forKey:TCAutoStartEditingVarsPref];
 
-	[defaults setObject:[NSNumber numberWithBool:TCGlobalPlaySounds] forKey:TCPlaySoundsPref];
-	[defaults setObject:[NSNumber numberWithBool:TCGlobalWindowsOnTop] forKey:TCWindowsOnTopPref];
-	[defaults setObject:[NSNumber numberWithBool:TCGlobalUpdateCheck] forKey:TCUpdateCheckPref];
-	[defaults setObject:[NSNumber numberWithBool:TCGlobalAllowRemote] forKey:TCAllowRemotePref];
-	[defaults setObject:[NSNumber numberWithInt:TCGlobalListenPort] forKey:TCListenPortPref];
-	[defaults setObject:[NSString stringWithFormat:@"%@'s Computer", NSFullUserName()] forKey:TCBroadcastNamePref];
-	[defaults setObject:[NSNumber numberWithInt:TCGlobalHitsDisplayed] forKey:TCHitsDisplayedPref];
-
+	// register it
 	[[NSUserDefaults standardUserDefaults] registerDefaults:defaults];
-
-	TCGlobalPlaySounds = [[NSUserDefaults standardUserDefaults] boolForKey:TCPlaySoundsPref];
-	TCGlobalWindowsOnTop = [[NSUserDefaults standardUserDefaults] boolForKey:TCWindowsOnTopPref];
-	TCGlobalUpdateCheck = [[NSUserDefaults standardUserDefaults] boolForKey:TCUpdateCheckPref];
-	TCGlobalAllowRemote = [[NSUserDefaults standardUserDefaults] boolForKey:TCAllowRemotePref];
-	TCGlobalListenPort = [[NSUserDefaults standardUserDefaults] integerForKey:TCListenPortPref];
-	TCGlobalHitsDisplayed = [[NSUserDefaults standardUserDefaults] integerForKey:TCHitsDisplayedPref];
+	
+	// set globals
+	gFadeAnimationDuration = [[NSUserDefaults standardUserDefaults] floatForKey:TCFadeAnimationPref];
 }
 
 - (id)init
 {
-	if ( self = [super init] )
-	{
-		servers = [[NSMutableArray alloc] init];
-
-		// start the server with saved settings
-		[self listenOnPort:TCGlobalListenPort remote:TCGlobalAllowRemote];
-		if ( TCGlobalAllowRemote ) [self broadcastWithName:TCGlobalBroadcastName];
-		
-		// set up the network browser
-		browser = [[NSNetServiceBrowser alloc] init];
-		[browser setDelegate:self];
-		[browser searchForServicesOfType:@"_cheat._tcp." inDomain:@"local."];
-		
-		serverList = [[NSMutableArray alloc] init];
-		
+	if ( self = [super init] ) {
 		[self setDelegate:self];
 	}
 
@@ -90,16 +75,8 @@
 
 - (void)dealloc
 {
-	[[NSNotificationCenter defaultCenter] removeObserver:self];
-	
-	[self stopListener];
-	[self stopBroadcast];
-	
-	[servers release];
-	
-	[browser release];
-	[serverList release];
-	
+	ChazLog( @"AppController deallocated!!" );
+	[self stopCheatServer];
 	[super dealloc];
 }
 
@@ -111,116 +88,87 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification
 {
-	if ( TCGlobalUpdateCheck )
-	{
-		[CMUpdateCheck checkWithURL:@"http://www.brokenzipper.com/software.plist" verbose:NO];
+	// check if this is the first launch
+	if ( ![[NSUserDefaults standardUserDefaults] boolForKey:TCFirstLaunchPref] ) {
+		// FIRST LAUNCH
+		[self showAboutBoxWindow:self];
+		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:TCFirstLaunchPref];
 	}
 	
-	[self newSessionWindow:self];
-}
-
-- (void)applicationDidBecomeActive:(NSNotification *)aNotification
-{
-	/*if ( TCGlobalSessionCount == 0 )
-	{
-		[self newSessionWindow:self];
-	}*/
-}
-
-
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
-#pragma mark Server Starting/Stopping
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
-
-
-- (void)listenOnPort:(int)port remote:(BOOL)remote
-{
-	if ( connection )
-	{
-		[self stopListener];
-
-		waitingToListen = YES;
-		connectionPort = port;
-		connectionRemote = remote;
+	// if should check for updates on launch
+	if ( [[NSUserDefaults standardUserDefaults] boolForKey:TCUpdateCheckPref] ) {
+		ChazCheckForUpdate( TCUpdateCheckURL, NO );
 	}
-	else
-	{
-		connection = [[CheatListener listenerWithDelegate:self port:port remote:remote] retain];
-		connectionPort = port;
-		connectionRemote = remote;
-	}
-}
-
-- (void)stopListener
-{
-	if ( connection )
-	{
-		close( sockfd );
-		[connection release], connection = nil;
+	
+	// automaticall start the cheat server if the pref is set
+	if ( [[NSUserDefaults standardUserDefaults] boolForKey:TCRunServerPref] ) {
+		if ( ![self startCheatServer] ) {
+			// inform the user that the server won't start
+			NSRunAlertPanel( @"The Cheat could not start the server.",
+							 @"The cheat server failed to start.  Check the server settings and start it manually.",
+							 @"OK", nil, nil );
+			// open server prefs
+			[self showPreferenceWindow:self];
+			[_preferenceController chooseServer:self];
+		}
 	}
 }
 
 
-- (void)broadcastWithName:(NSString *)name
-{
-	[self stopBroadcast];
-		
-	service = [[NSNetService alloc] initWithDomain:@"local." type:@"_cheat._tcp." name:name port:TCGlobalListenPort];
-	[service setDelegate:self];
-	[service publish];
-}
-
-- (void)stopBroadcast
-{
-	[service stop], service = nil;
-}
-
-
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
-#pragma mark Interface Activation
+#pragma mark Interface Actions
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
 
-- (IBAction)newSessionWindow:(id)sender
+- (IBAction)newSearchWindow:(id)sender
 {
-	[[[SessionController alloc] init] showWindow:self];
+	NSDocumentController	*controller = [NSDocumentController sharedDocumentController];
+	CheatDocument			*doc = [controller makeUntitledDocumentOfType:@"Cheat Document"];
+	if ( !doc ) {
+		ChazLog( @"nil document" );
+	}
+	[doc setMode:TCSearchMode];
+	[controller addDocument:doc];
+	[doc makeWindowControllers];
+	[doc showWindows];
+}
+
+- (IBAction)newBlankCheatWindow:(id)sender
+{
+	NSDocumentController	*controller = [NSDocumentController sharedDocumentController];
+	CheatDocument			*doc = [controller makeUntitledDocumentOfType:@"Cheat Document"];
+	if ( !doc ) {
+		ChazLog( @"nil document" );
+	}
+	[doc setMode:TCCheatMode];
+	[controller addDocument:doc];
+	[doc makeWindowControllers];
+	[doc showWindows];
 }
 
 - (IBAction)showAboutBoxWindow:(id)sender
 {
-	if ( !aboutBoxController )
-	{
-		aboutBoxController = [[AboutBoxController alloc] init];
+	if ( !_aboutBoxController ) {
+		_aboutBoxController = [[AboutBoxController alloc] init];
 	}
-	
-	[aboutBoxController showWindow:self];
+	[_aboutBoxController showWindow:self];
 }
 
 - (IBAction)showPreferenceWindow:(id)sender
 {
-	if ( !preferenceController )
-	{
-		preferenceController = [[PreferenceController alloc] initWithDelegate:self];
+	if ( !_preferenceController ) {
+		_preferenceController = [[PreferenceController alloc] init];
 	}
-
-	[preferenceController showWindow:self];
-}
-
-- (IBAction)showNetTrafficWindow:(id)sender
-{
-	if ( !netTrafficController )
-	{
-		netTrafficController = [[NetTrafficController alloc] initWithDelegate:self];
-	}
-
-	[netTrafficController showWindow:self];
+	[_preferenceController showWindow:self];
 }
 
 
 - (IBAction)launchHelpFile:(id)sender
 {
-	//[[NSWorkspace sharedWorkspace] openFile:[[NSBundle mainBundle] pathForResource:@"Read Me" ofType:@"html"] withApplication:@"Safari"];
-	[[NSWorkspace sharedWorkspace] openURL:[NSURL fileURLWithPath:[[NSBundle mainBundle] pathForResource:@"Read Me" ofType:@"rtf"]]];
+	if ( !_helpController ) {
+		_helpController = [[HelpController alloc] init];
+	}
+	[_helpController showWindow:self];
 }
 
 - (IBAction)launchEmailMenu:(id)sender
@@ -236,313 +184,72 @@
 
 - (IBAction)checkForUpdate:(id)sender
 {
-	[CMUpdateCheck checkWithURL:@"http://www.brokenzipper.com/software.plist"];
-}
-
-
-- (NSArray *)serverList
-{
-	return serverList;
+	ChazCheckForUpdate( TCUpdateCheckURL, YES );
 }
 
 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
-#pragma mark Controlling Preferences
+#pragma mark CheatServer Stuff
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-
-- (void)preferenceSetWindowsOnTop:(BOOL)windowsOnTop
+- (CheatServer *)cheatServer
 {
-	if ( TCGlobalWindowsOnTop != windowsOnTop )
-	{
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"TCWindowsOnTopChanged" object:[NSNumber numberWithBool:windowsOnTop]];
+	if ( !_server ) {
+		_server = [[CheatServer alloc] initWithDelegate:self];
 	}
+	return _server;
 }
 
-- (void)preferenceSetAllowRemote:(BOOL)allow listenPort:(int)port broadcastName:(NSString *)name
+- (BOOL)startCheatServer
 {
-	if ( TCGlobalAllowRemote != allow || TCGlobalListenPort != port )
-	{
-		[self listenOnPort:port remote:allow];
-	}
-	if ( allow )
-	{
-		if ( !TCGlobalAllowRemote || ![TCGlobalBroadcastName isEqualToString:name] )
-		{
-			[self broadcastWithName:name];
-		}
-	}
-	else
-	{
-		[self stopBroadcast];
-	}
-	[netTrafficController serverSetAllowRemote:allow listenPort:port broadcastName:name];
-	//[netTrafficController allowRemoteChanged:allow];
-	//[netTrafficController listenPortChanged:port];
-	//[netTrafficController broadcastNameChanged:name];
-}
-
-/*
-- (void)preferenceAllowRemoteChanged:(BOOL)allow
-{
-	[self listenOnPort:TCGlobalListenPort remote:allow];
+	ChazLog( @"cheat server starting..." );
 	
-	if ( allow )
-	{
-		[self broadcastWithName:TCGlobalBroadcastName];
-	}
-	else
-	{
-		[self stopBroadcast];
-	}
-
-	[netTrafficController allowRemoteChanged:allow];
-}
-
-- (void)preferenceListenPortChanged:(int)port
-{
-	[self listenOnPort:port remote:TCGlobalAllowRemote];
-	[self broadcastWithName:TCGlobalBroadcastName];
-
-	[netTrafficController listenPortChanged:port];
-}
-
-- (void)preferenceBroadcastNameChanged:(NSString *)name
-{
-	[self broadcastWithName:name];
-
-	[netTrafficController broadcastNameChanged:name];
-}
-*/
-
-
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
-#pragma mark Controlling NetTraffic
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
-
-
-- (int)netTrafficConnectionCount
-{
-	return [servers count];
-}
-
-- (NSArray *)netTrafficConnectionList
-{
-	return servers;
-}
-
-- (void)netTrafficKillConnection:(int)index
-{
-	CMLog( @"kill connection" );
-
-	close( [[servers objectAtIndex:index] sockfd] );
-}
-
-
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
-#pragma mark Controlling Listener
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
-
-
-- (void)listenerListeningWithSocket:(int)sock
-{
-	sockfd = sock;
-
-	TCGlobalListening = YES;
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"TCListenerStarted" object:nil];
-}
-
-- (void)listenerDisconnected
-{
-	if ( waitingToListen )
-	{
-		waitingToListen = NO;
-		connection = [[CheatListener listenerWithDelegate:self port:connectionPort remote:connectionRemote] retain];
-	}
-	else
-	{
-		[self stopListener];
-	}
-
-	TCGlobalListening = NO;
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"TCListenerStopped" object:nil];
-}
-
-- (void)listenerError:(NSString *)error message:(NSString *)message
-{
-	NSRunCriticalAlertPanel( error, message, @"OK", nil, nil );
-}
-
-- (void)listenerReceivedNewConnection:(int)sock
-{
-	[servers addObject:[ServerHolder holderWithConnection:[CheatServer serverWithDelegate:self socket:sock] socket:sock]];
-}
-
-
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
-#pragma mark Controlling Server
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
-
-
-- (void)server:(CheatServer *)server connectedWithSocket:(int)sock
-{
-	int				i, top = [servers count];
-
-	for ( i = 0; i < top; i++ )
-	{
-		if ( [(ServerHolder *)[servers objectAtIndex:i] sockfd] == sock )
-		{
-			[(ServerHolder *)[servers objectAtIndex:i] setServer:server];
-			break;
-		}
-	}
-
-	[netTrafficController connectionListChanged];
-}
-
-- (void)serverDisconnected:(CheatServer *)server
-{
-	int				i, top = [servers count];
-
-	for ( i = 0; i < top; i++ )
-	{
-		if ( [(ServerHolder *)[servers objectAtIndex:i] server] == server )
-		{
-			[servers removeObjectAtIndex:i];
-			break;
-		}
-	}
-
-	[netTrafficController connectionListChanged];
-}
-
-- (void)server:(CheatServer *)server changedAddress:(NSString *)address
-{
-	int				i, top = [servers count];
-
-	for ( i = 0; i < top; i++ )
-	{
-		if ( [(ServerHolder *)[servers objectAtIndex:i] server] == server )
-		{
-			[(ServerHolder *)[servers objectAtIndex:i] setAddress:address];
-			break;
-		}
-	}
-
-	[netTrafficController connectionListChanged];
-}
-
-- (void)server:(CheatServer *)server changedAction:(NSString *)action
-{
-	int				i, top = [servers count];
-
-	for ( i = 0; i < top; i++ )
-	{
-		if ( [(ServerHolder *)[servers objectAtIndex:i] server] == server )
-		{
-			[(ServerHolder *)[servers objectAtIndex:i] setAction:action];
-			break;
-		}
-	}
-
-	[netTrafficController connectionListChanged];
-}
-
-- (NSArray *)serverProcessList
-{
-	return [[NSWorkspace sharedWorkspace] launchedApplications];
-}
-
-- (pid_t)serverFirstProcess
-{
-	return (pid_t)[[[[[NSWorkspace sharedWorkspace] launchedApplications] objectAtIndex:0] objectForKey:@"NSApplicationProcessIdentifier"] intValue];
-}
-
-
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
-#pragma mark NetService Delegate
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
-
-
-- (void)netServiceWillPublish:(NSNetService *)sender
-{
-	CMLog( @"service will publish" );
-	[sender resolve];
-}
-
-- (void)netService:(NSNetService *)sender didNotPublish:(NSDictionary *)errorDict
-{
-	CMLog( @"service did not publish" );
-	
-	if ( [[errorDict objectForKey:@"NSNetServicesErrorCode"] intValue] == NSNetServicesCollisionError )
-	{
-		[self broadcastWithName:[NSString stringWithFormat:@"%@ %i", [sender name], TCGlobalAlternateBroadcastNameCount++]];
-	}
-	else
-	{
-		NSRunCriticalAlertPanel( @"Network Error", @"Server couldn't broadcast.  Local can't be cheated by remote computers.", @"OK", nil, nil );
-	}
-}
-
-- (void)netServiceDidStop:(NSNetService *)sender
-{
-	CMLog( @"service stopped" );
-	[sender release];
-}
-
-
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
-#pragma mark NetServiceBrowser Delegate
-/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
-
-
-- (void)netServiceBrowser:(NSNetServiceBrowser *)browser didFindService:(NSNetService *)aService moreComing:(BOOL)more
-{
-	// a server has broadcast; not much use until it's resolved.
-	[aService setDelegate:self];
-	[aService resolve];
-}
-
-- (void)netServiceDidResolveAddress:(NSNetService *)aService
-{	
-	int					i, top = [serverList count];
-	
-	// ignore if this is the local server.
-	if ( TCGlobalAllowRemote && [[aService name] isEqualToString:TCGlobalBroadcastName] )
-	{
-		return;
+	// start the server with saved settings
+	int port = [[NSUserDefaults standardUserDefaults] integerForKey:TCListenPortPref];
+	NSString *name = [[NSUserDefaults standardUserDefaults] objectForKey:TCBroadcastNamePref];
+	if ( [name isEqualToString:@""] ) {
+		name = nil;
 	}
 	
-	// ignore if the server name is already in the list.
-	for ( i = 0; i < top; i++ )
-	{
-		if ( [[aService name] isEqualToString:[(NSNetService *)[serverList objectAtIndex:i] name]] )
-		{
-			return;
-		}
+	// stop the cheat server if it's running
+	[self stopCheatServer];
+	
+	// start the server
+	if ( [[self cheatServer] listenOnPort:port broadcast:name] ) {
+		[[NSNotificationCenter defaultCenter] postNotificationName:TCServerStartedNote object:[self cheatServer]];
+		return YES;
 	}
-	
-	[serverList addObject:aService];
-	CMLog( @"server added: %i", [serverList count] );
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"TCServerFound" object:aService];
+	return NO;
 }
 
-- (void)netServiceBrowser:(NSNetServiceBrowser *)browser didRemoveService:(NSNetService *)aService moreComing:(BOOL)more
+- (void)stopCheatServer
 {
-	int					i, top = [serverList count];
-	
-	for ( i = 0; i < top; i++ )
-	{
-		if ( [[aService name] isEqualToString:[(NSNetService *)[serverList objectAtIndex:i] name]] )
-		{
-			[serverList removeObjectAtIndex:i];
-			CMLog( @"server deleted: %i", [serverList count] );
-			break;
-		}
+	if ( _server ) {
+		[_server stop];
+		[[NSNotificationCenter defaultCenter] postNotificationName:TCServerStoppedNote object:[self cheatServer]];
 	}
-	
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"TCServerLost" object:aService];
+}
+
+
+/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
+#pragma mark CheatServerDelegate
+/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
+
+- (void)serverDisconnectedUnexpectedly:(CheatServer *)theServer
+{
+	ChazLog( @"server disconnected unexpectedly." );
+	[self stopCheatServer];
+}
+
+- (void)server:(CheatServer *)theServer failedToBroadcastName:(NSString *)theName
+{
+	NSBeginInformationalAlertSheet( @"The cheat server can not broadcast.",  @"OK", nil, nil, [_preferenceController window], nil, NULL, NULL, NULL,
+									@"The Cheat can't broadcast as \"%@\" because that name is in use by another server.  The server will continue running with broadcasting disabled.", theName );
+}
+
+- (void)serverChildrenChanged:(CheatServer *)theServer
+{
+	[[NSNotificationCenter defaultCenter] postNotificationName:TCServerConnectionsChangedNote object:theServer];
 }
 
 
