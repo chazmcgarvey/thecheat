@@ -1,0 +1,25 @@
+{
+    IBClasses = (
+        {
+            ACTIONS = {changeButton = id; processPopup = id; searchButton = id; typePopup = id; }; 
+            CLASS = AppController; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                addressTable = id; 
+                changeButton = id; 
+                changeTextField = id; 
+                processPopup = id; 
+                searchButton = id; 
+                searchTextField = id; 
+                sizePopup = id; 
+                statusBar = id; 
+                statusText = id; 
+                typePopup = id; 
+                window = id; 
+            }; 
+            SUPERCLASS = NSObject; 
+        }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }
+    ); 
+    IBVersion = 1; 
+}
