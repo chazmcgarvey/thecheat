@@ -9,6 +9,7 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #import <Cocoa/Cocoa.h>
+#import <Chaz/Chaz.h>
 
 #import "ServerDelegate.h"
 
@@ -41,7 +42,7 @@
 
 	NSMutableArray		*searchResults;
 	NSMutableArray		*searchResultsUndone;
-	int					maxSearchResultsAmount;
+	int					searchResultsAmountDisplayed;
 }
 
 + (NSConnection *)serverWithDelegate:(id)delegate socket:(int)sock;

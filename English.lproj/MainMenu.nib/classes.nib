@@ -6,6 +6,7 @@
                 launchEmailMenu = id; 
                 launchHelpFile = id; 
                 launchWebsiteMenu = id; 
+                newSessionWindow = id; 
                 showAboutBoxWindow = id; 
                 showNetTrafficWindow = id; 
                 showPreferenceWindow = id; 

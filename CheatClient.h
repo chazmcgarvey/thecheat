@@ -9,6 +9,7 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #import <Cocoa/Cocoa.h>
+#import <Chaz/Chaz.h>
 
 #include "cheat_types.h"
 #include "cheat_globals.h"

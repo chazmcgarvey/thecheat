@@ -1,0 +1,58 @@
+{
+    IBClasses = (
+        {CLASS = CMStatusView; LANGUAGE = ObjC; SUPERCLASS = NSTextField; }, 
+        {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
+        {
+            ACTIONS = {
+                cancelButton = id; 
+                changeButton = id; 
+                clearSearchButton = id; 
+                okButton = id; 
+                pauseButton = id; 
+                processMenuItem = id; 
+                recurringChangeButton = id; 
+                redoMenu = id; 
+                searchButton = id; 
+                serverMenuDisconnect = id; 
+                serverMenuItem = id; 
+                serverMenuLocal = id; 
+                sizePopup = id; 
+                typePopup = id; 
+                undoMenu = id; 
+            }; 
+            CLASS = MyDocument; 
+            LANGUAGE = ObjC; 
+            OUTLETS = {
+                addressTable = NSTableView; 
+                cancelButton = NSButton; 
+                changeButton = NSButton; 
+                changeSecondsCombo = NSComboBox; 
+                changeSheet = NSWindow; 
+                changeTextField = NSTextField; 
+                cheatWindow = NSWindow; 
+                clearSearchButton = NSButton; 
+                decimalSizeMenu = NSMenu; 
+                descriptionText = NSTextField; 
+                integerSizeMenu = NSMenu; 
+                okButton = NSButton; 
+                pauseButton = NSButton; 
+                processMenu = NSMenu; 
+                processPopup = NSPopUpButton; 
+                recurringChangeButton = NSButton; 
+                searchButton = NSButton; 
+                searchRadioMatrix = NSMatrix; 
+                searchTextField = NSTextField; 
+                serverMenu = NSMenu; 
+                serverPopup = NSPopUpButton; 
+                sizePopup = NSPopUpButton; 
+                statusBar = NSProgressIndicator; 
+                statusText = NSTextField; 
+                stringSizeMenu = NSMenu; 
+                typeMenu = NSMenu; 
+                typePopup = NSPopUpButton; 
+            }; 
+            SUPERCLASS = NSDocument; 
+        }
+    ); 
+    IBVersion = 1; 
+}

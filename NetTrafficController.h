@@ -9,6 +9,7 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #import <Cocoa/Cocoa.h>
+#import <Chaz/Chaz.h>
 
 #import "NetTrafficControlling.h"
 

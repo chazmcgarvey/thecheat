@@ -147,7 +147,7 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.objc;
-			path = MyDocument.m;
+			path = SessionController.m;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -155,13 +155,12 @@
 			fileEncoding = 30;
 			isa = PBXFileReference;
 			lastKnownFileType = sourcecode.c.h;
-			path = MyDocument.h;
+			path = SessionController.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		2A37F4AFFDCFA73011CA2CEA = {
 			children = (
-				32DBCF750370BD2300C91783,
 				2A37F4B0FDCFA73011CA2CEA,
 				6E51A986057330B900506538,
 				6E51A987057330B900506538,
@@ -170,6 +169,7 @@
 				6E71F41B051BCCC600A80003,
 				6E71F41C051BCCC600A80003,
 				6E0BDF7D0511568D00A80003,
+				32DBCF750370BD2300C91783,
 			);
 			isa = PBXGroup;
 			name = "Other Sources";
@@ -190,7 +190,7 @@
 				2A37F4B5FDCFA73011CA2CEA,
 			);
 			isa = PBXVariantGroup;
-			name = MyDocument.nib;
+			name = Session.nib;
 			path = "";
 			refType = 4;
 			sourceTree = "<group>";
@@ -199,7 +199,7 @@
 			isa = PBXFileReference;
 			lastKnownFileType = wrapper.nib;
 			name = English;
-			path = English.lproj/MyDocument.nib;
+			path = English.lproj/Session.nib;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -225,11 +225,13 @@
 			children = (
 				6E8DD52805FC4EB600D2C0EA,
 				6E1E43700588275100526509,
+				6E789E4A0603A52B008F8B51,
 				2A37F4B6FDCFA73011CA2CEA,
+				2A37F4B4FDCFA73011CA2CEA,
+				6EE8122A0602610900F1CD3F,
 				6E51A97605732B9000506538,
 				6E0D40BC052245E700A80003,
 				6E0D40B005223D4E00A80003,
-				2A37F4B4FDCFA73011CA2CEA,
 				089C165FFE840EACC02AAC07,
 				6EF8EC08055A1730008BBE46,
 			);
@@ -650,6 +652,19 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		6E789E4A0603A52B008F8B51 = {
+			isa = PBXFileReference;
+			lastKnownFileType = image.icns;
+			path = icondoc.icns;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		6E789E4B0603A52B008F8B51 = {
+			fileRef = 6E789E4A0603A52B008F8B51;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		6E8DD52305FC4EA100D2C0EA = {
 			buildActionMask = 2147483647;
 			dstPath = "";
@@ -781,6 +796,30 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
+		6EE8122A0602610900F1CD3F = {
+			children = (
+				6EE8122B0602610900F1CD3F,
+			);
+			isa = PBXVariantGroup;
+			name = Record.nib;
+			path = "";
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		6EE8122B0602610900F1CD3F = {
+			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
+			name = English;
+			path = English.lproj/Record.nib;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		6EE8122C0602610900F1CD3F = {
+			fileRef = 6EE8122A0602610900F1CD3F;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
 		6EF8EBD9055A1730008BBE46 = {
 			buildPhases = (
 				6EF8EBDA055A1730008BBE46,
@@ -793,6 +832,7 @@
 			buildRules = (
 			);
 			buildSettings = {
+				DEPLOYMENT_LOCATION = NO;
 				FRAMEWORK_SEARCH_PATHS = /Users/chaz/Projects/Chaz/build;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_ENABLE_ASM_KEYWORD = YES;
@@ -977,6 +1017,8 @@
 				6E51A97905732B9000506538,
 				6E1E43710588275100526509,
 				6E8DD52905FC4EB600D2C0EA,
+				6EE8122C0602610900F1CD3F,
+				6E789E4B0603A52B008F8B51,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;

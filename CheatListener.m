@@ -68,7 +68,7 @@
 
 	if ( (sockfd = socket( family, SOCK_STREAM, 0 )) == -1 )
 	{
-		NSLog( @"ERROR: failed to start server because socket() failed" );
+		CMLog( @"ERROR: failed to start server because socket() failed" );
 		[rootProxy listenerError:@"Network Error" message:@"Server couldn't start.  Local can't be cheated."];
 		return;
 	}
@@ -83,14 +83,14 @@
 
 		if ( setsockopt( sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int) ) == -1 )
 		{
-			NSLog( @"ERROR: failed to start server because setsockopt() failed" );
+			CMLog( @"ERROR: failed to start server because setsockopt() failed" );
 			[rootProxy listenerError:@"Network Error" message:@"Server couldn't start.  Local can't be cheated."];
 			return;
 		}
 
 		if ( bind( sockfd, (struct sockaddr *)(&addr), sizeof(struct sockaddr) ) == -1 )
 		{
-			NSLog( @"ERROR: failed to start server because bind() failed" );
+			CMLog( @"ERROR: failed to start server because bind() failed" );
 			[rootProxy listenerError:@"Network Error" message:@"The cheat server could not start, probably because the port is already in use.  Local can not be cheated."];
 			return;
 		}
@@ -106,7 +106,7 @@
 
 		if ( bind( sockfd, (struct sockaddr *)(&addr), sizeof(addr) ) == -1 )
 		{
-			NSLog( @"ERROR: failed to start server because bind() failed" );
+			CMLog( @"ERROR: failed to start server because bind() failed" );
 			[rootProxy listenerError:@"Network Error" message:@"The cheat server could not start, probably because the path is already in use.  Local can not be cheated."];
 			return;
 		}
@@ -114,7 +114,7 @@
 
 	if ( listen( sockfd, 50 ) == -1 )
 	{
-		NSLog( @"ERROR: failed to start server because listen() failed" );
+		CMLog( @"ERROR: failed to start server because listen() failed" );
 		[rootProxy listenerError:@"Network Error" message:@"Server couldn't start.  Local can't be cheated."];
 		return;
 	}
@@ -128,7 +128,7 @@
 {
 	int						result;
 
-	NSLog( @"LISTENER start" );
+	CMLog( @"LISTENER start" );
 
 	if ( listenRemote )
 	{
@@ -165,7 +165,7 @@
 		}
 	}
 
-	NSLog( @"LISTENER close" );
+	CMLog( @"LISTENER close" );
 
 	[rootProxy listenerDisconnected];
 }

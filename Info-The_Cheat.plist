@@ -7,18 +7,26 @@
 	<key>CFBundleDocumentTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleTypeExtensions</key>
+			<array>
+				<string>cheat</string>
+			</array>
+			<key>CFBundleTypeIconFile</key>
+			<string>icondoc.icns</string>
 			<key>CFBundleTypeName</key>
-			<string>The Cheat</string>
+			<string>Cheat Document</string>
+			<key>CFBundleTypeOSTypes</key>
+			<array>
+				<string>ThCh</string>
+			</array>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
-			<key>NSDocumentClass</key>
-			<string>MyDocument</string>
 		</dict>
 	</array>
 	<key>CFBundleExecutable</key>
 	<string>The Cheat</string>
 	<key>CFBundleGetInfoString</key>
-	<string>The Cheat 1.1.1</string>
+	<string>The Cheat 1.1.2</string>
 	<key>CFBundleIconFile</key>
 	<string>icon.icns</string>
 	<key>CFBundleIdentifier</key>
@@ -30,7 +38,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.1.1</string>
+	<string>1.1.2</string>
 	<key>CFBundleSignature</key>
 	<string>ThCh</string>
 	<key>NSMainNibFile</key>

@@ -2,13 +2,13 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Project:   The Cheat
 //
-// File:      MyDocument.m
+// File:      SessionController.m
 // Created:   Sun Sep 07 2003
 //
 // Copyright: 2003 Chaz McGarvey.  All rights reserved.
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#import "MyDocument.h"
+#import "SessionController.h"
 
 #import "AppController.h"
 
@@ -19,11 +19,11 @@
 void TCPlaySound( NSString *name );
 
 
-@implementation MyDocument
+@implementation SessionController
 
 - (id)init
 {
-    if ( self = [super init] )
+    if ( self = [super initWithWindowNibName:@"Session"] )
 	{
 		NSNotificationCenter		*nc = [NSNotificationCenter defaultCenter];
 		
@@ -48,7 +48,7 @@ void TCPlaySound( NSString *name );
     return self;
 }
 
-- (NSString *)windowNibName
+/*- (NSString *)windowNibName
 {
     return @"MyDocument";
 }
@@ -63,10 +63,16 @@ void TCPlaySound( NSString *name );
     [super windowControllerDidLoadNib:controller];
 
 	[self initialInterfaceSetup];
+}*/
+
+- (void)windowDidLoad
+{
+	[cheatWindow setTitle:[NSString stringWithFormat:@"The Cheat %i", ++TCGlobalSessionCount]];
+	
+	[self initialInterfaceSetup];
 }
 
-
-- (void)close
+- (void)windowWillClose:(NSNotification *)aNotification
 {
 	// closing the window will automatically disconnect the client from the server,
 	// but if the application is quitting, the client may not get a chance to exit.
@@ -81,7 +87,8 @@ void TCPlaySound( NSString *name );
 	[statusTextTimer invalidate];
 	[statusTextTimer release], statusTextTimer = nil;
 	
-	[super close];
+	// we keep track of ourselves so we have to release ourself.
+	[self release];
 }
 
 
@@ -245,6 +252,7 @@ void TCPlaySound( NSString *name );
 
 - (void)setStatusDisconnected
 {
+	if ( status == STATUS_DISCONNECTED ) return;
 	lastStatus = status;
 	status = STATUS_DISCONNECTED;
 	
@@ -258,7 +266,7 @@ void TCPlaySound( NSString *name );
 	[searchRadioMatrix setEnabled:NO];
 	[searchButton setEnabled:NO];
 	[clearSearchButton setEnabled:NO];
-	[self setStatusText:@"Not Connected" duration:0];
+	[statusText addStatus:@"Not Connected" duration:CM_STATUS_FOREVER];
 	[statusText setToolTip:@""];
 	[statusBar stopAnimation:self];
 	[addressTable setEnabled:NO];
@@ -270,6 +278,7 @@ void TCPlaySound( NSString *name );
 
 - (void)setStatusConnected
 {
+	if ( status == STATUS_CONNECTED ) return;
 	lastStatus = status;
 	status = STATUS_CONNECTED;
 	
@@ -282,7 +291,7 @@ void TCPlaySound( NSString *name );
 	[self updateSearchBoxes];
 	[self updateSearchButton];
 	[clearSearchButton setEnabled:NO];
-	[self setStatusText:@"Connected" duration:0];
+	[statusText addStatus:@"Connected" duration:CM_STATUS_FOREVER];
 	[statusText setToolTip:@""];
 	[statusBar stopAnimation:self];
 	[addressTable setEnabled:NO];
@@ -294,6 +303,7 @@ void TCPlaySound( NSString *name );
 
 - (void)setStatusCheating
 {
+	if ( status == STATUS_CHEATING ) return;
 	lastStatus = status;
 	status = STATUS_CHEATING;
 	
@@ -306,25 +316,25 @@ void TCPlaySound( NSString *name );
 	[self updateSearchBoxes];
 	[self updateSearchButton];
 	[clearSearchButton setEnabled:YES];
-	if ( searchResultsAmount < maxSearchResultsAmount )
+	if ( searchResultsAmount <= searchResultsAmountDisplayed )
 	{
 		if ( searchResultsAmount == 1 )
 		{
-			[self setStatusText:[NSString stringWithFormat:@"Results: %i", searchResultsAmount] duration:0 color:[NSColor colorWithCalibratedRed:0.0f green:0.5f blue:0.0f alpha:1.0f]];
+			[statusText addStatus:@"One Result" color:[NSColor colorWithCalibratedRed:0.0f green:0.5f blue:0.0f alpha:1.0f] duration:CM_STATUS_FOREVER];
 		}
 		else if ( searchResultsAmount == 0 )
 		{
-			[self setStatusText:[NSString stringWithFormat:@"Results: %i", searchResultsAmount] duration:0 color:[NSColor colorWithCalibratedRed:0.5f green:0.0f blue:0.0f alpha:1.0f]];
+			[statusText addStatus:@"No Results" color:[NSColor colorWithCalibratedRed:0.5f green:0.0f blue:0.0f alpha:1.0f] duration:CM_STATUS_FOREVER];
 		}
 		else
 		{
-			[self setStatusText:[NSString stringWithFormat:@"Results: %i", searchResultsAmount] duration:0];
+			[statusText addStatus:[NSString stringWithFormat:@"Results: %i", searchResultsAmount] duration:CM_STATUS_FOREVER];
 		}
 		[statusText setToolTip:@""];
 	}
 	else
 	{
-		[self setStatusText:[NSString stringWithFormat:@"Results: >%i", maxSearchResultsAmount] duration:0];
+		[statusText addStatus:[NSString stringWithFormat:@"Results: >%i", searchResultsAmountDisplayed] duration:CM_STATUS_FOREVER];
 		[statusText setToolTip:[NSString stringWithFormat:@"Results: %i", searchResultsAmount]];
 	}
 	[statusBar stopAnimation:self];
@@ -337,6 +347,7 @@ void TCPlaySound( NSString *name );
 
 - (void)setStatusSearching
 {
+	if ( status == STATUS_SEARCHING ) return;
 	lastStatus = status;
 	status = STATUS_SEARCHING;
 	
@@ -350,7 +361,7 @@ void TCPlaySound( NSString *name );
 	[searchRadioMatrix setEnabled:NO];
 	[searchButton setEnabled:NO];
 	[clearSearchButton setEnabled:NO];
-	[self setStatusText:@"Searching..." duration:0];
+	[statusText addStatus:@"Searching..." duration:CM_STATUS_FOREVER];
 	[statusText setToolTip:@""];
 	[statusBar startAnimation:self];
 	[addressTable setEnabled:NO];
@@ -362,6 +373,7 @@ void TCPlaySound( NSString *name );
 
 - (void)setStatusChanging
 {
+	if ( status == STATUS_CHANGING ) return;
 	lastStatus = status;
 	status = STATUS_CHANGING;
 	
@@ -387,6 +399,7 @@ void TCPlaySound( NSString *name );
 
 - (void)setStatusChangingLater
 {
+	if ( status == STATUS_CHANGING_LATER ) return;
 	lastStatus = status;
 	status = STATUS_CHANGING_LATER;
 	
@@ -400,7 +413,7 @@ void TCPlaySound( NSString *name );
 	[searchRadioMatrix setEnabled:NO];
 	[searchButton setEnabled:NO];
 	[clearSearchButton setEnabled:NO];
-	[self setStatusText:@"Changing Later..." duration:0];
+	[statusText addStatus:@"Changing Later..." duration:CM_STATUS_FOREVER];
 	[statusText setToolTip:@""];
 	[statusBar startAnimation:self];
 	[addressTable setEnabled:NO];
@@ -412,6 +425,7 @@ void TCPlaySound( NSString *name );
 
 - (void)setStatusChangingContinuously
 {
+	if ( status == STATUS_CHANGING_CONTINUOUSLY ) return;
 	lastStatus = status;
 	status = STATUS_CHANGING_CONTINUOUSLY;
 	
@@ -425,7 +439,7 @@ void TCPlaySound( NSString *name );
 	[searchRadioMatrix setEnabled:NO];
 	[searchButton setEnabled:NO];
 	[clearSearchButton setEnabled:NO];
-	[self setStatusText:@"Repeating Change..." duration:0];
+	[statusText addStatus:@"Repeating Change..." duration:CM_STATUS_FOREVER];
 	[statusText setToolTip:@""];
 	[statusBar startAnimation:self];
 	[addressTable setEnabled:NO];
@@ -437,6 +451,7 @@ void TCPlaySound( NSString *name );
 
 - (void)setStatusUndoing
 {
+	if ( status == STATUS_UNDOING ) return;
 	lastStatus = status;
 	status = STATUS_UNDOING;
 	
@@ -450,7 +465,7 @@ void TCPlaySound( NSString *name );
 	[searchRadioMatrix setEnabled:NO];
 	[searchButton setEnabled:NO];
 	[clearSearchButton setEnabled:NO];
-	[self setStatusText:@"Undoing..." duration:0];
+	[statusText addStatus:@"Undoing..." duration:CM_STATUS_FOREVER];
 	[statusBar startAnimation:self];
 	[addressTable setEnabled:NO];
 	[changeButton setTitle:@"Change..."];
@@ -461,6 +476,7 @@ void TCPlaySound( NSString *name );
 
 - (void)setStatusRedoing
 {
+	if ( status == STATUS_REDOING ) return;
 	lastStatus = status;
 	status = STATUS_REDOING;
 	
@@ -474,7 +490,7 @@ void TCPlaySound( NSString *name );
 	[searchRadioMatrix setEnabled:NO];
 	[searchButton setEnabled:NO];
 	[clearSearchButton setEnabled:NO];
-	[self setStatusText:@"Redoing..." duration:0];
+	[statusText addStatus:@"Redoing..." duration:CM_STATUS_FOREVER];
 	[statusText setToolTip:@""];
 	[statusBar startAnimation:self];
 	[addressTable setEnabled:NO];
@@ -484,7 +500,7 @@ void TCPlaySound( NSString *name );
 	[[serverMenu itemAtIndex:0] setTitle:@"Disconnect"];
 }
 
-- (void)setStatusToLast
+/*- (void)setStatusToLast
 {
 	switch ( lastStatus )
 	{
@@ -524,8 +540,9 @@ void TCPlaySound( NSString *name );
 			[self setStatusRedoing];
 			break;
 	}
-}
+}*/
 
+/*
 - (void)setStatusText:(NSString *)msg duration:(NSTimeInterval)seconds
 {
 	[self setStatusText:msg duration:seconds color:[NSColor blackColor]];
@@ -564,7 +581,7 @@ void TCPlaySound( NSString *name );
 	[savedStatusText release], savedStatusText = nil;
 	[statusTextTimer invalidate];
 	[statusTextTimer release], statusTextTimer = nil;
-}
+}*/
 
 
 - (void)connectToLocal
@@ -649,7 +666,7 @@ void TCPlaySound( NSString *name );
 
 	if ( SendBuffer( sockfd, (char *)(&header), &length ) == -1 || length != sizeof(header) )
 	{
-		NSLog( @"sendProcessListRequest failed on socket %i", sockfd );
+		CMLog( @"sendProcessListRequest failed on socket %i", sockfd );
 	}
 }
 
@@ -664,7 +681,7 @@ void TCPlaySound( NSString *name );
 	
 	if ( SendBuffer( sockfd, (char *)(&header), &length ) == -1 || length != sizeof(header) )
 	{
-		NSLog( @"sendClearSearch failed on socket %i", sockfd );
+		CMLog( @"sendClearSearch failed on socket %i", sockfd );
 	}
 }
 
@@ -682,7 +699,7 @@ void TCPlaySound( NSString *name );
 
 	if ( (buffer = (char *)malloc( length )) == NULL )
 	{
-		NSLog( @"sendSearch:size: failed" );
+		CMLog( @"sendSearch:size: failed" );
 	}
 
 	ptr = buffer;
@@ -692,7 +709,7 @@ void TCPlaySound( NSString *name );
 
 	if ( SendBuffer( sockfd, buffer, &lengthAfter ) == -1 || lengthAfter != length )
 	{
-		NSLog( @"sendSearch:size: failed" );
+		CMLog( @"sendSearch:size: failed" );
 	}
 
 	free( buffer );
@@ -712,7 +729,7 @@ void TCPlaySound( NSString *name );
 	
 	if ( (buffer = (char *)malloc( length )) == NULL )
 	{
-		NSLog( @"sendChange:size: failed" );
+		CMLog( @"sendChange:size: failed" );
 	}
 	
 	ptr = buffer;
@@ -722,7 +739,7 @@ void TCPlaySound( NSString *name );
 	
 	if ( SendBuffer( sockfd, buffer, &lengthAfter ) == -1 || lengthAfter != length )
 	{
-		NSLog( @"sendChange:size: failed" );
+		CMLog( @"sendChange:size: failed" );
 	}
 	
 	free( buffer );
@@ -739,7 +756,7 @@ void TCPlaySound( NSString *name );
 
 	if ( SendBuffer( sockfd, (char *)(&header), &length ) == -1 || length != sizeof(header) )
 	{
-		NSLog( @"sendPauseTarget failed" );
+		CMLog( @"sendPauseTarget failed" );
 	}
 }
 
@@ -759,7 +776,7 @@ void TCPlaySound( NSString *name );
 
 	if ( SendBuffer( sockfd, (char *)(&header), &length ) == -1 || length != sizeof(header) )
 	{
-		NSLog( @"sendUndoRequest failed" );
+		CMLog( @"sendUndoRequest failed" );
 	}
 }
 
@@ -774,7 +791,7 @@ void TCPlaySound( NSString *name );
 
 	if ( SendBuffer( sockfd, (char *)(&header), &length ) == -1 || length != sizeof(header) )
 	{
-		NSLog( @"sendRedoRequest failed" );
+		CMLog( @"sendRedoRequest failed" );
 	}
 }
 
@@ -794,7 +811,7 @@ void TCPlaySound( NSString *name );
 
 	if ( (buffer = (char *)malloc( length )) == NULL )
 	{
-		NSLog( @"sendSetTargetPID: failed" );
+		CMLog( @"sendSetTargetPID: failed" );
 	}
 
 	ptr = buffer;
@@ -804,7 +821,7 @@ void TCPlaySound( NSString *name );
 
 	if ( SendBuffer( sockfd, buffer, &lengthAfter ) == -1 || lengthAfter != length )
 	{
-		NSLog( @"sendSetTargetPID: failed" );
+		CMLog( @"sendSetTargetPID: failed" );
 	}
 
 	free( buffer );
@@ -849,7 +866,7 @@ void TCPlaySound( NSString *name );
 		TCPlaySound( @"Basso" );
 	}
 	
-	[self setStatusToLast];
+	[self setStatusCheating];
 	//[self setStatusText:@"Search Finished" duration:1.5];
 	[cheatWindow makeFirstResponder:searchTextField];
 }
@@ -861,18 +878,21 @@ void TCPlaySound( NSString *name );
 	[self destroyResults];
 
 	COPY_FROM_BUFFER( &searchResultsAmount, ptr, sizeof(searchResultsAmount) );
-	COPY_FROM_BUFFER( &maxSearchResultsAmount, ptr, sizeof(maxSearchResultsAmount) );
+	COPY_FROM_BUFFER( &searchResultsAmountDisplayed, ptr, sizeof(searchResultsAmountDisplayed) );
 
-	if ( searchResultsAmount > 0 )
+	if ( searchResultsAmountDisplayed > 0 )
 	{
-		int				memSize = TCAddressSize*maxSearchResultsAmount;
+		int				memSize = TCAddressSize * searchResultsAmountDisplayed;
+		// TCAddressSize*maxSearchResultsAmount;
 		
 		if ( (searchResults = (TCaddress *)malloc( memSize )) == NULL )
 		{
-			NSLog( @"receivedVariableList failed: malloc failed" );
+			CMLog( @"receivedVariableList failed: malloc failed" );
 			searchResultsAmount = 0;
+			searchResultsAmountDisplayed = 0;
 			return;
 		}
+		CMLog( @"CLIENT setting display amount to %i", searchResultsAmountDisplayed );
 
 		COPY_FROM_BUFFER( searchResults, ptr, memSize );
 	}
@@ -882,15 +902,10 @@ void TCPlaySound( NSString *name );
 
 - (void)receivedChangeFinished
 {
-	[self setStatusToLast];
-
-	if ( status == STATUS_CHANGING_CONTINUOUSLY )
-	{
-		[self setStatusText:@"Change Occured" duration:1.5];
-	}
-	else
+	if ( status != STATUS_CHANGING_CONTINUOUSLY )
 	{
 		TCPlaySound( @"Tink" );
+		[self setStatusCheating];
 	}
 }
 
@@ -911,12 +926,12 @@ void TCPlaySound( NSString *name );
 
 - (void)receivedUndoFinished
 {
-	[self setStatusToLast];
+	[self setStatusCheating];
 }
 
 - (void)receivedRedoFinished
 {
-	[self setStatusToLast];
+	[self setStatusCheating];
 }
 
 - (void)receivedUndoRedoStatus:(NSData *)data
@@ -926,7 +941,7 @@ void TCPlaySound( NSString *name );
 	COPY_FROM_BUFFER( &undoCount, ptr, sizeof(undoCount) );
 	COPY_FROM_BUFFER( &redoCount, ptr, sizeof(redoCount) );
 	
-	NSLog( @"UNDO: %i, REDO: %i", undoCount, redoCount );
+	CMLog( @"UNDO: %i, REDO: %i", undoCount, redoCount );
 }
 
 - (void)receivedAppLaunched:(NSData *)data
@@ -968,8 +983,10 @@ void TCPlaySound( NSString *name );
 	[self sendSetTargetPID:targetPID];
 	
 	// alert the user.
-	[self handleErrorMessage:@"The application that was being cheated has quit." fatal:NO];
+	TCPlaySound( @"Frog" );
+	//[self handleErrorMessage:@"The application that was being cheated has quit." fatal:NO];
 	
+	[statusText addStatus:@"Target Quit"];
 	[self setStatusConnected];
 }
 
@@ -1006,7 +1023,7 @@ void TCPlaySound( NSString *name );
 	// copy the number of results to return.
 	COPY_TO_BUFFER( ptr, &TCGlobalHitsDisplayed, sizeof(TCGlobalHitsDisplayed) );
 	
-	NSLog( @"type: %i, size: %i", type, size );
+	CMLog( @"type: %i, size: %i", type, size );
 	
 	// switch to cheating mode if this is the first search.
 	if ( status == STATUS_CONNECTED )
@@ -1266,8 +1283,6 @@ void TCPlaySound( NSString *name );
 	
 	[self sendChange:data size:dataSize];
 	free( data );
-	
-	[self setStatusChanging];
 }
 
 
@@ -1352,8 +1367,8 @@ void TCPlaySound( NSString *name );
 {
 	[self clearSearch];
 	
+	[statusText addStatus:@"Search Cleared" duration:1.5];
 	[self setStatusConnected];
-	[self setStatusText:@"Search Cleared" duration:1.5];
 
 	[self sendClearSearch];
 }
@@ -1405,8 +1420,8 @@ void TCPlaySound( NSString *name );
 	targetPID = [sender tag];
 
 	[self sendSetTargetPID:targetPID];
-
-	[self setStatusText:[NSString stringWithFormat:@"PID: %i", targetPID] duration:0];
+	
+	[statusText addStatus:[NSString stringWithFormat:@"PID: %i", targetPID] duration:CM_STATUS_FOREVER];
 }
 
 
@@ -1483,6 +1498,14 @@ void TCPlaySound( NSString *name );
 {
 	[changeSheet orderOut:sender];
 	[NSApp endSheet:changeSheet returnCode:1];
+	if ( [recurringChangeButton state] == NSOnState )
+	{
+		[self setStatusChangingContinuously];
+	}
+	else
+	{
+		[self setStatusChanging];
+	}
 	//[NSApp stopModal];
 }
 
@@ -1521,11 +1544,12 @@ void TCPlaySound( NSString *name );
 
 - (void)destroyResults
 {
-	if ( searchResultsAmount > 0 )
+	if ( searchResultsAmountDisplayed > 0 )
 	{
 		free( searchResults );
 		
 		searchResultsAmount = 0;
+		searchResultsAmountDisplayed = 0;
 	}
 }
 
@@ -1600,7 +1624,7 @@ void TCPlaySound( NSString *name );
 
 - (void)handleErrorMessage:(NSString *)msg fatal:(BOOL)fatal
 {
-	NSLog( @"error received" );
+	CMLog( @"error received" );
 	// close the change sheet if it's open.
 	if ( [cheatWindow attachedSheet] )
 	{
@@ -1743,7 +1767,7 @@ void TCPlaySound( NSString *name );
 
 - (int)numberOfRowsInTableView:(NSTableView *)table
 {
-	return (searchResultsAmount <= maxSearchResultsAmount) ? searchResultsAmount : maxSearchResultsAmount;
+	return searchResultsAmountDisplayed;
 }
 
 - (id)tableView:(NSTableView *)table objectValueForTableColumn:(NSTableColumn *)column row:(int)row
@@ -1784,7 +1808,7 @@ void TCPlaySound( NSString *name );
 	int							tag = [serverList count] - 1;
 	NSMenuItem					*item;
 	
-	NSLog( @"server found" );
+	CMLog( @"server found" );
 	
 	if ( [serverMenu itemWithTitle:name] == nil )
 	{

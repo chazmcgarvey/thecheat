@@ -11,6 +11,8 @@
 #ifndef _cheat_net_H
 #define _cheat_net_H
 
+#import <Chaz/Chaz.h>
+
 #include <sys/socket.h>
 #include <sys/un.h>
 #include <netinet/in.h>
@@ -23,8 +25,8 @@
 
 // macros
 
-#define COPY_TO_BUFFER( to, from, size )	memcpy( to, from, size ), to += size;
-#define COPY_FROM_BUFFER( to, from, size )	memcpy( to, from, size ), from += size;
+#define COPY_TO_BUFFER( to, from, size )	memcpy( to, from, size ), (char *)to += size;
+#define COPY_FROM_BUFFER( to, from, size )	memcpy( to, from, size ), (char *)from += size;
 
 
 struct tagPacketHeader

@@ -93,7 +93,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	if ( getpeername( sockfd, &identifier, &addrLen ) == -1 )
 	{
-		NSLog( @"ERROR: getpeername() failed" );
+		CMLog( @"ERROR: getpeername() failed" );
 	}
 
 	if ( identifier.sa_family == AF_INET )
@@ -104,12 +104,12 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 		if ( getpeername( sockfd, (struct sockaddr *)(&addr), &addrLen ) == -1 )
 		{
-			NSLog( @"ERROR: getpeername() failed" );
+			CMLog( @"ERROR: getpeername() failed" );
 		}
 
 		if ( (addressCString = inet_ntoa( addr.sin_addr )) == NULL )
 		{
-			NSLog( @"ERROR: inet_ntoa() failed" );
+			CMLog( @"ERROR: inet_ntoa() failed" );
 		}
 
 		address = [NSString stringWithCString:addressCString];
@@ -122,10 +122,10 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 		if ( getpeername( sockfd, (struct sockaddr *)(&addr), &addrLen ) == -1 )
 		{
-			NSLog( @"ERROR: getpeername() failed" );
+			CMLog( @"ERROR: getpeername() failed" );
 		}
 
-		NSLog( @"client connection: %s", addr.sun_path );
+		CMLog( @"client connection: %s", addr.sun_path );
 		
 		address = [NSString stringWithString:@"127.0.0.1"];
 	}
@@ -156,7 +156,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	numfds = sockfd + 1;
 
-	NSLog( @"SERVER start" );
+	CMLog( @"SERVER start" );
 
 	for (;;)
 	{
@@ -173,26 +173,26 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 			if ( !VerifyChecksum( header.checksum ) )
 			{
-				NSLog( @"checksum failed" );
+				CMLog( @"checksum failed" );
 			}
 
 			if ( header.size != 0 )
 			{
 				if ( (data = (char *)malloc( header.size )) == NULL )
 				{
-					NSLog( @"failed to allocate buffer for reading a network packet" );
+					CMLog( @"failed to allocate buffer for reading a network packet" );
 					break;
 				}
 
 				if ( (result = ReadBuffer( sockfd, data, header.size )) != header.size )
 				{
-					NSLog( @"failed to read the data of a network packet" );
+					CMLog( @"failed to read the data of a network packet" );
 					free( data );
 					break;
 				}
 			}
 
-			//NSLog( @"SERVER message %i/%i/%i", header.checksum, header.function, header.size );
+			//CMLog( @"SERVER message %i/%i/%i", header.checksum, header.function, header.size );
 
 			switch ( header.function )
 			{
@@ -239,7 +239,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	close( sockfd );
 
-	NSLog( @"SERVER close" );
+	CMLog( @"SERVER close" );
 
 	[rootProxy serverDisconnected:self];
 }
@@ -284,7 +284,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 		{
 			if ( result != KERN_INVALID_ADDRESS )
 			{
-				NSLog( @"vm_region returned error: %i", result );
+				CMLog( @"vm_region returned error: %i", result );
 			}
 			break;
 		}
@@ -296,7 +296,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 			
 			if ( (result = vm_read_overwrite( processTask, address, size, (vm_address_t)data, &dataLength )) != KERN_SUCCESS && result != KERN_PROTECTION_FAILURE )
 			{
-				NSLog( @"vm_read_overwrite returned error: %i", result );
+				CMLog( @"vm_read_overwrite returned error: %i", result );
 				free( data );
 				break;
 			}
@@ -307,7 +307,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 				
 				if ( (results = realloc( results, TCAddressSize*resultsAmount + dataLength )) == NULL )
 				{
-					NSLog( @"ERROR: could not expand buffer" );
+					CMLog( @"ERROR: could not expand buffer" );
 					exit(0);
 				}
 				
@@ -333,7 +333,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	realloc( results, TCAddressSize*resultsAmount );
 	[searchResults addObject:[SearchResults resultsWithType:TYPE_INTEGER size:SIZE_8_BIT data:results amount:resultsAmount]];
 	
-	NSLog( @"found %i of %i", resultsAmount, value );
+	CMLog( @"found %i of %i", resultsAmount, value );
 }
 
 - (void)firstSearchIntegerChar:(int8_t)value
@@ -358,7 +358,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 		{
 			if ( result != KERN_INVALID_ADDRESS )
 			{
-				NSLog( @"vm_region returned error: %i", result );
+				CMLog( @"vm_region returned error: %i", result );
 			}
 			break;
 		}
@@ -370,7 +370,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 			
 			if ( (result = vm_read_overwrite( processTask, address, size, (vm_address_t)data, &dataLength )) != KERN_SUCCESS && result != KERN_PROTECTION_FAILURE )
 			{
-				NSLog( @"vm_read_overwrite returned error: %i", result );
+				CMLog( @"vm_read_overwrite returned error: %i", result );
 				free( data );
 				break;
 			}
@@ -381,7 +381,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 				
 				if ( (results = (TCaddress *)realloc( results, TCAddressSize*resultsAmount + TCAddressSize*dataLength )) == NULL )
 				{
-					NSLog( @"ERROR: could not expand buffer" );
+					CMLog( @"ERROR: could not expand buffer" );
 					exit(0);
 				}
 				
@@ -403,7 +403,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	realloc( results, TCAddressSize*resultsAmount );
 	[searchResults addObject:[SearchResults resultsWithType:TYPE_INTEGER size:SIZE_8_BIT data:results amount:resultsAmount]];
 	
-	NSLog( @"found %i of %i", resultsAmount, value );
+	CMLog( @"found %i of %i", resultsAmount, value );
 }
 
 - (void)firstSearchIntegerShort:(int16_t)value
@@ -428,7 +428,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 		{
 			if ( result != KERN_INVALID_ADDRESS )
 			{
-				NSLog( @"vm_region returned error: %i", result );
+				CMLog( @"vm_region returned error: %i", result );
 			}
 			break;
 		}
@@ -440,7 +440,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 			
 			if ( (result = vm_read_overwrite( processTask, address, size, (vm_address_t)data, &dataLength )) != KERN_SUCCESS && result != KERN_PROTECTION_FAILURE )
 			{
-				NSLog( @"vm_read_overwrite returned error: %i", result );
+				CMLog( @"vm_read_overwrite returned error: %i", result );
 				free( data );
 				break;
 			}
@@ -451,7 +451,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 				
 				if ( (results = (TCaddress *)realloc( results, TCAddressSize*resultsAmount + 2*dataLength )) == NULL )
 				{
-					NSLog( @"ERROR: could not expand buffer" );
+					CMLog( @"ERROR: could not expand buffer" );
 					exit(0);
 				}
 				
@@ -473,7 +473,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	realloc( results, TCAddressSize*resultsAmount );
 	[searchResults addObject:[SearchResults resultsWithType:TYPE_INTEGER size:SIZE_16_BIT data:results amount:resultsAmount]];
 	
-	NSLog( @"found %i of %i", resultsAmount, value );
+	CMLog( @"found %i of %i", resultsAmount, value );
 }
 
 - (void)firstSearchIntegerLong:(int32_t)value
@@ -498,7 +498,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	
 	if ( (result = malloc_get_all_zones( processTask, NULL, &zones, &zone_count )) != KERN_SUCCESS )
 	{
-		NSLog( @"malloc_get_all_zones error: %i", result );
+		CMLog( @"malloc_get_all_zones error: %i", result );
 	}
 	else
 	{
@@ -508,7 +508,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 		
 		for ( i = 0; i < 10; i++ )
 		{
-			NSLog( @"malloc_get_all_zones[%i] = %X", i, (vm_address_t)zones[i] );
+			CMLog( @"malloc_get_all_zones[%i] = %X", i, (vm_address_t)zones[i] );
 		}
 	}*/
 	
@@ -518,7 +518,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 		{
 			if ( result != KERN_INVALID_ADDRESS )
 			{
-				NSLog( @"vm_region returned error: %i", result );
+				CMLog( @"vm_region returned error: %i", result );
 			}
 			break;
 		}
@@ -528,11 +528,11 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 			data = (int32_t *)malloc( size );
 			dataLength = size;
 			
-			//NSLog( @"address: %.8X size: %i", address, size );
+			//CMLog( @"address: %.8X size: %i", address, size );
 			
 			if ( (result = vm_read_overwrite( processTask, address, size, (vm_address_t)data, &dataLength )) != KERN_SUCCESS && result != KERN_PROTECTION_FAILURE )
 			{
-				NSLog( @"vm_read_overwrite returned error: %i", result );
+				CMLog( @"vm_read_overwrite returned error: %i", result );
 				free( data );
 				break;
 			}
@@ -543,7 +543,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 				
 				if ( (results = (TCaddress *)realloc( results, TCAddressSize*resultsAmount + dataLength )) == NULL )
 				{
-					NSLog( @"ERROR: could not expand buffer" );
+					CMLog( @"ERROR: could not expand buffer" );
 					exit(0);
 				}
 
@@ -565,7 +565,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	realloc( results, TCAddressSize*resultsAmount );
 	[searchResults addObject:[SearchResults resultsWithType:TYPE_INTEGER size:SIZE_32_BIT data:results amount:resultsAmount]];
 	
-	NSLog( @"found %i of %i", resultsAmount, value );
+	CMLog( @"found %i of %i", resultsAmount, value );
 }
 
 - (void)firstSearchDecimalFloat:(float)value
@@ -590,7 +590,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 		{
 			if ( result != KERN_INVALID_ADDRESS )
 			{
-				NSLog( @"vm_region returned error: %i", result );
+				CMLog( @"vm_region returned error: %i", result );
 			}
 			break;
 		}
@@ -602,7 +602,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 			
 			if ( (result = vm_read_overwrite( processTask, address, size, (vm_address_t)data, &dataLength )) != KERN_SUCCESS && result != KERN_PROTECTION_FAILURE )
 			{
-				NSLog( @"vm_read_overwrite returned error: %i", result );
+				CMLog( @"vm_read_overwrite returned error: %i", result );
 				free( data );
 				break;
 			}
@@ -613,7 +613,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 				
 				if ( (results = realloc( results, TCAddressSize*resultsAmount + dataLength )) == NULL )
 				{
-					NSLog( @"ERROR: could not expand buffer" );
+					CMLog( @"ERROR: could not expand buffer" );
 					exit(0);
 				}
 				
@@ -635,7 +635,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	realloc( results, TCAddressSize*resultsAmount );
 	[searchResults addObject:[SearchResults resultsWithType:TYPE_DECIMAL size:SIZE_32_BIT data:results amount:resultsAmount]];
 	
-	NSLog( @"found %i of %i", resultsAmount, value );
+	CMLog( @"found %i of %i", resultsAmount, value );
 }
 
 - (void)firstSearchDecimalDouble:(double)value
@@ -654,7 +654,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	TCaddress					*results = NULL;
 	int							resultsAmount = 0;
 	
-	NSLog( @"float search" );
+	CMLog( @"float search" );
 	
 	for (;;)
 	{
@@ -662,7 +662,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 		{
 			if ( result != KERN_INVALID_ADDRESS )
 			{
-				NSLog( @"vm_region returned error: %i", result );
+				CMLog( @"vm_region returned error: %i", result );
 			}
 			break;
 		}
@@ -674,7 +674,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 			
 			if ( (result = vm_read_overwrite( processTask, address, size, (vm_address_t)data, &dataLength )) != KERN_SUCCESS && result != KERN_PROTECTION_FAILURE )
 			{
-				NSLog( @"vm_read_overwrite returned error: %i", result );
+				CMLog( @"vm_read_overwrite returned error: %i", result );
 				free( data );
 				break;
 			}
@@ -685,7 +685,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 				
 				if ( (results = realloc( results, TCAddressSize*resultsAmount + dataLength )) == NULL )
 				{
-					NSLog( @"ERROR: could not expand buffer" );
+					CMLog( @"ERROR: could not expand buffer" );
 					exit(0);
 				}
 				
@@ -707,7 +707,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	realloc( results, TCAddressSize*resultsAmount );
 	[searchResults addObject:[SearchResults resultsWithType:TYPE_DECIMAL size:SIZE_64_BIT data:results amount:resultsAmount]];
 	
-	NSLog( @"found %i of %i", resultsAmount, value );
+	CMLog( @"found %i of %i", resultsAmount, value );
 }
 
 
@@ -733,7 +733,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	
 	if ( (data = (char *)malloc( vsize )) == NULL )
 	{
-		NSLog( @"ERROR: could not create buffer" );
+		CMLog( @"ERROR: could not create buffer" );
 		
 		[self sendError:@"The server cancelled the search because it ran out of memory." fatal:NO];
 		return;
@@ -741,7 +741,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	
 	if ( (results = (TCaddress *)malloc( TCAddressSize*lastResultsAmount )) == NULL )
 	{
-		NSLog( @"ERROR: could not create buffer" );
+		CMLog( @"ERROR: could not create buffer" );
 		
 		[self sendError:@"The server cancelled the search because it ran out of memory." fatal:NO];
 		free( data );
@@ -765,7 +765,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 		{
 			if ( result != KERN_PROTECTION_FAILURE )
 			{
-				NSLog( @"vm_read_overwrite returned error: %i", result );
+				CMLog( @"vm_read_overwrite returned error: %i", result );
 				break;
 			}
 		}
@@ -776,7 +776,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	
 	free( data );
 	
-	NSLog( @"found %i of %i", resultsAmount, value );
+	CMLog( @"found %i of %i", resultsAmount, value );
 }
 
 - (void)searchIntegerChar:(int8_t)value
@@ -801,7 +801,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	
 	if ( (results = (TCaddress *)malloc( TCAddressSize*lastResultsAmount )) == NULL )
 	{
-		NSLog( @"ERROR: could not create buffer" );
+		CMLog( @"ERROR: could not create buffer" );
 		
 		[self sendError:@"The server cancelled the search because it ran out of memory." fatal:NO];
 		return;
@@ -824,7 +824,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 		{
 			if ( result != KERN_PROTECTION_FAILURE )
 			{
-				NSLog( @"vm_read_overwrite returned error: %i", result );
+				CMLog( @"vm_read_overwrite returned error: %i", result );
 				break;
 			}
 		}
@@ -833,7 +833,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	realloc( results, TCAddressSize*resultsAmount );
 	[searchResults addObject:[SearchResults resultsWithType:TYPE_INTEGER size:SIZE_8_BIT data:results amount:resultsAmount]];
 	
-	NSLog( @"found %i of %i", resultsAmount, value );
+	CMLog( @"found %i of %i", resultsAmount, value );
 }
 
 - (void)searchIntegerShort:(int16_t)value
@@ -858,7 +858,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	
 	if ( (results = (TCaddress *)malloc( TCAddressSize*lastResultsAmount )) == NULL )
 	{
-		NSLog( @"ERROR: could not create buffer" );
+		CMLog( @"ERROR: could not create buffer" );
 		
 		[self sendError:@"The server cancelled the search because it ran out of memory." fatal:NO];
 		return;
@@ -881,7 +881,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 		{
 			if ( result != KERN_PROTECTION_FAILURE )
 			{
-				NSLog( @"vm_read_overwrite returned error: %i", result );
+				CMLog( @"vm_read_overwrite returned error: %i", result );
 				break;
 			}
 		}
@@ -890,7 +890,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	realloc( results, TCAddressSize*resultsAmount );
 	[searchResults addObject:[SearchResults resultsWithType:TYPE_INTEGER size:SIZE_16_BIT data:results amount:resultsAmount]];
 	
-	NSLog( @"found %i of %i", resultsAmount, value );
+	CMLog( @"found %i of %i", resultsAmount, value );
 }
 
 - (void)searchIntegerLong:(int32_t)value
@@ -915,7 +915,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	
 	if ( (results = (TCaddress *)malloc( TCAddressSize*lastResultsAmount )) == NULL )
 	{
-		NSLog( @"ERROR: could not create buffer" );
+		CMLog( @"ERROR: could not create buffer" );
 		
 		[self sendError:@"The server cancelled the search because it ran out of memory." fatal:NO];
 		return;
@@ -938,7 +938,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 		{
 			if ( result != KERN_PROTECTION_FAILURE )
 			{
-				NSLog( @"vm_read_overwrite returned error: %i", result );
+				CMLog( @"vm_read_overwrite returned error: %i", result );
 				break;
 			}
 		}
@@ -947,7 +947,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	realloc( results, TCAddressSize*resultsAmount );
 	[searchResults addObject:[SearchResults resultsWithType:TYPE_INTEGER size:SIZE_32_BIT data:results amount:resultsAmount]];
 	
-	NSLog( @"found %i of %i", resultsAmount, value );
+	CMLog( @"found %i of %i", resultsAmount, value );
 }
 
 - (void)searchDecimalFloat:(float)value
@@ -972,7 +972,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	
 	if ( (results = (TCaddress *)malloc( TCAddressSize*lastResultsAmount )) == NULL )
 	{
-		NSLog( @"ERROR: could not create buffer" );
+		CMLog( @"ERROR: could not create buffer" );
 		
 		[self sendError:@"The server cancelled the search because it ran out of memory." fatal:NO];
 		return;
@@ -995,7 +995,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 		{
 			if ( result != KERN_PROTECTION_FAILURE )
 			{
-				NSLog( @"vm_read_overwrite returned error: %i", result );
+				CMLog( @"vm_read_overwrite returned error: %i", result );
 				break;
 			}
 		}
@@ -1004,7 +1004,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	realloc( results, TCAddressSize*resultsAmount );
 	[searchResults addObject:[SearchResults resultsWithType:TYPE_DECIMAL size:SIZE_32_BIT data:results amount:resultsAmount]];
 	
-	NSLog( @"found %i of %i", resultsAmount, value );
+	CMLog( @"found %i of %i", resultsAmount, value );
 }
 
 - (void)searchDecimalDouble:(double)value
@@ -1029,7 +1029,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	
 	if ( (results = (TCaddress *)malloc( TCAddressSize*lastResultsAmount )) == NULL )
 	{
-		NSLog( @"ERROR: could not create buffer" );
+		CMLog( @"ERROR: could not create buffer" );
 		
 		[self sendError:@"The server cancelled the search because it ran out of memory." fatal:NO];
 		return;
@@ -1052,7 +1052,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 		{
 			if ( result != KERN_PROTECTION_FAILURE )
 			{
-				NSLog( @"vm_read_overwrite returned error: %i", result );
+				CMLog( @"vm_read_overwrite returned error: %i", result );
 				break;
 			}
 		}
@@ -1061,7 +1061,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	realloc( results, TCAddressSize*resultsAmount );
 	[searchResults addObject:[SearchResults resultsWithType:TYPE_DECIMAL size:SIZE_64_BIT data:results amount:resultsAmount]];
 	
-	NSLog( @"found %i of %i", resultsAmount, value );
+	CMLog( @"found %i of %i", resultsAmount, value );
 }
 
 
@@ -1218,7 +1218,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	if ( (buffer = (char *)malloc( length ))==NULL )
 	{
-		NSLog( @"sendProcessList failed" );
+		CMLog( @"sendProcessList failed" );
 		return;
 	}
 
@@ -1240,7 +1240,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	if ( SendBuffer( sockfd, buffer, &lengthAfter ) == -1 || lengthAfter != length )
 	{
-		NSLog( @"sendProcessList failed" );
+		CMLog( @"sendProcessList failed" );
 	}
 
 	free( buffer );
@@ -1258,7 +1258,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	if ( SendBuffer( sockfd, (char *)(&header), &length ) == -1 || length != sizeof(header) )
 	{
-		NSLog( @"sendSearchFinished failed" );
+		CMLog( @"sendSearchFinished failed" );
 	}
 }
 
@@ -1267,19 +1267,21 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	PacketHeader	header;
 	int				length;
 	int				lengthAfter;
+	int				displayAmount = ( searchResultsAmountDisplayed > amount )? amount : searchResultsAmountDisplayed;
+	int				resultsLength = TCAddressSize * displayAmount;
 
 	char			*buffer, *ptr;
 
 	header.checksum = RandomChecksum();
 	header.function = 7;
-	header.size = sizeof(amount) + sizeof(maxSearchResultsAmount) + TCAddressSize*maxSearchResultsAmount;
-	//            AMOUNT           MAX AMOUNT                       DATA
+	header.size = sizeof(amount) + sizeof(displayAmount) + resultsLength;
+	//            AMOUNT           DISPLAY AMOUNT          DATA
 
 	lengthAfter = length = header.size + sizeof(header);
 
 	if ( (buffer = (char *)malloc( length )) == NULL )
 	{
-		NSLog( @"sendVariableList:amount: failed" );
+		CMLog( @"sendVariableList:amount: failed" );
 		return;
 	}
 
@@ -1287,15 +1289,17 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	COPY_TO_BUFFER( ptr, &header, sizeof(header) );
 	COPY_TO_BUFFER( ptr, &amount, sizeof(amount) );
-	COPY_TO_BUFFER( ptr, &maxSearchResultsAmount, sizeof(maxSearchResultsAmount) );
-	COPY_TO_BUFFER( ptr, data, TCAddressSize*maxSearchResultsAmount );
+	COPY_TO_BUFFER( ptr, &displayAmount, sizeof(displayAmount) );
+	COPY_TO_BUFFER( ptr, data, resultsLength );
 
 	if ( SendBuffer( sockfd, buffer, &length ) == -1 || lengthAfter != length )
 	{
-		NSLog( @"sendVariableList:amount: failed" );
+		CMLog( @"sendVariableList:amount: failed" );
 	}
 
 	free( buffer );
+	
+	CMLog( @"SERVER sending %i out of %i results", displayAmount, amount );
 }
 
 - (void)sendChangeFinished
@@ -1309,7 +1313,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	if ( SendBuffer( sockfd, (char *)(&header), &length ) == -1 || length != sizeof(header) )
 	{
-		NSLog( @"sendChangeFinished failed" );
+		CMLog( @"sendChangeFinished failed" );
 	}
 }
 
@@ -1332,7 +1336,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	if ( (buffer = (char *)malloc( length )) == NULL )
 	{
-		NSLog( @"sendError:fatal: failed" );
+		CMLog( @"sendError:fatal: failed" );
 		return;
 	}
 
@@ -1344,7 +1348,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	if ( SendBuffer( sockfd, buffer, &length ) == -1 || lengthAfter != length )
 	{
-		NSLog( @"sendError:fatal: failed" );
+		CMLog( @"sendError:fatal: failed" );
 	}
 
 	free( buffer );
@@ -1366,7 +1370,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	if ( SendBuffer( sockfd, (char *)(&header), &length ) == -1 || length != sizeof(header) )
 	{
-		NSLog( @"sendUndoFinished failed" );
+		CMLog( @"sendUndoFinished failed" );
 	}
 }
 
@@ -1381,7 +1385,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	if ( SendBuffer( sockfd, (char *)(&header), &length ) == -1 || length != sizeof(header) )
 	{
-		NSLog( @"sendRedoFinished failed" );
+		CMLog( @"sendRedoFinished failed" );
 	}
 }
 
@@ -1404,7 +1408,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	
 	if ( (buffer = (char *)malloc( length )) == NULL )
 	{
-		NSLog( @"sendSetTargetPID: failed" );
+		CMLog( @"sendSetTargetPID: failed" );
 	}
 	
 	ptr = buffer;
@@ -1415,7 +1419,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	
 	if ( SendBuffer( sockfd, buffer, &lengthAfter ) == -1 || lengthAfter != length )
 	{
-		NSLog( @"sendUndoRedoStatus: failed" );
+		CMLog( @"sendUndoRedoStatus: failed" );
 	}
 	
 	free( buffer );
@@ -1445,7 +1449,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	if ( (buffer = (char *)malloc( length ))==NULL )
 	{
-		NSLog( @"sendAppLaunched: failed" );
+		CMLog( @"sendAppLaunched: failed" );
 
 		return;
 	}
@@ -1460,7 +1464,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	if ( SendBuffer( sockfd, buffer, &lengthAfter ) == -1 || lengthAfter != length )
 	{
-		NSLog( @"sendAppLaunched: failed" );
+		CMLog( @"sendAppLaunched: failed" );
 	}
 
 	free( buffer );
@@ -1490,7 +1494,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	if ( (buffer = (char *)malloc( length ))==NULL )
 	{
-		NSLog( @"sendAppQuit: failed" );
+		CMLog( @"sendAppQuit: failed" );
 
 		return;
 	}
@@ -1504,7 +1508,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	if ( SendBuffer( sockfd, buffer, &lengthAfter ) == -1 || lengthAfter != length )
 	{
-		NSLog( @"sendAppQuit: failed" );
+		CMLog( @"sendAppQuit: failed" );
 	}
 
 	free( buffer );
@@ -1521,7 +1525,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	if ( SendBuffer( sockfd, (char *)(&header), &length ) == -1 || length != sizeof(header) )
 	{
-		NSLog( @"sendTargetAppQuit failed" );
+		CMLog( @"sendTargetAppQuit failed" );
 	}
 }
 
@@ -1544,7 +1548,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	if ( (buffer = (char *)malloc( length ))==NULL )
 	{
-		NSLog( @"sendPauseFinished: failed" );
+		CMLog( @"sendPauseFinished: failed" );
 
 		return;
 	}
@@ -1558,7 +1562,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	if ( SendBuffer( sockfd, buffer, &lengthAfter ) == -1 || lengthAfter != length )
 	{
-		NSLog( @"sendPauseFinished: failed" );
+		CMLog( @"sendPauseFinished: failed" );
 	}
 
 	free( buffer );
@@ -1585,7 +1589,8 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 	COPY_FROM_BUFFER( &type, ptr, sizeof(type) );
 	COPY_FROM_BUFFER( &size, ptr, sizeof(size) );
 	
-	COPY_FROM_BUFFER( &maxSearchResultsAmount, ptr, sizeof(maxSearchResultsAmount) );
+	// receive the amount of results to return
+	COPY_FROM_BUFFER( &searchResultsAmountDisplayed, ptr, sizeof(searchResultsAmountDisplayed) );
 
 	if ( ![searchResults lastObject] )
 	{
@@ -1875,21 +1880,21 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 					}
 					else
 					{
-						NSLog( @"ERROR: process couldn't be paused" );
+						CMLog( @"ERROR: process couldn't be paused" );
 						[self sendPauseFinished:NO];
 						[self sendError:@"Could not pause target because of an unknown error." fatal:NO];
 					}
 				}
 				else
 				{
-					NSLog( @"ERROR: process couldn't be paused" );
+					CMLog( @"ERROR: process couldn't be paused" );
 					[self sendPauseFinished:NO];
 					[self sendError:@"Could not pause target because of an unknown error." fatal:NO];
 				}
 			}
 			else
 			{
-				NSLog( @"ERROR: process couldn't be paused" );
+				CMLog( @"ERROR: process couldn't be paused" );
 				[self sendPauseFinished:NO];
 				
 				switch ( errno )
@@ -2010,7 +2015,7 @@ int bmsearch( char *pat, int m, char *text, int n, void *base, void *loc[] );
 
 	if ( (result = task_for_pid( current_task(), processID, &processTask)) != KERN_SUCCESS )
 	{
-		NSLog( @"task_for_pid returned error: %i", result );
+		CMLog( @"task_for_pid returned error: %i", result );
 	}
 }
 

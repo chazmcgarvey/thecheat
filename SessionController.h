@@ -2,13 +2,14 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 // Project:   The Cheat
 //
-// File:      MyDocument.h
+// File:      SessionController.h
 // Created:   Sun Sep 07 2003
 //
 // Copyright: 2003 Chaz McGarvey.  All rights reserved.
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #import <Cocoa/Cocoa.h>
+#import <Chaz/Chaz.h>
 
 #include <float.h>
 
@@ -21,7 +22,7 @@
 #include "cheat_net.h"
 
 
-@interface MyDocument : NSDocument < ClientDelegate >
+@interface SessionController : NSWindowController < ClientDelegate >
 {
 	// allows for easy interface updating
 	TCstatus			status, lastStatus;
@@ -43,7 +44,7 @@
 
 	TCaddress			*searchResults;
 	int					searchResultsAmount;
-	int					maxSearchResultsAmount;
+	int					searchResultsAmountDisplayed;
 
 	// to allow for connecting on new document
 	BOOL				everConnected;
@@ -74,7 +75,7 @@
 	IBOutlet NSButton				*clearSearchButton;
 	IBOutlet NSButton				*changeButton;
 	IBOutlet NSTableView			*addressTable;
-	IBOutlet NSTextField			*statusText;
+	IBOutlet CMStatusView			*statusText;
 	IBOutlet NSProgressIndicator	*statusBar;
 	IBOutlet NSTextField			*descriptionText;
 
@@ -112,11 +113,11 @@
 - (void)setStatusChangingContinuously;
 - (void)setStatusUndoing;
 - (void)setStatusRedoing;
-- (void)setStatusToLast;
+//- (void)setStatusToLast;
 
-- (void)setStatusText:(NSString *)msg duration:(NSTimeInterval)seconds;
-- (void)setStatusText:(NSString *)msg duration:(NSTimeInterval)seconds color:(NSColor *)color;
-- (void)statusTextTimer:(NSTimer *)timer;
+//- (void)setStatusText:(NSString *)msg duration:(NSTimeInterval)seconds;
+//- (void)setStatusText:(NSString *)msg duration:(NSTimeInterval)seconds color:(NSColor *)color;
+//- (void)statusTextTimer:(NSTimer *)timer;
 
 // UPDATE CHANGE SHEET
 

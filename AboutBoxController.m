@@ -12,8 +12,6 @@
 
 #include "cheat_shared.h"
 
-#import <Chaz/CMUpdateCheck.h>
-
 
 @implementation AboutBoxController
 

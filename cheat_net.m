@@ -49,7 +49,7 @@ char VerifyChecksum( u_int32_t checksum )
 		return 1;
 	}
 
-	NSLog( @"checksum failed" );
+	CMLog( @"checksum failed" );
 
 	return 0;
 }

@@ -10,7 +10,7 @@
 
 #import "CheatClient.h"
 
-#import "MyDocument.h"
+#import "SessionController.h"
 
 
 @implementation CheatClient
@@ -65,7 +65,7 @@
 
 	if ( (sockfd = socket( identifier.sa_family, SOCK_STREAM, 0 )) == -1 )
 	{
-		NSLog( @"ERROR: socket() failed" );
+		CMLog( @"ERROR: socket() failed" );
 		[rootProxy clientError:@"Network Error" message:@"Attempt to connect to server failed."];
 		return;
 	}
@@ -80,7 +80,7 @@
 		{
 			close( sockfd );
 
-			NSLog( @"ERROR: connect() failed" );
+			CMLog( @"ERROR: connect() failed" );
 			[rootProxy clientError:@"Network Error" message:@"Attempt to connect to server failed."];
 			return;
 		}
@@ -95,7 +95,7 @@
 		{
 			close( sockfd );
 
-			NSLog( @"ERROR: connect() failed" );
+			CMLog( @"ERROR: connect() failed" );
 			[rootProxy clientError:@"Network Error" message:@"Attempt to connect to server failed."];
 			return;
 		}
@@ -115,11 +115,11 @@
 	
 	if ( sockfd == -1 )
 	{
-		NSLog( @"ERROR: can't run when not connected" );
+		CMLog( @"ERROR: can't run when not connected" );
 		return;
 	}
 
-	NSLog( @"CLIENT start" );
+	CMLog( @"CLIENT start" );
 
 	for (;;)
 	{
@@ -127,7 +127,7 @@
 		{
 			if ( result != 0 && result != -1 )
 			{
-				NSLog( @"ERROR: incomplete header received" );
+				CMLog( @"ERROR: incomplete header received" );
 				close( sockfd );
 				break;
 			}
@@ -137,25 +137,25 @@
 
 		if ( !VerifyChecksum( header.checksum ) )
 		{
-			NSLog( @"ERROR: checksum verification failed" );
+			CMLog( @"ERROR: checksum verification failed" );
 			close( sockfd );
 			break;
 		}
 
-		//NSLog( @"CLIENT message %i/%i/%i", header.checksum, header.function, header.size );
+		//CMLog( @"CLIENT message %i/%i/%i", header.checksum, header.function, header.size );
 
 		if ( header.size != 0 )
 		{
 			if ( (bytes = (char *)malloc( header.size )) == NULL )
 			{
-				NSLog( @"ERROR: failed to allocate buffer for reading a network packet" );
+				CMLog( @"ERROR: failed to allocate buffer for reading a network packet" );
 				close( sockfd );
 				break;
 			}
 
 			if ( (result = ReadBuffer( sockfd, bytes, header.size )) != header.size )
 			{
-				NSLog( @"ERROR: failed to read the data of a network packet; only read %i bytes out of %i", result, header.size );
+				CMLog( @"ERROR: failed to read the data of a network packet; only read %i bytes out of %i", result, header.size );
 				free( bytes );
 				close( sockfd );
 				break;
@@ -223,7 +223,7 @@
 
 	[rootProxy clientDisconnected];
 
-	NSLog( @"CLIENT close" );
+	CMLog( @"CLIENT close" );
 }
 
 

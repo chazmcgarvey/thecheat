@@ -9,6 +9,7 @@
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 #import <Cocoa/Cocoa.h>
+#import <Chaz/Chaz.h>
 
 #import "PreferenceControlling.h"
 #import "NetTrafficControlling.h"
@@ -48,6 +49,8 @@
 
 - (void)broadcastWithName:(NSString *)name;
 - (void)stopBroadcast;
+
+- (IBAction)newSessionWindow:(id)sender;
 
 - (IBAction)showAboutBoxWindow:(id)sender;
 - (IBAction)showPreferenceWindow:(id)sender;

@@ -20,7 +20,7 @@ char extern				TCDefaultListenPath[104];
 
 //#define					TCMaxSearchResults (100)
 
-int extern				TCGlobalDocumentCount;
+int extern				TCGlobalSessionCount;
 int extern				TCGlobalAlternateBroadcastNameCount;
 char extern				TCGlobalListening;
 

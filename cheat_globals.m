@@ -12,7 +12,7 @@
 
 char					TCDefaultListenPath[104] = "/.thecheat_socket";
 
-int						TCGlobalDocumentCount = 1;
+int						TCGlobalSessionCount = 0;
 int						TCGlobalAlternateBroadcastNameCount = 2;
 char					TCGlobalListening = NO;
 

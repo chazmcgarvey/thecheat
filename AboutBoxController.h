@@ -8,7 +8,8 @@
 // Copyright: 2003 Chaz McGarvey.  All rights reserved.
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-#import <Foundation/Foundation.h>
+#import <Cocoa/Cocoa.h>
+#import <Chaz/Chaz.h>
 
 
 @interface AboutBoxController : NSWindowController
