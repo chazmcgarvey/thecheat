@@ -15,6 +15,7 @@
                 serverMenuDisconnect = id; 
                 serverMenuItem = id; 
                 serverMenuLocal = id; 
+                sizePopup = id; 
                 typePopup = id; 
                 undoMenu = id; 
             }; 
@@ -30,6 +31,7 @@
                 cheatWindow = NSWindow; 
                 clearSearchButton = NSButton; 
                 decimalSizeMenu = NSMenu; 
+                descriptionText = NSTextField; 
                 integerSizeMenu = NSMenu; 
                 okButton = NSButton; 
                 pauseButton = NSButton; 

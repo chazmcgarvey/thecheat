@@ -20,7 +20,7 @@
 	<key>CFBundleGetInfoString</key>
 	<string>The Cheat 1.0</string>
 	<key>CFBundleIconFile</key>
-	<string>icon_b.icns</string>
+	<string>icon.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.brokenzipper.TheCheat</string>
 	<key>CFBundleInfoDictionaryVersion</key>
@@ -33,11 +33,9 @@
 	<string>1.0</string>
 	<key>CFBundleSignature</key>
 	<string>ThCh</string>
-	<key>CFBundleVersion</key>
-	<string>1B04</string>
 	<key>NSMainNibFile</key>
 	<string>MainMenu</string>
 	<key>NSPrincipalClass</key>
-	<string>NSApplication</string>
+	<string>AppController</string>
 </dict>
 </plist>

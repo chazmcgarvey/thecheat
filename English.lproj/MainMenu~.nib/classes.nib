@@ -3,7 +3,6 @@
         {
             ACTIONS = {
                 launchDebugEmailMenu = id; 
-                launchEmailMenu = id; 
                 launchHelpFile = id; 
                 launchWebsiteMenu = id; 
                 showAboutBoxWindow = id; 
@@ -12,7 +11,7 @@
             }; 
             CLASS = AppController; 
             LANGUAGE = ObjC; 
-            SUPERCLASS = NSObject; 
+            SUPERCLASS = NSApplication; 
         }, 
         {
             ACTIONS = {redoMenu = id; undoMenu = id; }; 

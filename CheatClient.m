@@ -142,7 +142,7 @@
 			break;
 		}
 
-		NSLog( @"CLIENT message %i/%i/%i", header.checksum, header.function, header.size );
+		//NSLog( @"CLIENT message %i/%i/%i", header.checksum, header.function, header.size );
 
 		if ( header.size != 0 )
 		{

@@ -23,20 +23,24 @@
 @class NetTrafficController;
 
 
-@interface AppController : NSObject < PreferenceControlling, NetTrafficControlling, ListenerDelegate, ServerDelegate >
+@interface AppController : NSApplication < PreferenceControlling, NetTrafficControlling, ListenerDelegate, ServerDelegate >
 {
 	BOOL					waitingToListen;
 	NSConnection			*connection;
 	int						connectionPort;
 	BOOL					connectionRemote;
 	int						sockfd;
-	NSNetService			*service, *oldService;
+	NSNetService			*service;
 
 	NSMutableArray			*servers;
 
 	AboutBoxController		*aboutBoxController;
 	PreferenceController	*preferenceController;
 	NetTrafficController	*netTrafficController;
+	
+	// global network browser
+	NSNetServiceBrowser		*browser;
+	NSMutableArray			*serverList;
 }
 
 - (void)listenOnPort:(int)port remote:(BOOL)remote;
@@ -51,6 +55,7 @@
 
 - (IBAction)launchHelpFile:(id)sender;
 - (IBAction)launchWebsiteMenu:(id)sender;
-- (IBAction)launchDebugEmailMenu:(id)sender;
+
+- (NSArray *)serverList;
 
 @end

@@ -15,9 +15,9 @@
 			sourceTree = "<group>";
 		};
 		089C1660FE840EACC02AAC07 = {
-			expectedFileType = text.plist.strings;
 			fileEncoding = 10;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist.strings;
 			name = English;
 			path = English.lproj/InfoPlist.strings;
 			refType = 4;
@@ -43,9 +43,9 @@
 			sourceTree = "<group>";
 		};
 		1058C7A7FEA54F5311CA2CBB = {
-			expectedFileType = wrapper.framework;
 			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = Cocoa.framework;
 			path = /System/Library/Frameworks/Cocoa.framework;
 			refType = 0;
@@ -143,17 +143,17 @@
 			sourceTree = "<group>";
 		};
 		2A37F4ACFDCFA73011CA2CEA = {
-			expectedFileType = sourcecode.c.objc;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = MyDocument.m;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		2A37F4AEFDCFA73011CA2CEA = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = MyDocument.h;
 			refType = 4;
 			sourceTree = "<group>";
@@ -178,9 +178,9 @@
 			sourceTree = "<group>";
 		};
 		2A37F4B0FDCFA73011CA2CEA = {
-			expectedFileType = sourcecode.c.objc;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = main.m;
 			refType = 4;
 			sourceTree = "<group>";
@@ -196,8 +196,8 @@
 			sourceTree = "<group>";
 		};
 		2A37F4B5FDCFA73011CA2CEA = {
-			expectedFileType = wrapper.nib;
 			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
 			name = English;
 			path = English.lproj/MyDocument.nib;
 			refType = 4;
@@ -214,8 +214,8 @@
 			sourceTree = "<group>";
 		};
 		2A37F4B7FDCFA73011CA2CEA = {
-			expectedFileType = wrapper.nib;
 			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
 			name = English;
 			path = English.lproj/MainMenu.nib;
 			refType = 4;
@@ -223,8 +223,7 @@
 		};
 		2A37F4B8FDCFA73011CA2CEA = {
 			children = (
-				6ED02FE7055758FF007B5502,
-				2A37F4B9FDCFA73011CA2CEA,
+				6E1E43700588275100526509,
 				2A37F4B6FDCFA73011CA2CEA,
 				6E51A97605732B9000506538,
 				6E0D40BC052245E700A80003,
@@ -236,24 +235,6 @@
 			isa = PBXGroup;
 			name = Resources;
 			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		2A37F4B9FDCFA73011CA2CEA = {
-			children = (
-				2A37F4BAFDCFA73011CA2CEA,
-			);
-			isa = PBXVariantGroup;
-			name = Credits.rtf;
-			path = "";
-			refType = 4;
-			sourceTree = "<group>";
-		};
-		2A37F4BAFDCFA73011CA2CEA = {
-			expectedFileType = text.rtf;
-			isa = PBXFileReference;
-			name = English;
-			path = English.lproj/Credits.rtf;
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -269,18 +250,18 @@
 			sourceTree = "<group>";
 		};
 		2A37F4C4FDCFA73011CA2CEA = {
-			expectedFileType = wrapper.framework;
 			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = AppKit.framework;
 			path = /System/Library/Frameworks/AppKit.framework;
 			refType = 0;
 			sourceTree = "<absolute>";
 		};
 		2A37F4C5FDCFA73011CA2CEA = {
-			expectedFileType = wrapper.framework;
 			fallbackIsa = PBXFileReference;
 			isa = PBXFrameworkReference;
+			lastKnownFileType = wrapper.framework;
 			name = Foundation.framework;
 			path = /System/Library/Frameworks/Foundation.framework;
 			refType = 0;
@@ -297,9 +278,9 @@
 //323
 //324
 		32DBCF750370BD2300C91783 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = The_Cheat_Prefix.pch;
 			refType = 4;
 			sourceTree = "<group>";
@@ -352,25 +333,25 @@
 //6E3
 //6E4
 		6E0BDF7D0511568D00A80003 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = cheat_types.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6E0D40AC05223CCE00A80003 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = NetTrafficController.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6E0D40AD05223CCE00A80003 = {
-			expectedFileType = sourcecode.c.objc;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = NetTrafficController.m;
 			refType = 4;
 			sourceTree = "<group>";
@@ -386,8 +367,8 @@
 			sourceTree = "<group>";
 		};
 		6E0D40B105223D4E00A80003 = {
-			expectedFileType = wrapper.nib;
 			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
 			name = English;
 			path = English.lproj/NetTraffic.nib;
 			refType = 4;
@@ -412,33 +393,33 @@
 			sourceTree = "<group>";
 		};
 		6E0D40B4052243D500A80003 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = PreferenceController.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6E0D40B5052243D500A80003 = {
-			expectedFileType = sourcecode.c.objc;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = PreferenceController.m;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6E0D40B80522449500A80003 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = CheatListener.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6E0D40B90522449500A80003 = {
-			expectedFileType = sourcecode.c.objc;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = CheatListener.m;
 			refType = 4;
 			sourceTree = "<group>";
@@ -454,8 +435,8 @@
 			sourceTree = "<group>";
 		};
 		6E0D40BD052245E700A80003 = {
-			expectedFileType = wrapper.nib;
 			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
 			name = English;
 			path = English.lproj/Preferences.nib;
 			refType = 4;
@@ -475,56 +456,69 @@
 			sourceTree = "<group>";
 		};
 		6E0D40C005224FD000A80003 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = NetTrafficControlling.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6E0D40C405225DA100A80003 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = PreferenceControlling.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6E0D40CA0522815100A80003 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = ListenerDelegate.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6E0D40CE0522820D00A80003 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = ClientDelegate.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6E146B11051FA42C00A80003 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = CheatClient.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6E146B12051FA42C00A80003 = {
-			expectedFileType = sourcecode.c.objc;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = CheatClient.m;
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		6E3309E10575BA9D0093550E = {
-			expectedFileType = image.pdf;
+		6E1E43700588275100526509 = {
 			isa = PBXFileReference;
+			lastKnownFileType = image.icns;
+			path = icon.icns;
+			refType = 4;
+			sourceTree = "<group>";
+		};
+		6E1E43710588275100526509 = {
+			fileRef = 6E1E43700588275100526509;
+			isa = PBXBuildFile;
+			settings = {
+			};
+		};
+		6E3309E10575BA9D0093550E = {
+			isa = PBXFileReference;
+			lastKnownFileType = image.pdf;
 			path = "Read Me.pdf";
 			refType = 4;
 			sourceTree = "<group>";
@@ -536,49 +530,49 @@
 			};
 		};
 		6E3F0D01050D4ACC00A80003 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = cheat_net.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6E3F0D02050D4ACC00A80003 = {
-			expectedFileType = sourcecode.c.objc;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = cheat_net.m;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6E4E098C050BB21400A80003 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AppController.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6E4E098D050BB21400A80003 = {
-			expectedFileType = sourcecode.c.objc;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AppController.m;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6E4E098E050BB21400A80003 = {
-			expectedFileType = sourcecode.c.objc;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = CheatServer.m;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6E4E098F050BB21400A80003 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = CheatServer.h;
 			refType = 4;
 			sourceTree = "<group>";
@@ -594,8 +588,8 @@
 			sourceTree = "<group>";
 		};
 		6E51A97705732B9000506538 = {
-			expectedFileType = wrapper.nib;
 			isa = PBXFileReference;
+			lastKnownFileType = wrapper.nib;
 			name = English;
 			path = English.lproj/AboutBox.nib;
 			refType = 4;
@@ -608,17 +602,17 @@
 			};
 		};
 		6E51A97C0573304C00506538 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = AboutBoxController.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6E51A97D0573304C00506538 = {
-			expectedFileType = sourcecode.c.objc;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = AboutBoxController.m;
 			refType = 4;
 			sourceTree = "<group>";
@@ -636,17 +630,17 @@
 			};
 		};
 		6E51A986057330B900506538 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = cheat_shared.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6E51A987057330B900506538 = {
-			expectedFileType = sourcecode.c.objc;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = cheat_shared.m;
 			refType = 4;
 			sourceTree = "<group>";
@@ -664,17 +658,17 @@
 			};
 		};
 		6E71F41B051BCCC600A80003 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = cheat_globals.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6E71F41C051BCCC600A80003 = {
-			expectedFileType = sourcecode.c.objc;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = cheat_globals.m;
 			refType = 4;
 			sourceTree = "<group>";
@@ -692,25 +686,25 @@
 			sourceTree = "<group>";
 		};
 		6EAF23080527D7FE00A80003 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = ServerHolder.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6EAF23090527D7FE00A80003 = {
-			expectedFileType = sourcecode.c.objc;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = ServerHolder.m;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6EBCEEE60523E23700A80003 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = ServerDelegate.h;
 			refType = 4;
 			sourceTree = "<group>";
@@ -725,8 +719,8 @@
 			sourceTree = "<group>";
 		};
 		6ECC8EE40579AE4400AA179F = {
-			expectedFileType = archive.ar;
 			isa = PBXFileReference;
+			lastKnownFileType = archive.ar;
 			name = libchaz.a;
 			path = /Users/chaz/Projects/LibChaz/build/libchaz.a;
 			refType = 0;
@@ -739,9 +733,9 @@
 			};
 		};
 		6ECC8EE60579AE4A00AA179F = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 30;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			name = chaz.h;
 			path = /Users/chaz/Projects/LibChaz/build/chaz.h;
 			refType = 0;
@@ -753,25 +747,18 @@
 			settings = {
 			};
 		};
-		6ED02FE7055758FF007B5502 = {
-			expectedFileType = image.icns;
-			isa = PBXFileReference;
-			path = icon_b.icns;
-			refType = 4;
-			sourceTree = "<group>";
-		};
 		6ED3E46305192E2B00A80003 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = MenuExtras.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6ED3E46405192E2B00A80003 = {
-			expectedFileType = sourcecode.c.objc;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = MenuExtras.m;
 			refType = 4;
 			sourceTree = "<group>";
@@ -973,24 +960,17 @@
 		6EF8EBEE055A1730008BBE46 = {
 			buildActionMask = 2147483647;
 			files = (
-				6EF8EBEF055A1730008BBE46,
 				6EF8EBF0055A1730008BBE46,
 				6EF8EBF1055A1730008BBE46,
 				6EF8EBF2055A1730008BBE46,
 				6EF8EBF3055A1730008BBE46,
 				6EF8EBF4055A1730008BBE46,
-				6EF8EBF6055A1730008BBE46,
 				6E51A97905732B9000506538,
 				6E3309E30575BA9D0093550E,
+				6E1E43710588275100526509,
 			);
 			isa = PBXResourcesBuildPhase;
 			runOnlyForDeploymentPostprocessing = 0;
-		};
-		6EF8EBEF055A1730008BBE46 = {
-			fileRef = 2A37F4B9FDCFA73011CA2CEA;
-			isa = PBXBuildFile;
-			settings = {
-			};
 		};
 		6EF8EBF0055A1730008BBE46 = {
 			fileRef = 2A37F4B6FDCFA73011CA2CEA;
@@ -1018,12 +998,6 @@
 		};
 		6EF8EBF4055A1730008BBE46 = {
 			fileRef = 6E0D40BC052245E700A80003;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
-		6EF8EBF6055A1730008BBE46 = {
-			fileRef = 6ED02FE7055758FF007B5502;
 			isa = PBXBuildFile;
 			settings = {
 			};
@@ -1148,14 +1122,14 @@
 			};
 		};
 		6EF8EC08055A1730008BBE46 = {
-			expectedFileType = text.plist;
 			isa = PBXFileReference;
+			lastKnownFileType = text.plist;
 			path = "Info-The_Cheat__Upgraded_.plist";
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6EF8EC09055A1730008BBE46 = {
-			expectedFileType = wrapper.application;
+			explicitFileType = wrapper.application;
 			includeInIndex = 0;
 			isa = PBXFileReference;
 			path = "The Cheat.app";
@@ -1163,17 +1137,17 @@
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		6EFB422D052F601400A80003 = {
-			expectedFileType = sourcecode.c.h;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.h;
 			path = SearchResults.h;
 			refType = 4;
 			sourceTree = "<group>";
 		};
 		6EFB422E052F601400A80003 = {
-			expectedFileType = sourcecode.c.objc;
 			fileEncoding = 4;
 			isa = PBXFileReference;
+			lastKnownFileType = sourcecode.c.objc;
 			path = SearchResults.m;
 			refType = 4;
 			sourceTree = "<group>";

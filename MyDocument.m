@@ -10,6 +10,8 @@
 
 #import "MyDocument.h"
 
+#import "AppController.h"
+
 #import "CheatClient.h"
 
 
@@ -27,18 +29,18 @@ void TCPlaySound( NSString *name );
 		
 		// initialize stuff
 		sockfd = -1;
-		serverList = [[NSMutableArray alloc] init];
 		addressList = [[NSMutableArray alloc] init];
-		
-		// set up the network browser
-		browser = [[NSNetServiceBrowser alloc] init];
-		[browser setDelegate:self];
-		[browser searchForServicesOfType:@"_cheat._tcp." inDomain:@"local."];
 
 		// notifications to receive
 		[nc addObserver:self selector:@selector(listenerStarted:) name:@"TCListenerStarted" object:nil];
 		[nc addObserver:self selector:@selector(listenerStopped:) name:@"TCListenerStopped" object:nil];
 		[nc addObserver:self selector:@selector(windowsOnTopChanged:) name:@"TCWindowsOnTopChanged" object:nil];
+		
+		serverList = [(NSArray *)[NSApp serverList] retain];
+		
+		// register to recieve notes from the global browser
+		[nc addObserver:self selector:@selector(browserServerFound:) name:@"TCServerFound" object:nil];
+		[nc addObserver:self selector:@selector(browserServerLost:) name:@"TCServerLost" object:nil];
 
 		[self connectToLocal];
 	}
@@ -87,6 +89,9 @@ void TCPlaySound( NSString *name );
 {
 	NSString			*localName = @"Local"; //[NSString stringWithFormat:@"%@ (local)", TCGlobalBroadcastName];
 	
+	NSMenuItem			*menuItem;
+	int					i, top = [serverList count];
+	
 	// misc window settings
 	[cheatWindow useOptimizedDrawing:YES];
 	[cheatWindow setFrameAutosaveName:@"TCCheatWindow"];
@@ -103,6 +108,22 @@ void TCPlaySound( NSString *name );
 	[serverMenu addItemWithTitle:localName action:@selector(serverMenuLocal:) keyEquivalent:@""];
 	[processMenu removeAllItems];
 	
+	// update server menu
+	for ( i = 0; i < top; i++ )
+	{
+		menuItem = [[NSMenuItem alloc] initWithTitle:[(NSNetService *)[serverList objectAtIndex:i] name] action:@selector(serverMenuItem:) keyEquivalent:@""];
+		
+		[menuItem setTag:i];
+		
+		// if this is the first server, add a divider.
+		if ( [serverMenu numberOfItems] <= 2 )
+		{
+			[serverMenu addItem:[NSMenuItem separatorItem]];
+		}
+		
+		[serverMenu addItem:[menuItem autorelease]];
+	}
+	
 	// give tags to the menu items.
 	[[typeMenu itemWithTitle:@"Integer"] setTag:TYPE_INTEGER];
 	[[typeMenu itemWithTitle:@"String"] setTag:TYPE_STRING];
@@ -118,6 +139,9 @@ void TCPlaySound( NSString *name );
 	// set default state
 	[statusText setStringValue:@""];
 	[self setStatusDisconnected];
+	
+	// display the initial description text
+	[self updateDescriptionText];
 	
 	// change sheet initial interface.
 	[changeSecondsCombo setEnabled:NO];
@@ -184,6 +208,40 @@ void TCPlaySound( NSString *name );
 	}
 }
 
+- (void)updateDescriptionText
+{
+	TCtype			type = [[typePopup selectedItem] tag];
+	TCsize			size = [[sizePopup selectedItem] tag];
+	
+	switch ( type )
+	{
+		case TYPE_STRING:
+			[descriptionText setStringValue:@"A string is a series of characters.\n\nThis search allows you to find and change words and phrases.  Numbers can also be stored as strings, but they aren't recognized as numbers by the computer.  Changing strings probably won't change the game in a big way."];
+			break;
+			
+		case TYPE_INTEGER:
+			switch ( size )
+			{
+				case SIZE_8_BIT:
+					[descriptionText setStringValue:@"An integer is a non-fraction number.\n\nExamples:   0, 1, 2, 3, 4\nRange: 0 - 255\n\nIntegers usually store variables like score, lives, and remaining ammo."];
+					break;
+					
+				case SIZE_16_BIT:
+					[descriptionText setStringValue:@"An integer is a non-fraction number.\n\nExamples: -1, 0, 1, 2, 3\nRange: -32,768 - 32,767\n\nIntegers usually store variables like score, lives, and remaining ammo."];
+					break;
+					
+				case SIZE_32_BIT:
+					[descriptionText setStringValue:@"An integer is a non-fraction number.\n\nExamples: -1, 0, 1, 2, 3\nRange: about -2 billion - 2 billion\n\nIntegers usually store variables like score, lives, and remaining ammo.  This is the most common size for integer variables."];
+					break;
+			}
+			break;
+			
+		case TYPE_DECIMAL:
+			[descriptionText setStringValue:@"A decimal is a fraction number.\n\nFloats and doubles are not often used as variables in games, but there may be other uses for cheating them.  Type in as many digits after the decimal place as possible to ensure that your input is matched with the variable you are looking for."];
+			break;
+	}
+}
+
 
 - (void)setStatusDisconnected
 {
@@ -203,7 +261,7 @@ void TCPlaySound( NSString *name );
 	[self setStatusText:@"Not Connected" duration:0];
 	[statusBar stopAnimation:self];
 	[addressTable setEnabled:NO];
-	[changeButton setTitle:@"ChangeÉ"];
+	[changeButton setTitle:@"Change..."];
 	[changeButton setEnabled:NO];
 	
 	[[serverMenu itemAtIndex:0] setTitle:@"Not Connected"];
@@ -226,7 +284,7 @@ void TCPlaySound( NSString *name );
 	[self setStatusText:@"Connected" duration:0];
 	[statusBar stopAnimation:self];
 	[addressTable setEnabled:NO];
-	[changeButton setTitle:@"ChangeÉ"];
+	[changeButton setTitle:@"Change..."];
 	[changeButton setEnabled:NO];
 	
 	[[serverMenu itemAtIndex:0] setTitle:@"Disconnect"];
@@ -267,7 +325,7 @@ void TCPlaySound( NSString *name );
 	}
 	[statusBar stopAnimation:self];
 	[addressTable setEnabled:YES];
-	[changeButton setTitle:@"ChangeÉ"];
+	[changeButton setTitle:@"Change..."];
 	[self updateChangeButton];
 	
 	[[serverMenu itemAtIndex:0] setTitle:@"Disconnect"];
@@ -288,10 +346,10 @@ void TCPlaySound( NSString *name );
 	[searchRadioMatrix setEnabled:NO];
 	[searchButton setEnabled:NO];
 	[clearSearchButton setEnabled:NO];
-	[self setStatusText:@"SearchingÉ" duration:0];
+	[self setStatusText:@"Searching..." duration:0];
 	[statusBar startAnimation:self];
 	[addressTable setEnabled:NO];
-	[changeButton setTitle:@"ChangeÉ"];
+	[changeButton setTitle:@"Change..."];
 	[changeButton setEnabled:NO];
 	
 	[[serverMenu itemAtIndex:0] setTitle:@"Disconnect"];
@@ -337,7 +395,7 @@ void TCPlaySound( NSString *name );
 	[searchRadioMatrix setEnabled:NO];
 	[searchButton setEnabled:NO];
 	[clearSearchButton setEnabled:NO];
-	[self setStatusText:@"Changing LaterÉ" duration:0];
+	[self setStatusText:@"Changing Later..." duration:0];
 	[statusBar startAnimation:self];
 	[addressTable setEnabled:NO];
 	[changeButton setTitle:@"Cancel Change"];
@@ -361,7 +419,7 @@ void TCPlaySound( NSString *name );
 	[searchRadioMatrix setEnabled:NO];
 	[searchButton setEnabled:NO];
 	[clearSearchButton setEnabled:NO];
-	[self setStatusText:@"Repeating ChangeÉ" duration:0];
+	[self setStatusText:@"Repeating Change..." duration:0];
 	[statusBar startAnimation:self];
 	[addressTable setEnabled:NO];
 	[changeButton setTitle:@"Stop Change"];
@@ -385,10 +443,10 @@ void TCPlaySound( NSString *name );
 	[searchRadioMatrix setEnabled:NO];
 	[searchButton setEnabled:NO];
 	[clearSearchButton setEnabled:NO];
-	[self setStatusText:@"UndoingÉ" duration:0];
+	[self setStatusText:@"Undoing..." duration:0];
 	[statusBar startAnimation:self];
 	[addressTable setEnabled:NO];
-	[changeButton setTitle:@"ChangeÉ"];
+	[changeButton setTitle:@"Change..."];
 	[changeButton setEnabled:NO];
 	
 	[[serverMenu itemAtIndex:0] setTitle:@"Disconnect"];
@@ -409,10 +467,10 @@ void TCPlaySound( NSString *name );
 	[searchRadioMatrix setEnabled:NO];
 	[searchButton setEnabled:NO];
 	[clearSearchButton setEnabled:NO];
-	[self setStatusText:@"RedoingÉ" duration:0];
+	[self setStatusText:@"Redoing..." duration:0];
 	[statusBar startAnimation:self];
 	[addressTable setEnabled:NO];
-	[changeButton setTitle:@"ChangeÉ"];
+	[changeButton setTitle:@"Change..."];
 	[changeButton setEnabled:NO];
 	
 	[[serverMenu itemAtIndex:0] setTitle:@"Disconnect"];
@@ -911,15 +969,6 @@ void TCPlaySound( NSString *name );
 	char			*ptr = (char *)[data bytes];
 
 	COPY_FROM_BUFFER( &targetPaused, ptr, sizeof(targetPaused) );
-
-	if ( targetPaused )
-	{
-		[self setStatusText:@"Target Paused" duration:1.5];
-	}
-	else
-	{
-		[self setStatusText:@"Target Resumed" duration:1.5];
-	}
 	
 	[self updatePauseButton];
 }
@@ -944,6 +993,8 @@ void TCPlaySound( NSString *name );
 	// copy the size and type of the variable.
 	COPY_TO_BUFFER( ptr, &type, sizeof(type) );
 	COPY_TO_BUFFER( ptr, &size, sizeof(size) );
+	
+	NSLog( @"type: %i, size: %i", type, size );
 	
 	// switch to cheating mode if this is the first search.
 	if ( status == STATUS_CONNECTED )
@@ -1072,8 +1123,7 @@ void TCPlaySound( NSString *name );
 	TCtype			type = [[typePopup selectedItem] tag];
 	TCsize			size = [[sizePopup selectedItem] tag];
 	
-	NSArray			*selectedAddresses = [[addressTable selectedRowEnumerator] allObjects];
-	int				i, addressCount = [selectedAddresses count];
+	int				i, addressCount = [changeSelectedItems count];
 	
 	char			*data, *ptr;
 	int				dataSize = sizeof(type) + sizeof(size) + sizeof(addressCount) + TCAddressSize*addressCount;
@@ -1089,7 +1139,7 @@ void TCPlaySound( NSString *name );
 	COPY_TO_BUFFER( ptr, &addressCount, sizeof(addressCount) );
 	for ( i = 0; i < addressCount; i++ )
 	{
-		COPY_TO_BUFFER( ptr, &((TCaddress *)searchResults)[ [[selectedAddresses objectAtIndex:i] intValue] ], sizeof(TCaddress) );
+		COPY_TO_BUFFER( ptr, &((TCaddress *)searchResults)[ [[changeSelectedItems objectAtIndex:i] intValue] ], sizeof(TCaddress) );
 	}
 	
 	// copy the new value.
@@ -1213,6 +1263,8 @@ void TCPlaySound( NSString *name );
 {
 	if ( returned == 1 )
 	{
+		[changeSelectedItems release], changeSelectedItems = [[[addressTable selectedRowEnumerator] allObjects] retain];
+		
 		if ( [recurringChangeButton state] == NSOnState )
 		{
 			float			seconds = [changeSecondsCombo floatValue];
@@ -1262,11 +1314,25 @@ void TCPlaySound( NSString *name );
 	
 	[self updateSearchBoxes];
 	[self updateSearchButton];
+	[self updateDescriptionText];
+}
+
+- (IBAction)sizePopup:(id)sender
+{
+	[self updateDescriptionText];
 }
 
 
 - (IBAction)searchButton:(id)sender
 {
+	/*if ( [searchTextField intValue] == 0 )
+	{
+		if ( NSRunAlertPanel( @"Warning", @"Performing a search with this value will probably take a long time.  You should try to search for the variable at a different value.", @"Search Anyway", @"Cancel", nil ) == NSAlertAlternateReturn )
+		{
+			return;
+		}
+	}*/
+	
 	[self search];
 }
 
@@ -1288,6 +1354,8 @@ void TCPlaySound( NSString *name );
 	
 	if ( status == STATUS_CHANGING_CONTINUOUSLY )
 	{
+		[changeSelectedItems release], changeSelectedItems = nil;
+		
 		[self setStatusCheating];
 	}
 	else if ( status == STATUS_CHEATING )
@@ -1455,11 +1523,6 @@ void TCPlaySound( NSString *name );
 	[[NSNotificationCenter defaultCenter] removeObserver:self];
 	
 	[self disconnect];
-
-	[browser release];
-
-	[serverList release];
-	[addressList release];
 	
 	// clean up status timer stuff
 	[savedStatusColor release];
@@ -1471,6 +1534,11 @@ void TCPlaySound( NSString *name );
 	[changeTimer release];
 	
 	[self destroyResults];
+	
+	[changeSelectedItems release];
+	
+	[serverList release];
+	[addressList release];
 
 	[super dealloc];
 }
@@ -1520,6 +1588,7 @@ void TCPlaySound( NSString *name );
 
 - (void)handleErrorMessage:(NSString *)msg fatal:(BOOL)fatal
 {
+	NSLog( @"error received" );
 	// close the change sheet if it's open.
 	if ( [cheatWindow attachedSheet] )
 	{
@@ -1529,6 +1598,23 @@ void TCPlaySound( NSString *name );
 	
 	// show message.
 	NSBeginAlertSheet( fatal? @"Fatal Error":@"Error", @"OK", nil, nil, cheatWindow, nil, nil, nil, 0, msg );
+}
+
+
+/*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%   Cheat Window Delegate
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
+
+
+- (BOOL)windowShouldClose:(id)sender
+{
+	if ( sender == cheatWindow && ( status == STATUS_SEARCHING || status == STATUS_CHANGING ) )
+	{
+		NSBeep();
+		return NO;
+	}
+	
+	return YES;
 }
 
 
@@ -1674,33 +1760,19 @@ void TCPlaySound( NSString *name );
 
 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%   NSNetServiceBrowser Delegate
+%%%%%%%%%%%%%%%%%%%%%%   Global Browser Notifications
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
 
-- (void)netServiceBrowser:(NSNetServiceBrowser *)browser didFindService:(NSNetService *)service moreComing:(BOOL)more
+- (void)browserServerFound:(NSNotification *)note
 {
-	// a server has broadcast; not much use until it's resolved.
-	[service setDelegate:self];
-	[service resolve];
-}
-
-- (void)netServiceBrowser:(NSNetServiceBrowser *)browser didRemoveService:(NSNetService *)service moreComing:(BOOL)more
-{
-	[serverMenu removeAllItemsWithTitle:[service name]];
+	NSNetService				*service = (NSNetService *)[note object];
 	
-	// if this is the last broadcast server, take away the divider.
-	if ( [serverMenu numberOfItems] == 3 )
-	{
-		[serverMenu removeItemAtIndex:2];
-	}
-}
-
-- (void)netServiceDidResolveAddress:(NSNetService *)service
-{
-	NSString		*name = [service name];
-	int				tag = [serverList count];
-	NSMenuItem		*item;
+	NSString					*name = [service name];
+	int							tag = [serverList count] - 1;
+	NSMenuItem					*item;
+	
+	NSLog( @"server found" );
 	
 	if ( [serverMenu itemWithTitle:name] == nil )
 	{
@@ -1714,7 +1786,7 @@ void TCPlaySound( NSString *name );
 			[serverMenu addItem:[NSMenuItem separatorItem]];
 		}
 		
-		[serverList addObject:service];
+		//[serverList addObject:service];
 		[serverMenu addItem:[item autorelease]];
 		
 		// select the item if we are already connected to the server.
@@ -1723,6 +1795,27 @@ void TCPlaySound( NSString *name );
 		{
 			[serverPopup selectItemWithTitle:[service name]];
 		}
+	}
+}
+
+- (void)browserServerLost:(NSNotification *)note
+{
+	NSNetService				*service = (NSNetService *)[note object];
+	NSString					*name = [service name];
+	
+	int							i, top = [serverMenu numberOfItems];
+	
+	for ( i = [serverMenu indexOfItemWithTitle:name] + 1; i < top; i++ )
+	{
+		[[serverMenu itemWithTitle:name] setTag:[[serverMenu itemWithTitle:name] tag] - 1];
+	}
+	
+	[serverMenu removeAllItemsWithTitle:name];
+	
+	// if this is the last broadcast server, take away the divider.
+	if ( [serverMenu numberOfItems] == 3 )
+	{
+		[serverMenu removeItemAtIndex:2];
 	}
 }
 

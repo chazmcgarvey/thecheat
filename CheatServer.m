@@ -190,7 +190,7 @@
 				}
 			}
 
-			NSLog( @"SERVER message %i/%i/%i", header.checksum, header.function, header.size );
+			//NSLog( @"SERVER message %i/%i/%i", header.checksum, header.function, header.size );
 
 			switch ( header.function )
 			{
@@ -488,7 +488,7 @@
 	TCaddress					*results = NULL;
 	int							resultsAmount = 0;
 	
-	unsigned					zone_count = 10;
+	/*unsigned					zone_count = 10;
 	vm_address_t				*zones = (vm_address_t *)malloc( zone_count * sizeof(vm_address_t) );
 	//memory_reader_t				reader;
 	
@@ -500,13 +500,13 @@
 	{
 		//address = zones[0];
 		
-		/*int			i;
+		int			i;
 		
 		for ( i = 0; i < 10; i++ )
 		{
 			NSLog( @"malloc_get_all_zones[%i] = %X", i, (vm_address_t)zones[i] );
-		}*/
-	}
+		}
+	}*/
 	
 	for (;;)
 	{

@@ -53,11 +53,18 @@
 	if ( self = [super init] )
 	{
 		servers = [[NSMutableArray alloc] init];
-		
-		[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willQuit:) name:@"NSApplicationWillTerminateNotification" object:nil];
 
 		[self listenOnPort:TCGlobalListenPort remote:TCGlobalAllowRemote];
 		[self broadcastWithName:TCGlobalBroadcastName];
+		
+		// set up the network browser
+		browser = [[NSNetServiceBrowser alloc] init];
+		[browser setDelegate:self];
+		[browser searchForServicesOfType:@"_cheat._tcp." inDomain:@"local."];
+		
+		serverList = [[NSMutableArray alloc] init];
+		
+		[self setDelegate:self];
 	}
 
 	return self;
@@ -106,8 +113,7 @@
 
 - (void)stopBroadcast
 {
-	oldService = service;
-	[oldService stop], service = nil;
+	[service stop], service = nil;
 }
 
 
@@ -153,9 +159,10 @@
 	LaunchWebsite();
 }
 
-- (IBAction)launchDebugEmailMenu:(id)sender
+
+- (NSArray *)serverList
 {
-	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"mailto:thecheat@brokenzipper.com"]];
+	return serverList;
 }
 
 
@@ -167,6 +174,9 @@
 	[self stopBroadcast];
 
 	[servers release];
+	
+	[browser release];
+	[serverList release];
 
 	[super dealloc];
 }
@@ -380,19 +390,62 @@
 - (void)netServiceDidStop:(NSNetService *)sender
 {
 	NSLog( @"service stopped" );
-	[oldService release], oldService = nil;
+	[sender release];
 }
 
 
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%%%%%%%%%%%%%%%%%%%%%%   NSApplication Notification
+%%%%%%%%%%%%%%%%%%%%%%   NSNetServiceBrowser Delegate
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
 
-- (void)willQuit:(NSNotification *)note
+- (void)netServiceBrowser:(NSNetServiceBrowser *)browser didFindService:(NSNetService *)aService moreComing:(BOOL)more
 {
-	//[self listenPortTextField:self];
-	//[self broadcastNameTextField:self];
+	// a server has broadcast; not much use until it's resolved.
+	[aService setDelegate:self];
+	[aService resolve];
+}
+
+- (void)netServiceDidResolveAddress:(NSNetService *)aService
+{	
+	int					i, top = [serverList count];
+	
+	// ignore if this is the local server.
+	if ( TCGlobalAllowRemote && [[aService name] isEqualToString:TCGlobalBroadcastName] )
+	{
+		return;
+	}
+	
+	// ignore if the server name is already in the list.
+	for ( i = 0; i < top; i++ )
+	{
+		if ( [[aService name] isEqualToString:[(NSNetService *)[serverList objectAtIndex:i] name]] )
+		{
+			return;
+		}
+	}
+	
+	[serverList addObject:aService];
+	NSLog( @"server added: %i", [serverList count] );
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"TCServerFound" object:aService];
+}
+
+- (void)netServiceBrowser:(NSNetServiceBrowser *)browser didRemoveService:(NSNetService *)aService moreComing:(BOOL)more
+{
+	int					i, top = [serverList count];
+	
+	for ( i = 0; i < top; i++ )
+	{
+		if ( [[aService name] isEqualToString:[(NSNetService *)[serverList objectAtIndex:i] name]] )
+		{
+			[serverList removeObjectAtIndex:i];
+			NSLog( @"server deleted: %i", [serverList count] );
+			break;
+		}
+	}
+	
+	[[NSNotificationCenter defaultCenter] postNotificationName:@"TCServerLost" object:aService];
 }
 
 

@@ -32,15 +32,13 @@
 	NSData				*connectionAddress;
 	NSString			*connectionName;
 	int					sockfd;
-	NSNetServiceBrowser	*browser;
 	
 	// for updating the interface
 	NSString			*targetName;
 	int					targetPID;
 	BOOL				targetPaused;
 
-	// list of broadcast servers
-	NSMutableArray		*serverList;
+	NSArray				*serverList;
 	NSMutableArray		*addressList;
 
 	TCaddress			*searchResults;
@@ -60,6 +58,7 @@
 	
 	// for changing variables every x seconds
 	NSTimer				*changeTimer;
+	NSArray				*changeSelectedItems;
 
 	// INTERFACE OUTLETS
 	IBOutlet NSWindow				*cheatWindow;
@@ -76,6 +75,7 @@
 	IBOutlet NSTableView			*addressTable;
 	IBOutlet NSTextField			*statusText;
 	IBOutlet NSProgressIndicator	*statusBar;
+	IBOutlet NSTextField			*descriptionText;
 
 	IBOutlet NSMenu					*serverMenu;
 	IBOutlet NSMenu					*processMenu;
@@ -100,6 +100,7 @@
 - (void)updatePauseButton;
 - (void)updateSearchBoxes;
 - (void)updateChangeButton;
+- (void)updateDescriptionText;
 
 - (void)setStatusDisconnected;
 - (void)setStatusConnected;
@@ -160,6 +161,7 @@
 
 // CHEAT WINDOW INTERFACE
 - (IBAction)typePopup:(id)sender;
+- (IBAction)sizePopup:(id)sender;
 
 - (IBAction)searchButton:(id)sender;
 - (IBAction)clearSearchButton:(id)sender;
