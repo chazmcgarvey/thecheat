@@ -34,19 +34,11 @@
 - (void)initialInterfaceSetup;
 - (void)interfaceUpdate;
 
-/*
-- (IBAction)playSoundsButton:(id)sender;
-- (IBAction)windowsOnTopButton:(id)sender;
-- (IBAction)updateAutomaticallyButton:(id)sender;
-- (IBAction)allowRemoteButton:(id)sender;
-- (IBAction)listenPortTextField:(id)sender;
-- (IBAction)broadcastNameTextField:(id)sender;
-- (IBAction)hitsDisplayedTextField:(id)sender;
-*/
-
 - (IBAction)change:(id)sender;
 
 - (IBAction)revert:(id)sender;
+- (IBAction)apply:(id)sender;
+
 - (IBAction)cancel:(id)sender;
 - (IBAction)save:(id)sender;
 

@@ -59,95 +59,6 @@
 	}
 }
 
-/*
-- (IBAction)playSoundsButton:(id)sender
-{
-	if ( [playSoundsButton state] == NSOnState )
-	{
-		TCGlobalPlaySounds = YES;
-		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:TCPlaySoundsPref];
-	}
-	else
-	{
-		TCGlobalPlaySounds = NO;
-		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:TCPlaySoundsPref];
-	}
-}
-
-- (IBAction)windowsOnTopButton:(id)sender
-{
-	if ( [windowsOnTopButton state] == NSOnState )
-	{
-		TCGlobalWindowsOnTop = YES;
-		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:TCWindowsOnTopPref];
-	}
-	else
-	{
-		TCGlobalWindowsOnTop = NO;
-		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:TCWindowsOnTopPref];
-	}
-
-	[[NSNotificationCenter defaultCenter] postNotificationName:@"TCWindowsOnTopChanged" object:nil];
-}
-
-- (IBAction)updateAutomaticallyButton:(id)sender
-{
-	if ( [updateAutomaticallyButton state] == NSOnState )
-	{
-		TCGlobalUpdateCheck = YES;
-		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:TCUpdateCheckPref];
-	}
-	else
-	{
-		TCGlobalUpdateCheck = NO;
-		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:TCUpdateCheckPref];
-	}
-}
-
-- (IBAction)allowRemoteButton:(id)sender
-{
-	if ( [allowRemoteButton state] == NSOnState )
-	{
-		TCGlobalAllowRemote = YES;
-		[[NSUserDefaults standardUserDefaults] setBool:YES forKey:TCAllowRemotePref];
-	}
-	else
-	{
-		TCGlobalAllowRemote = NO;
-		[[NSUserDefaults standardUserDefaults] setBool:NO forKey:TCAllowRemotePref];
-	}
-
-	[self interfaceUpdate];
-
-	[delegate preferenceAllowRemoteChanged:TCGlobalAllowRemote];
-}
-
-- (IBAction)listenPortTextField:(id)sender
-{
-	TCGlobalListenPort = [listenPortTextField intValue];
-
-	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:TCGlobalListenPort] forKey:TCListenPortPref];
-
-	[delegate preferenceListenPortChanged:TCGlobalListenPort];
-}
-
-- (IBAction)broadcastNameTextField:(id)sender
-{
-	NSString			*name = [broadcastNameTextField stringValue];
-	
-	[[NSUserDefaults standardUserDefaults] setObject:name forKey:TCBroadcastNamePref];
-
-	[delegate preferenceBroadcastNameChanged:name];
-}
-
-- (IBAction)hitsDisplayedTextField:(id)sender
-{
-	TCGlobalHitsDisplayed = [hitsDisplayedTextField intValue];
-	
-	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:TCGlobalHitsDisplayed] forKey:TCHitsDisplayedPref];
-}
-*/
-
 
 - (IBAction)change:(id)sender
 {
@@ -160,13 +71,7 @@
 	[self initialInterfaceSetup];
 }
 
-- (IBAction)cancel:(id)sender
-{
-	[self initialInterfaceSetup];
-	[self close];
-}
-
-- (IBAction)save:(id)sender
+- (IBAction)apply:(id)sender
 {
 	TCGlobalPlaySounds = [playSoundsButton state];
 	[[NSUserDefaults standardUserDefaults] setBool:TCGlobalPlaySounds forKey:TCPlaySoundsPref];
@@ -193,7 +98,18 @@
 	
 	TCGlobalHitsDisplayed = [hitsDisplayedTextField intValue];
 	[[NSUserDefaults standardUserDefaults] setObject:[NSNumber numberWithInt:TCGlobalHitsDisplayed] forKey:TCHitsDisplayedPref];
-	
+}
+
+
+- (IBAction)cancel:(id)sender
+{
+	[self initialInterfaceSetup];
+	[self close];
+}
+
+- (IBAction)save:(id)sender
+{
+	[self apply:self];
 	[self close];
 }
 

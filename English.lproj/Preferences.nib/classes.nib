@@ -2,7 +2,7 @@
     IBClasses = (
         {CLASS = FirstResponder; LANGUAGE = ObjC; SUPERCLASS = NSObject; }, 
         {
-            ACTIONS = {cancel = id; change = id; revert = id; save = id; }; 
+            ACTIONS = {apply = id; cancel = id; change = id; revert = id; save = id; }; 
             CLASS = PreferenceController; 
             LANGUAGE = ObjC; 
             OUTLETS = {

@@ -1582,7 +1582,7 @@ void TCPlaySound( NSString *name );
 
 - (void)windowsOnTopChanged:(NSNotification *)note
 {
-	if ( TCGlobalWindowsOnTop )
+	if ( [[note object] boolValue] )
 	{
 		[cheatWindow setLevel:NSPopUpMenuWindowLevel];
 	}

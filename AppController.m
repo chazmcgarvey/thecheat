@@ -215,7 +215,7 @@
 {
 	if ( TCGlobalWindowsOnTop != windowsOnTop )
 	{
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"TCWindowsOnTopChanged" object:nil];
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"TCWindowsOnTopChanged" object:[NSNumber numberWithBool:windowsOnTop]];
 	}
 }
 
