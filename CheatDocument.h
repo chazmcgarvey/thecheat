@@ -101,7 +101,6 @@ enum {
 	// EDIT VARIABLES INTERFACE
 	IBOutlet NSWindow *ibEditVariablesSheet;
 	IBOutlet NSTextField *ibNewValueField;
-	IBOutlet NSButton *ibVariableEnableButton;
 	
 	NSResponder *_lastResponder;
 	

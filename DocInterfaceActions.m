@@ -1,10 +1,23 @@
-//
-//  DocumentActions.m
-//  The Cheat
-//
-//  Created by Chaz McGarvey on 12/26/04.
-//  Copyright 2004 Chaz McGarvey. All rights reserved.
-//
+
+// **********************************************************************
+// The Cheat - A universal game cheater for Mac OS X
+// (C) 2003-2005 Chaz McGarvey (BrokenZipper)
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 1, or (at your option)
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+// 
+
 
 #import "CheatDocument.h"
 
@@ -435,9 +448,8 @@
 	
 	var = [_cheatData variableAtIndex:row];
 	
-	// update fields
+	// update field
 	[ibNewValueField setStringValue:[var stringValue]];
-	[ibVariableEnableButton setState:[var isEnabled]];
 	
 	// display sheet
 	[NSApp beginSheet:ibEditVariablesSheet modalForWindow:ibWindow modalDelegate:nil didEndSelector:NULL contextInfo:nil];
@@ -446,7 +458,6 @@
 - (IBAction)ibEndEditVariablesSheet:(id)sender
 {
 	NSString *newValue = [ibNewValueField stringValue];
-	BOOL enabled = [ibVariableEnableButton state];
 	NSArray *rows;
 	int i, top;
 	
@@ -463,12 +474,12 @@
 	rows = [ibCheatVariableTable selectedRows];
 	top = [rows count];
 	
-	for ( i = 0; i < top; i++ ) {
-		Variable *var = [_cheatData variableAtIndex:[[rows objectAtIndex:i] unsignedIntValue]];
-		if ( newValue ) {
+	// change all selected variables with the new value
+	if ( newValue ) {
+		for ( i = 0; i < top; i++ ) {
+			Variable *var = [_cheatData variableAtIndex:[[rows objectAtIndex:i] unsignedIntValue]];
 			[var setStringValue:newValue];
 		}
-		[var setEnabled:enabled];
 	}
 	
 	[ibCheatVariableTable reloadData];

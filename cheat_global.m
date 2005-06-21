@@ -61,7 +61,9 @@ void LaunchWebsite()
 
 void LaunchEmail()
 {
-	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"mailto:chaz@brokenzipper.com?subject=The%20Cheat%20Feedback"]];
+	//[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"mailto:chaz@brokenzipper.com?subject=The%20Cheat%20Feedback"]];
+	/* Ed Palma will act as a contact person for The Cheat. */
+	[[NSWorkspace sharedWorkspace] openURL:[NSURL URLWithString:@"http://www.brokenzipper.com/contact.html"]];
 }
 
 

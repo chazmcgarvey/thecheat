@@ -63,8 +63,8 @@
 /* See accessor methods for a description of the parameters. */
 - (id)initWithTarget:(id)target selector:(SEL)selector delegate:(id)delegate;
 - (id)initWithTarget:(id)target selector:(SEL)selector context:(id)context delegate:(id)delegate;
-- (id)initWithFunction:(int (*)(id, unsigned))function delegate:(id)delegate;
-- (id)initWithFunction:(int (*)(id, unsigned))function context:(id)context delegate:(id)delegate;
+- (id)initWithFunction:(int (*)(ThreadedTask *, unsigned))function delegate:(id)delegate;
+- (id)initWithFunction:(int (*)(ThreadedTask *, unsigned))function context:(id)context delegate:(id)delegate;
 
 
 // #############################################################################

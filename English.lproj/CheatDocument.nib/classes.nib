@@ -53,7 +53,7 @@
                 ibCheatRepeatAuxText = NSTextField; 
                 ibCheatRepeatButton = NSButton; 
                 ibCheatRepeatField = NSTextField; 
-                ibCheatVariableTable = NSTableView; 
+                ibCheatVariableTable = BetterTableView; 
                 ibCustomServerSheet = NSWindow; 
                 ibEditVariablesSheet = NSWindow; 
                 ibNewValueField = NSTextField; 
@@ -77,7 +77,6 @@
                 ibServerPopup = NSPopUpButton; 
                 ibStatusBar = NSProgressIndicator; 
                 ibStatusText = StatusTextField; 
-                ibVariableEnableButton = NSButton; 
                 ibWindow = NSWindow; 
                 ibWindowTitleField = NSTextField; 
             }; 

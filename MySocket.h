@@ -1,10 +1,23 @@
-//
-//  MySocket.h
-//  The Cheat
-//
-//  Created by Chaz McGarvey on 2/1/05.
-//  Copyright 2005 Chaz McGarvey. All rights reserved.
-//
+
+// **********************************************************************
+// The Cheat - A universal game cheater for Mac OS X
+// (C) 2003-2005 Chaz McGarvey (BrokenZipper)
+// 
+// This program is free software; you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation; either version 1, or (at your option)
+// any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+// 
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
+// 
+
 
 /*
  * MySocket is my 24 hour hackjob.  There are other classes which would have
@@ -16,6 +29,14 @@
  * each connection (for both serving and receiving).  I thought that this way
  * would be more efficient, but the old way is noticeably faster.  I may go
  * back to that way eventually, after all it isn't that many threads.
+ */
+
+/*
+ * June 21 2005 - Chaz
+ * I have written a much more robust socket wrapper for another project that
+ * could be re-emplemented into The Cheat. It is cleaner code and has very
+ * nice statistics tracking features. I'm going on my mission tomorrow. This
+ * will have to wait two years or so. ;)
  */
 
 #import <Cocoa/Cocoa.h>

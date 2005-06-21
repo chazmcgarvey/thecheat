@@ -576,12 +576,6 @@
 			refType = 4;
 			sourceTree = "<group>";
 		};
-		6E6FD8FB0764D1B0004FD845 = {
-			fileRef = 6E6FD8FA0764D1B0004FD845;
-			isa = PBXBuildFile;
-			settings = {
-			};
-		};
 		6E6FD9FE0764EDE4004FD845 = {
 			fileEncoding = 4;
 			isa = PBXFileReference;
@@ -1073,17 +1067,9 @@
 			);
 			isa = PBXGroup;
 			name = AppleScript;
+			path = "";
 			refType = 4;
 			sourceTree = "<group>";
-		};
-		6EB35A2D07C9C7C8000347B9 = {
-			buildActionMask = 2147483647;
-			dstPath = /;
-			dstSubfolderSpec = 0;
-			files = (
-			);
-			isa = PBXCopyFilesBuildPhase;
-			runOnlyForDeploymentPostprocessing = 0;
 		};
 		6EB35AA107CA5FE0000347B9 = {
 			isa = PBXFileReference;
@@ -1673,6 +1659,7 @@
 			);
 			isa = PBXGroup;
 			name = Images;
+			path = "";
 			refType = 4;
 			sourceTree = "<group>";
 		};
@@ -1706,27 +1693,29 @@
 				8D1107290486CEB800E47090,
 				8D11072C0486CEB800E47090,
 				8D11072E0486CEB800E47090,
-				6EB35A2D07C9C7C8000347B9,
 			);
 			buildRules = (
 			);
 			buildSettings = {
 				COPY_PHASE_STRIP = YES;
+				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = "";
+				GCC_AUTO_VECTORIZATION = YES;
 				GCC_DYNAMIC_NO_PIC = YES;
 				GCC_ENABLE_OBJC_EXCEPTIONS = NO;
 				GCC_ENABLE_TRIGRAPHS = NO;
-				GCC_GENERATE_DEBUGGING_SYMBOLS = YES;
+				GCC_FAST_OBJC_DISPATCH = YES;
+				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = The_Cheat_Prefix.pch;
 				GCC_WARN_ABOUT_MISSING_PROTOTYPES = NO;
 				GCC_WARN_FOUR_CHARACTER_CONSTANTS = NO;
 				GCC_WARN_UNKNOWN_PRAGMAS = NO;
-				HEADER_SEARCH_PATHS = /Users/chaz/Projects/chazlib/build/usr/local/include;
+				HEADER_SEARCH_PATHS = "";
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
-				LIBRARY_SEARCH_PATHS = /Users/chaz/Projects/chazlib/build;
-				MACOSX_DEPLOYMENT_TARGET = "";
+				LIBRARY_SEARCH_PATHS = "";
+				MACOSX_DEPLOYMENT_TARGET = 10.2;
 				OTHER_CFLAGS = "";
 				OTHER_LDFLAGS = "";
 				PRODUCT_NAME = "The Cheat";
@@ -1802,7 +1791,6 @@
 				6ECDE09A0643984400B1DD8A,
 				6ECDE09E0643985000B1DD8A,
 				6E98A54D06A740EE006A576D,
-				6E6FD8FB0764D1B0004FD845,
 				6EC06601078BFBE900591D61,
 				6EB3528907C56771000347B9,
 				6EB3528A07C56771000347B9,
