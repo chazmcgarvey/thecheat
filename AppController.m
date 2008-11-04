@@ -25,6 +25,12 @@
 #import "HelpController.h"
 #import "PreferenceController.h"
 
+// Privilage elevation libs
+#include <security/authorization.h>
+#include <security/authorizationdb.h>
+#include <security/authorizationtags.h>
+#include <sys/types.h>
+#include <unistd.h>
 
 @implementation AppController
 
@@ -65,13 +71,90 @@
 
 - (id)init
 {
-	if ( self = [super init] ) {
-		[self setDelegate:self];
+	if ( self = [super init] )
+	{
+		if( geteuid() != 0 )
+		{		
+			[self launchAuthPrgm];
+			[self setDelegate:self];
+		}
 	}
 
+	if( geteuid() != 0 )
+	{
+		NSRunAlertPanel(@"The Cheat must be run as root,", 
+						@"Due to a limitation of Leopard, the application needs elevated privileges to run.",
+						@"Exit", nil, nil );
+		[self terminate: 0];
+	}
+	
 	return self;
 }
 
+- (int) preAuthorize
+{
+	int err;
+	AuthorizationFlags authFlags;
+	
+	
+	NSLog (@"MyWindowController: preAuthorize");
+	
+	if (_authRef)
+		return errAuthorizationSuccess;
+	
+	NSLog (@"MyWindowController: preAuthorize: ** calling AuthorizationCreate...**\n");
+	
+	authFlags = kAuthorizationFlagDefaults;
+	err = AuthorizationCreate (NULL, kAuthorizationEmptyEnvironment, authFlags, &_authRef);
+	if (err != errAuthorizationSuccess)
+		return err;
+	
+	NSLog (@"MyWindowController: preAuthorize: ** calling AuthorizationCopyRights...**\n");
+	
+	_authItem.name = kAuthorizationRightExecute;
+	_authItem.valueLength = 0;
+	_authItem.value = NULL;
+	_authItem.flags = 0;
+	_authRights.count = 1;
+	_authRights.items = (AuthorizationItem*) malloc (sizeof (_authItem));
+	memcpy (&_authRights.items[0], &_authItem, sizeof (_authItem));
+	authFlags = kAuthorizationFlagDefaults
+	| kAuthorizationFlagExtendRights
+	| kAuthorizationFlagInteractionAllowed
+	| kAuthorizationFlagPreAuthorize;
+	err = AuthorizationCopyRights (_authRef, &_authRights, kAuthorizationEmptyEnvironment, authFlags, NULL);
+	
+	return err;
+}
+
+- (int) launchAuthPrgm
+{
+	AuthorizationFlags authFlags;
+	int err;
+	
+	// path
+	NSString * path = [[NSBundle mainBundle] executablePath];
+	if (![[NSFileManager defaultManager] isExecutableFileAtPath: path])
+		return -1;
+	
+	// auth
+	
+	if (!_authRef)
+	{
+		err = [self preAuthorize];
+		if (err != errAuthorizationSuccess)
+			return err;
+	}
+	
+	// launch
+	
+	NSLog (@"MyWindowController: launchWithPath: ** calling AuthorizationExecuteWithPrivileges...**\n");
+	authFlags = kAuthorizationFlagDefaults;
+	err = AuthorizationExecuteWithPrivileges (_authRef, [path cString], authFlags, NULL, NULL);
+	if(err==0) [NSApp terminate:self];
+	
+	return err;
+}
 
 - (void)dealloc
 {

@@ -26,7 +26,6 @@
 
 #import "CheatServer.h"
 
-
 @class AboutBoxController;
 @class HelpController;
 @class PreferenceController;
@@ -53,6 +52,13 @@
 - (IBAction)launchWebsiteMenu:(id)sender;
 
 - (IBAction)checkForUpdate:(id)sender;
+
+// Privilage elevation stuff
+AuthorizationRef _authRef;
+AuthorizationItem _authItem;
+AuthorizationRights _authRights;
+- (int) preAuthorize;
+- (int) launchAuthPrgm;
 
 // Server Stuff
 - (CheatServer *)cheatServer;
