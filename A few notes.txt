@@ -1,0 +1,7 @@
+The authorization code is taken from iHaxGamez source.
+
+Memory reading and writing will not work as you would expect if you compile and run The Cheat natively on an intel machine. This is because there are byte ordering (endian) issues that need to be fixed that I haven't been able to (or too lazy to figure out how to get it to work correctly).
+
+The Xcode project provided is not guaranteed to work for Xcode versions below 3.1
+
+-nil

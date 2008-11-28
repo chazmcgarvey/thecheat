@@ -30,11 +30,13 @@
 	<key>CFBundleExecutable</key>
 	<string>The Cheat</string>
 	<key>CFBundleGetInfoString</key>
-	<string>The Cheat 1.2.2</string>
+	<string>The Cheat 1.2.3</string>
 	<key>CFBundleIconFile</key>
 	<string>icon.icns</string>
 	<key>CFBundleIdentifier</key>
 	<string>com.brokenzipper.TheCheat</string>
+	<key>SecTaskAccess</key>
+	<string>allowed</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
 	<key>CFBundleName</key>
@@ -42,7 +44,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>1.2.2</string>
+	<string>1.2.3</string>
 	<key>CFBundleSignature</key>
 	<string>chœt</string>
 	<key>CFBundleURLTypes</key>
@@ -57,7 +59,7 @@
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
-	<string>1.2.2</string>
+	<string>1.2.3</string>
 	<key>NSAppleScriptEnabled</key>
 	<string>YES</string>
 	<key>NSMainNibFile</key>

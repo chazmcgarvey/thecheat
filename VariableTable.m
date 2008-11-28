@@ -70,7 +70,7 @@
 
 
 - (void)reloadData
-{
+{   
 	if ( _dontUpdate ) {
 		_updatePending = YES;
 		return;

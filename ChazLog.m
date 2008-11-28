@@ -30,7 +30,7 @@ void static _ChazPrint( FILE *output, NSString *format, va_list args );
 
 
 // Static Globals
-BOOL static _gLogEnabled = NO;
+BOOL static _gLogEnabled = YES;
 FILE static *_gLogFile = stdout;
 FILE static *_gDebugFile = NULL;
 

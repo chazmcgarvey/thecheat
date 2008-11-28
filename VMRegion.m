@@ -40,7 +40,6 @@
 #include <mach/mach_traps.h> // for task_for_pid(3)
 #include <signal.h> // for stop(2)
 
-
 static __inline__ vm_map_t _VMTaskFromPID( pid_t process )
 {
 	vm_map_t task;

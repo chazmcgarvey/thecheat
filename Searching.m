@@ -164,7 +164,6 @@ int SearchIterationAgain( ThreadedTask *task, unsigned iteration )
 		context->lastRegion = VMMakeRegion( context->process, *(context->lastRegionPtr), 0 );
 		region = VMNextRegionWithAttributes( context->process, context->lastRegion, VMREGION_READABLE | VMREGION_WRITABLE );
 		if ( VMRegionIsNotNull( region ) ) {
-			
 			if ( context->bufferSize < VMRegionSize( region ) ) {
 				char *buf = realloc( context->buffer, VMRegionSize( region ) );
 				if ( buf ) {
@@ -183,9 +182,9 @@ int SearchIterationAgain( ThreadedTask *task, unsigned iteration )
 			top = *context->lastPerRegionPtr;
 			
 			for ( i = 0; i < top; i++ ) {
-				
 				ptr = context->buffer + *context->lastAddressPtr - VMRegionAddress(region);
-				if ( context->compareFunc(ptr,context->value->_value) ) {
+				
+				if (ptr >= context->buffer && context->compareFunc(ptr,context->value->_value)) {
 					if ( context->numberOfResults >= TCArrayElementCount(context->addresses) ) {
 						TCArrayResize( context->addresses, TCArrayElementCount(context->addresses) + TC_BUFFER_SIZE / sizeof(TCAddress) );
 						context->addressPtr = (TCAddress *)TCArrayBytes(context->addresses) + context->numberOfResults;
@@ -276,7 +275,7 @@ int SearchIterationLastValue( ThreadedTask *task, unsigned iteration )
 			for ( i = 0; i < top; i++ ) {
 				
 				ptr = context->buffer + *context->lastAddressPtr - VMRegionAddress(region);
-				if ( context->compareFunc(ptr,context->lastValuePtr) ) {
+				if ( ptr >= context->buffer && context->compareFunc(ptr,context->lastValuePtr) ) {
 					if ( context->numberOfResults >= TCArrayElementCount(context->addresses) ) {
 						TCArrayResize( context->addresses, TCArrayElementCount(context->addresses) + TC_BUFFER_SIZE / sizeof(TCAddress) );
 						context->addressPtr = (TCAddress *)TCArrayBytes(context->addresses) + context->numberOfResults;
@@ -453,7 +452,8 @@ int SearchStringIterationAgain( ThreadedTask *task, unsigned iteration )
 			for ( i = 0; i < top; i++ ) {
 				
 				ptr = context->buffer + *context->lastAddressPtr - VMRegionAddress(region);
-				if ( memcmp( ptr, context->value->_value, MIN(TCArrayElementSize(context->values),context->buffer+VMRegionAddress(region)-ptr) ) == 0 ) {
+				
+				if ( ptr >= context->buffer && memcmp( ptr, context->value->_value, MIN(TCArrayElementSize(context->values),context->buffer+VMRegionAddress(region)-ptr) ) == 0 ) {
 					if ( context->numberOfResults >= TCArrayElementCount(context->addresses) ) {
 						TCArrayResize( context->addresses, TCArrayElementCount(context->addresses) + TC_BUFFER_SIZE / sizeof(TCAddress) );
 						context->addressPtr = (TCAddress *)TCArrayBytes(context->addresses) + context->numberOfResults;
@@ -542,7 +542,7 @@ int SearchStringIterationLastValue( ThreadedTask *task, unsigned iteration )
 			for ( i = 0; i < top; i++ ) {
 				
 				ptr = context->buffer + *context->lastAddressPtr - VMRegionAddress(region);
-				if ( memcmp( ptr, context->lastValuePtr, MIN(TCArrayElementSize(context->values),context->buffer+VMRegionAddress(region)-ptr) ) == 0 ) {
+				if ( ptr >= context->buffer && memcmp( ptr, context->lastValuePtr, MIN(TCArrayElementSize(context->values),context->buffer+VMRegionAddress(region)-ptr) ) == 0 ) {
 					if ( context->numberOfResults >= TCArrayElementCount(context->addresses) ) {
 						TCArrayResize( context->addresses, TCArrayElementCount(context->addresses) + TC_BUFFER_SIZE / sizeof(TCAddress) );
 						context->addressPtr = (TCAddress *)TCArrayBytes(context->addresses) + context->numberOfResults;

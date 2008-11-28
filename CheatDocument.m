@@ -1154,8 +1154,8 @@ Process static *_tc_target = nil;
 	
 	// clear the search
 	[_searchData clearResults];
-	[ibSearchVariableTable reloadData];
 	
+	//[ibSearchVariableTable reloadData]; // this can cause a crash, so commenting it out for now.
 	// clear the selected process
 	[_process release];
 	_process = nil;

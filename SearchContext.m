@@ -301,6 +301,7 @@
 			return SearchIterationLastValue;
 		}
 	}
+	
 	return NULL;
 }
 
