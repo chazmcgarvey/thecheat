@@ -48,6 +48,14 @@
 }
 
 
+- (void)setProcess:(Process *)process
+{
+	[process retain];
+	[_process release];
+	_process = process;
+}
+
+
 - (TCVariableType)variableType
 {
 	return _variableType;
@@ -107,6 +115,7 @@
 	if ( !_variableValue ) {
 		// create a zero value if there is none
 		_variableValue = [[Variable alloc] init];
+		[_variableValue setProcess:_process];
 	}
 	return _variableValue;
 }
@@ -165,6 +174,7 @@
 			TCArraySetElementAtIndex( _values, index, [value value] );
 		}
 	}
+	
 }
 
 - (BOOL)valuesLoaded

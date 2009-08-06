@@ -21,12 +21,12 @@
 #import <Cocoa/Cocoa.h>
 
 #import "CheaterTypes.h"
+#import "Process.h"
 
 #include <string.h>
 
 
 #define TC_MAX_VAR_SIZE (256)
-
 
 @interface Variable : NSObject < NSCoding >
 {
@@ -36,6 +36,8 @@
 	
 	int _tag;
 	
+	Process *process;
+	
 	@public;
 	// use the accessor methods unless you need fast access
 	// do not change these variables directly or things will be screwed.
@@ -43,6 +45,7 @@
 	TCIntegerSign _integerSign;
 	unsigned _size;
 	void *_value;
+	BOOL _isEmulated;
 }
 
 // #############################################################################
@@ -54,6 +57,11 @@
 - (id)init; // default: TCInt32
 - (id)initWithType:(TCVariableType)type; // default: TCSigned
 - (id)initWithType:(TCVariableType)type integerSign:(TCIntegerSign)sign;
+
+- (void)setProcess:(Process *)process;
+- (Process *)process;
+
+- (BOOL)isEmulated;
 
 // #############################################################################
 #pragma mark NSCoding
@@ -80,6 +88,8 @@
 - (void)setValue:(void const *)value size:(unsigned)size;
 - (NSString *)stringValue;
 - (BOOL)setStringValue:(NSString *)value;
+
+void bigEndianValue(void *buffer, Variable *variable);
 
 - (unsigned)valueSize;
 - (BOOL)isValueValid;

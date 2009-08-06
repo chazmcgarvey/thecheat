@@ -20,7 +20,6 @@
 
 #import "Variable.h"
 
-
 @interface Variable ( PrivateAPI )
 
 - (void)_setType:(TCVariableType)type;
@@ -53,6 +52,27 @@
 	return self;
 }
 
+- (void)setProcess:(Process *)newProcess
+{
+	if (process != newProcess && [newProcess pid] > 0)
+	{
+		_isEmulated = [newProcess isEmulated];
+		
+		[newProcess retain];
+		[process release];
+		process = newProcess;
+	}
+}
+
+- (Process *)process
+{
+	return process;
+}
+
+- (BOOL)isEmulated
+{
+	return _isEmulated;
+}
 
 - (void)dealloc
 {
@@ -73,7 +93,48 @@
 		[coder decodeValueOfObjCType:@encode(TCVariableType) at:&_type];
 		[coder decodeValueOfObjCType:@encode(TCIntegerSign) at:&_integerSign];
 		[coder decodeValueOfObjCType:@encode(TCAddress) at:&_address];
-		[self setValue:[coder decodeBytesWithReturnedLength:&_size]];
+		
+		void *value = [coder decodeBytesWithReturnedLength:&_size];
+		
+		if (_type == TCString || _type == TCInt8)
+		{
+			[self setValue:value];
+		}
+		else if (_type == TCInt16)
+		{
+			int16_t newVariable = CFSwapInt16BigToHost(*((int16_t *)value));
+			[self setValue:&newVariable];
+		}
+		else if (_type == TCInt32)
+		{
+			int32_t newVariable = CFSwapInt32BigToHost(*((int32_t *)value));
+			[self setValue:&newVariable];
+		}
+		else if (_type == TCInt64)
+		{
+			int64_t newVariable = CFSwapInt64BigToHost(*((int64_t *)value));
+			[self setValue:&newVariable];
+		}
+		else if (_type == TCFloat)
+		{
+#ifdef __LITTLE_ENDIAN__
+			CFSwappedFloat32 newVariable = CFConvertFloat32HostToSwapped(*((float *)value));
+			[self setValue:&(newVariable.v)];
+			
+#else
+			[self setValue:value];
+#endif
+		}
+		else if (_type == TCDouble)
+		{
+#ifdef __LITTLE_ENDIAN__
+			CFSwappedFloat64 newVariable = CFConvertDoubleHostToSwapped(*((double *)value));
+			[self setValue:&(newVariable.v)];
+#else
+			[self setValue:value];
+#endif
+		}
+		
 		[coder decodeValueOfObjCType:@encode(BOOL) at:&_isValueValid];
 		[coder decodeValueOfObjCType:@encode(BOOL) at:&_enabled];
 		[coder decodeValueOfObjCType:@encode(int) at:&_tag];
@@ -86,7 +147,45 @@
 	[coder encodeValueOfObjCType:@encode(TCVariableType) at:&_type];
 	[coder encodeValueOfObjCType:@encode(TCIntegerSign) at:&_integerSign];
 	[coder encodeValueOfObjCType:@encode(TCAddress) at:&_address];
-	[coder encodeBytes:_value length:_size];
+	
+	if (_type == TCString || _type == TCInt8)
+	{
+		[coder encodeBytes:_value length:_size];
+	}
+	else if (_type == TCInt16)
+	{
+		int16_t newVariable = CFSwapInt16HostToBig(*((int16_t *)_value));
+		[coder encodeBytes:&newVariable length:_size];
+	}
+	else if (_type == TCInt32)
+	{
+		int32_t newVariable = CFSwapInt32HostToBig(*((int32_t *)_value));
+		[coder encodeBytes:&newVariable length:_size];
+	}
+	else if (_type == TCInt64)
+	{
+		int64_t newVariable = CFSwapInt64HostToBig(*((int64_t *)_value));
+		[coder encodeBytes:&newVariable length:_size];
+	}
+	else if (_type == TCFloat)
+	{
+#ifdef __LITTLE_ENDIAN__
+		CFSwappedFloat32 newVariable = CFConvertFloat32HostToSwapped(*((float *)_value));
+		[coder encodeBytes:&newVariable length:_size];
+#else
+		[coder encodeBytes:&_value length:_size];
+#endif
+	}
+	else if (_type == TCDouble)
+	{
+#ifdef __LITTLE_ENDIAN__
+		CFSwappedFloat64 newVariable = CFConvertDoubleHostToSwapped(*((double *)_value));
+		[coder encodeBytes:&newVariable length:_size];
+#else
+		[coder encodeBytes:_value length:_size];
+#endif
+	}
+	
 	[coder encodeValueOfObjCType:@encode(BOOL) at:&_isValueValid];
 	[coder encodeValueOfObjCType:@encode(BOOL) at:&_enabled];
 	[coder encodeValueOfObjCType:@encode(int) at:&_tag];
@@ -321,6 +420,39 @@
 	return [self isValueValid];
 }
 
+// this only converts the byte order of the value at buffer if the process is running under rosetta on an intel mac
+// floats and double's byte ordering should not be changed when searching for values because they may be swapped to '0.0'
+void bigEndianValue(void *buffer, Variable *variable)
+{
+	if (variable->_isEmulated)
+	{
+		if (variable->_type == TCInt16)
+		{
+			int16_t newValue = CFSwapInt16HostToBig(*((int16_t *)buffer));
+			memcpy(buffer, &newValue, sizeof(int16_t));
+		}
+		else if (variable->_type == TCInt32)
+		{
+			int32_t newValue = CFSwapInt32HostToBig(*((int32_t *)buffer));
+			memcpy(buffer, &newValue, sizeof(int32_t));
+		}
+		else if (variable->_type == TCInt64)
+		{
+			int64_t newValue = CFSwapInt64HostToBig(*((int64_t *)buffer));
+			memcpy(buffer, &newValue, sizeof(int64_t));
+		}
+		else if (variable->_type == TCFloat)
+		{
+			CFSwappedFloat32 newValue = CFConvertFloat32HostToSwapped(*((float *)buffer));
+			memcpy(buffer, &(newValue.v), sizeof(float));
+		}
+		else if (variable->_type == TCDouble)
+		{
+			CFSwappedFloat64 newValue = CFConvertDoubleHostToSwapped(*((double *)buffer));
+			memcpy(buffer, &(newValue.v), sizeof(double));
+		}
+	}
+}
 
 - (unsigned)valueSize
 {

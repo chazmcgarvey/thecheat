@@ -79,27 +79,6 @@
 	[super dealloc];
 }
 
-// http://vgable.com/blog/2008/10/05/restarting-your-cocoa-application/
-- (void)restartOurselves
-{
-	NSString *killArg1AndOpenArg2Script = @"kill -9 $1 \n open \"$2\"";
-	NSString *ourPID = [NSString stringWithFormat:@"%d", [[NSProcessInfo processInfo] processIdentifier]];
-	NSString *pathToUs = [[NSBundle mainBundle] bundlePath];
-	
-	NSArray *shArgs = [NSArray arrayWithObjects:@"-c", killArg1AndOpenArg2Script, @"", ourPID, pathToUs, nil];
-	NSTask *restartTask = [NSTask launchedTaskWithLaunchPath:@"/bin/sh" arguments:shArgs];
-	[restartTask waitUntilExit];
-	NSLog(@"*** ERROR: %@ should have been terminated, but we are still running", pathToUs);
-	assert(!"We should not be running!");
-}
-
-- (BOOL) checkExecutablePermissions {
-	NSDictionary	*applicationAttributes = [[NSFileManager defaultManager] fileAttributesAtPath:[[NSBundle mainBundle] executablePath] traverseLink: YES];
-	
-	// We expect 2755 as octal (1517 as decimal, -rwxr-sr-x as extended notation)
-	return ([applicationAttributes filePosixPermissions] == 1517 && [[applicationAttributes fileGroupOwnerAccountName] isEqualToString: @"procmod"]);
-}
-
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 #pragma mark NSApplication Delegate
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/

@@ -38,6 +38,7 @@
 - (BOOL)sameApplicationAs:(id)anObject;
 
 // accessors
+- (BOOL)isEmulated;
 - (NSString *)name;
 - (NSString *)version;
 - (NSImage *)icon;

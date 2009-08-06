@@ -69,7 +69,7 @@
 		[self setWindowTitle:[coder decodeObject]];
 		[self setCheatInfo:[coder decodeObject]];
 		[self setProcess:[coder decodeObject]];
-		myVariables = [[coder decodeObject] retain];
+		myVariables = [[coder decodeObject] retain];	
 		[coder decodeValueOfObjCType:@encode(BOOL) at:&myRepeats];
 		[coder decodeValueOfObjCType:@encode(NSTimeInterval) at:&myRepeatInterval];
 	}

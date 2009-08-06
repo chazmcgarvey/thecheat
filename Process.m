@@ -20,6 +20,10 @@
 
 #import "Process.h"
 
+#ifdef __i386__
+	#import <sys/types.h>
+	#import <sys/sysctl.h>
+#endif
 
 @interface Process ( PrivateAPI )
 
@@ -130,6 +134,70 @@
 	return NO;
 }
 
+#pragma mark Detecting Emulation
+
+#ifdef __i386__
+// http://developer.apple.com/documentation/MacOSX/Conceptual/universal_binary/universal_binary_exec_a/universal_binary_exec_a.html
+static int sysctlbyname_with_pid (const char *name, pid_t pid,
+								  void *oldp, size_t *oldlenp,
+								  void *newp, size_t newlen)
+{
+    if (pid == 0) {
+        if (sysctlbyname(name, oldp, oldlenp, newp, newlen) == -1)  {
+            fprintf(stderr, "sysctlbyname_with_pid(0): sysctlbyname  failed:"
+					"%s\n", strerror(errno));
+            return -1;
+        }
+    } else {
+        int mib[CTL_MAXNAME+1];
+        size_t len = CTL_MAXNAME;
+        if (sysctlnametomib(name, mib, &len) == -1) {
+            fprintf(stderr, "sysctlbyname_with_pid: sysctlnametomib  failed:"
+					"%s\n", strerror(errno));
+            return -1;
+        }
+        mib[len] = pid;
+        len++;
+        if (sysctl(mib, len, oldp, oldlenp, newp, newlen) == -1)  {
+            fprintf(stderr, "sysctlbyname_with_pid: sysctl  failed:"
+                    "%s\n", strerror(errno));
+            return -1;
+        }
+    }
+    return 0;
+}
+
+// http://developer.apple.com/documentation/MacOSX/Conceptual/universal_binary/universal_binary_exec_a/universal_binary_exec_a.html
+static int is_pid_native (pid_t pid)
+{
+    int ret = 0;
+    size_t sz = sizeof(ret);
+	
+    if (sysctlbyname_with_pid("sysctl.proc_native", pid,
+							  &ret, &sz, NULL, 0) == -1) {
+		if (errno == ENOENT) {
+            return 1;
+        }
+        fprintf(stderr, "is_pid_native: sysctlbyname_with_pid  failed:"
+                "%s\n", strerror(errno));
+        return -1;
+    }
+    return ret;
+}
+#endif
+
+- (BOOL)isEmulated
+{
+	BOOL isEmulated = NO;
+#ifdef __i386__
+	if (is_pid_native(_pid) == 0)
+	{
+		isEmulated = YES;
+	}
+#endif
+	
+	return isEmulated;
+}
 
 #pragma mark Accessors
 

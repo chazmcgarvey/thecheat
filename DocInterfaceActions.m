@@ -182,6 +182,7 @@
 		return;
 	}
 	
+	[_cheatData process];
 	if ( [_searchData hasSearchedOnce] ) {
 		NSBeginInformationalAlertSheet( @"Confirm target change.", @"OK", @"Cancel", nil, ibWindow, self, NULL,
 										@selector(_confirmTargetChange:returnCode:context:), [[sender representedObject] retain],
@@ -247,6 +248,7 @@
 	// do the search
 	if ( [_searchData valueUsed] == TCGivenValue ) {
 		variable = [[Variable alloc] initWithType:[_searchData variableType] integerSign:[_searchData integerSign]];
+		[variable setProcess:_process];
 		[variable setStringValue:[ibSearchValueField stringValue]];
 		if ( [variable isValueValid] && [variable valueSize] > 0 ) {
 			_status = TCSearchingStatus;
@@ -254,8 +256,9 @@
 			[ibStatusBar setIndeterminate:NO];
 			
 			[_searchData setSearchValue:variable];
+			[_cheater searchForVariable:variable comparison:[_searchData searchOperator]];
+			//[_cheater searchForVariable:[_searchData searchValue] comparison:[_searchData searchOperator]];
 			[variable release];
-			[_cheater searchForVariable:[_searchData searchValue] comparison:[_searchData searchOperator]];
 		}
 		else {
 			NSBeginAlertSheet( @"Invalid Input", @"OK", nil, nil, ibWindow, nil, NULL, NULL, NULL,
@@ -542,7 +545,6 @@
 - (IBAction)ibAddCheatVariable:(id)sender
 {
 	ChazLog( @"ibAddCheatVariable:" );
-
 	Variable *var = [[Variable alloc] initWithType:[sender tag]];
 	// add the new variable to the doc data
 	[_cheatData addVariable:var];

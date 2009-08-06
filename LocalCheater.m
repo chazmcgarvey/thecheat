@@ -250,7 +250,13 @@ int _MemoryDumpTask( ThreadedTask *task, unsigned iteration );
 	}
 	
 	function = [context iterationFunction];
-	if ( function ) {
+	if ( function ) {		
+		SearchContext *searchContext = context;
+		if (searchContext->value->_type != TCFloat && searchContext->value->_type != TCDouble)
+		{
+			bigEndianValue(searchContext->value->_value, searchContext->value);
+		}
+		
 		_searchTask = [[ThreadedTask alloc] initWithFunction:function
 													 context:context
 													delegate:self];
@@ -489,8 +495,9 @@ int _MemoryDumpTask( ThreadedTask *task, unsigned iteration )
 			top = index + count;
 			for ( i = index; i < top; i++ ) {
 				Variable *var = [[Variable alloc] initWithType:[context variableType] integerSign:[context integerSign]];
+				[var setProcess:_target];
 				[var setAddress:*(TCAddress *)TCArrayElementAtIndex( addresses, i )];
-				[var setValue:TCArrayElementAtIndex( values, i ) size:TCArrayElementSize(values)];
+				[var setValue:TCArrayElementAtIndex(values, i) size:TCArrayElementSize(values)];
 				[vars addObject:var];
 				[var release];
 			}
@@ -708,7 +715,17 @@ int _MemoryDumpTask( ThreadedTask *task, unsigned iteration )
 	for ( i = 0; i < top; i++ ) {
 		Variable *variable = [variables objectAtIndex:i];
 		
-		if ( VMWriteBytes( [_target pid], [variable address], [variable value], [variable valueSize] ) ) {
+		if ([[variable process] pid] != [_target pid])
+		{
+			[variable setProcess:_target];
+		}
+		
+		char buffer[variable->_size];
+		memcpy(buffer, variable->_value, variable->_size);
+		bigEndianValue(buffer, variable);
+		
+		if ( VMWriteBytes( [_target pid], [variable address], buffer, [variable valueSize] ) )
+		{
 			successes++;
 		}
 	}
@@ -734,8 +751,11 @@ int _MemoryDumpTask( ThreadedTask *task, unsigned iteration )
 		
 		size = [variable valueSize];
 		if ( VMReadBytes( [_target pid], [variable address], value, &size ) ) {
+			bigEndianValue(value, variable);
+			
 			// check if memory changed
-			if ( memcmp( value, [variable value], size ) != 0 ) {
+			if (memcmp(value, variable->_value, size) != 0)
+			{
 				[variable setValue:value];
 				// inform delegate of the change
 				[_delegate cheater:self variableAtIndex:_watchRange.location+i didChangeTo:variable];

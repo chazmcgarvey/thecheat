@@ -23,6 +23,9 @@
 #import <SecurityFoundation/SFAuthorization.h>
 #import <Security/AuthorizationTags.h>
 #include "ChazLog.h"
+#include <sys/types.h>
+#include <sys/uio.h>
+#include <unistd.h>
 
 void authMe(char * FullPathToMe)
 {
@@ -74,13 +77,21 @@ void authMe(char * FullPathToMe)
 	}
 }
 
+bool checkExecutablePermissions(void)
+{
+	NSDictionary	*applicationAttributes = [[NSFileManager defaultManager] fileAttributesAtPath:[[NSBundle mainBundle] executablePath] traverseLink: YES];
+	
+	// We expect 2755 as octal (1517 as decimal, -rwxr-sr-x as extended notation)
+	return ([applicationAttributes filePosixPermissions] == 1517 && [[applicationAttributes fileGroupOwnerAccountName] isEqualToString: @"procmod"]);
+}
+
 bool amIWorthy(void)
 {
 	// running as root?
 	AuthorizationRef myAuthRef;
 	OSStatus stat = AuthorizationCopyPrivilegedReference(&myAuthRef,kAuthorizationFlagDefaults);
 	
-	return stat == errAuthorizationSuccess;
+	return stat == errAuthorizationSuccess || checkExecutablePermissions();
 }
 
 int main( int argc, char *argv[] )
@@ -92,18 +103,31 @@ int main( int argc, char *argv[] )
 	ChazDebugSetup();
 	ChazMapLogToDebug();
 	
-	[pool release];
+#ifdef __ppc__
+	// PPC machines whose operating system is below leopard do not need authorization
+	SInt32 osxMajorVersion;
+	Gestalt(gestaltSystemVersionMinor, &osxMajorVersion);
+	if (osxMajorVersion < 5)
+	{
+		[pool release];
+		return NSApplicationMain(argc,  (const char **) argv);
+	}
+#endif
 	
 	if (amIWorthy())
 	{
-		printf("Don't forget to flush! ;-) "); // signal back to close caller		
+#ifndef _DEBUG
+		printf("Don't forget to flush! ;-) "); // signal back to close caller
+#endif
 		fflush(stdout);
 		
+		[pool release];
 		return NSApplicationMain(argc,  (const char **) argv);
 	}
 	else
 	{
 		authMe(argv[0]);
+		[pool release];
 		return 0;
 	}
 	

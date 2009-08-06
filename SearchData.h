@@ -26,6 +26,7 @@
 #import "Cheater.h"
 #import "Variable.h"
 
+#import "Process.h"
 
 @interface SearchData : NSObject
 {
@@ -46,6 +47,8 @@
 }
 
 // ACCESSORS
+- (void)setProcess:(Process *)process;
+
 - (TCVariableType)variableType;
 - (void)setVariableType:(TCVariableType)varType;
 

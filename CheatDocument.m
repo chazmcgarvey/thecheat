@@ -78,6 +78,7 @@ Process static *_tc_target = nil;
 		
 		_cheatData = [[CheatData alloc] init];
 		_searchData = [[SearchData alloc] init];
+		[_searchData setProcess:_process];
 		
 		// show search mode when documents are first created
 		_connectsOnOpen = YES;
@@ -191,7 +192,7 @@ Process static *_tc_target = nil;
 // #############################################################################
 
 - (NSData *)dataRepresentationOfType:(NSString *)type
-{
+{	
     return [NSArchiver archivedDataWithRootObject:_cheatData];
 }
 

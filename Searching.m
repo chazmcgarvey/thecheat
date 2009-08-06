@@ -98,7 +98,24 @@ int SearchIteration( ThreadedTask *task, unsigned iteration )
 		offset = VMRegionAddress( region ) - (TCAddress)context->buffer;
 		
 		while ( ptr < top ) {
-			if ( context->compareFunc(ptr,context->value->_value) ) {
+			char firstValue[context->value->_size];
+			memcpy(firstValue, ptr, context->value->_size);
+			
+			if (context->value->_isEmulated)
+			{
+				if (context->value->_type == TCFloat)
+				{
+					CFSwappedFloat32 firstSwappedFloat = CFConvertFloat32HostToSwapped(*((float *)firstValue));
+					memcpy(firstValue, &firstSwappedFloat, context->value->_size);
+				}
+				else if (context->value->_type == TCDouble)
+				{
+					CFSwappedFloat64 firstSwappedDouble = CFConvertDoubleHostToSwapped(*((double *)firstValue));
+					memcpy(firstValue, &firstSwappedDouble, context->value->_size);
+				}
+			}
+			
+			if ( context->compareFunc(firstValue,context->value->_value) ) {
 				if ( context->numberOfResults >= TCArrayElementCount(context->addresses) ) {
 					TCArrayResize( context->addresses, TCArrayElementCount(context->addresses) + TC_BUFFER_SIZE / sizeof(TCAddress) );
 					context->addressPtr = (TCAddress *)TCArrayBytes(context->addresses) + context->numberOfResults;
@@ -184,7 +201,24 @@ int SearchIterationAgain( ThreadedTask *task, unsigned iteration )
 			for ( i = 0; i < top; i++ ) {
 				ptr = context->buffer + *context->lastAddressPtr - VMRegionAddress(region);
 				
-				if (ptr >= context->buffer && context->compareFunc(ptr,context->value->_value)) {
+				char firstValue[context->value->_size];
+				memcpy(firstValue, ptr, context->value->_size);
+				
+				if (context->value->_isEmulated)
+				{
+					if (context->value->_type == TCFloat)
+					{
+						CFSwappedFloat32 firstSwappedFloat = CFConvertFloat32HostToSwapped(*((float *)firstValue));
+						memcpy(firstValue, &firstSwappedFloat, context->value->_size);
+					}
+					else if (context->value->_type == TCDouble)
+					{
+						CFSwappedFloat64 firstSwappedDouble = CFConvertDoubleHostToSwapped(*((double *)firstValue));
+						memcpy(firstValue, &firstSwappedDouble, context->value->_size);
+					}
+				}
+				
+				if (ptr >= context->buffer && context->compareFunc(firstValue,context->value->_value)) {
 					if ( context->numberOfResults >= TCArrayElementCount(context->addresses) ) {
 						TCArrayResize( context->addresses, TCArrayElementCount(context->addresses) + TC_BUFFER_SIZE / sizeof(TCAddress) );
 						context->addressPtr = (TCAddress *)TCArrayBytes(context->addresses) + context->numberOfResults;
