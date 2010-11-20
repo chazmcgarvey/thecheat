@@ -3,7 +3,7 @@
 // VMRegion 0.1
 // Virtual Memory Wrapper
 // 
-// Copyright (c) 2004, Chaz McGarvey
+// Copyright (c) 2004, Charles McGarvey
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification, are
@@ -16,10 +16,6 @@
 // list of conditions and the following disclaimer in the documentation and/or other
 // materials provided with the distribution.
 // 
-// 3. Neither the name of the BrokenZipper nor the names of its contributors may be
-// used to endorse or promote products derived from this software without specific
-// prior written permission.
-// 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
 // EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
 // OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
@@ -30,9 +26,6 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 // DAMAGE.
-// 
-// Web:   http://www.brokenzipper.com/
-// Email: chaz@brokenzipper.com
 // 
 
 #import "VMRegion.h"
@@ -50,7 +43,7 @@ static __inline__ vm_map_t _VMTaskFromPID( pid_t process )
 	return 0;
 }
 
-static __inline__ VMRegion _VMMakeRegionWithAttributes( pid_t process, vm_address_t address, vm_size_t size, unsigned attribs )
+static __inline__ VMRegion _VMMakeRegionWithAttributes( pid_t process, mach_vm_address_t address, mach_vm_size_t size, unsigned attribs )
 {
 	VMRegion region;
 	region._process = process;
@@ -60,7 +53,7 @@ static __inline__ VMRegion _VMMakeRegionWithAttributes( pid_t process, vm_addres
 	return region;
 }
 
-unsigned _VMAttributesFromAddress( pid_t process, vm_address_t address );
+unsigned _VMAttributesFromAddress( pid_t process, mach_vm_address_t address );
 
 
 const VMRegion VMNullRegion = { 0, 0, 0, 0 };
@@ -70,7 +63,7 @@ const VMRegion VMNullRegion = { 0, 0, 0, 0 };
 #pragma mark VMRegion Functions
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-VMRegion VMMakeRegion( pid_t process, vm_address_t address, vm_size_t size )
+VMRegion VMMakeRegion( pid_t process, mach_vm_address_t address, mach_vm_size_t size )
 {
 	VMRegion region;
 	region._process = process;
@@ -83,7 +76,7 @@ VMRegion VMMakeRegion( pid_t process, vm_address_t address, vm_size_t size )
 BOOL VMRegionSetData( VMRegion region, NSData *data )
 {
 	// get the size that should be used (to prevent from writing past the region)
-	vm_size_t size = (vm_size_t)[data length];
+	mach_vm_size_t size = (mach_vm_size_t)[data length];
 	size = (size > region._size)? region._size : size;
 	
 	return VMWriteBytes( region._process, region._address, [data bytes], size );
@@ -137,10 +130,10 @@ VMRegion VMNextRegion( pid_t process, VMRegion previous )
 	
 	kern_return_t result;
 	
-	vm_address_t address = 0x0;
-	vm_size_t size = 0;
-	vm_region_basic_info_data_t info;
-	mach_msg_type_number_t infoCnt = VM_REGION_BASIC_INFO_COUNT;
+	mach_vm_address_t address = 0x0;
+	mach_vm_size_t size = 0;
+	vm_region_basic_info_data_64_t info;
+	mach_msg_type_number_t infoCnt = VM_REGION_BASIC_INFO_COUNT_64;
 	mach_port_t object_name = 0;
 	
 	if ( !VMEqualRegions( previous, VMNullRegion ) ) {
@@ -148,7 +141,7 @@ VMRegion VMNextRegion( pid_t process, VMRegion previous )
 	}
 	
 	// get the next region
-	result = vm_region( task, &address, &size, VM_REGION_BASIC_INFO, (vm_region_info_t)(&info), &infoCnt, &object_name );
+	result = mach_vm_region( task, &address, &size, VM_REGION_BASIC_INFO_64, (vm_region_info_t)(&info), &infoCnt, &object_name );
 	
 	if ( result == KERN_SUCCESS ) {
 		// get the attributes
@@ -185,13 +178,13 @@ VMRegion VMNextRegionWithAttributes( pid_t process, VMRegion previous, unsigned 
 }
 
 
-NSData *VMReadData( pid_t process, vm_address_t address, vm_size_t size )
+NSData *VMReadData( pid_t process, mach_vm_address_t address, mach_vm_size_t size )
 {
 	vm_map_t task = _VMTaskFromPID( process );
 	kern_return_t result;
 	
 	void *buffer;
-	vm_size_t actualSize;
+	mach_vm_size_t actualSize;
 	
 	// create a local block to hold the incoming data
 	buffer = (void *)malloc( (size_t)size );
@@ -201,7 +194,7 @@ NSData *VMReadData( pid_t process, vm_address_t address, vm_size_t size )
 	}
 	
 	// perform the read
-	result = vm_read_overwrite( task, address, size, (vm_address_t)buffer, &actualSize );
+	result = mach_vm_read_overwrite( task, address, size, (vm_offset_t)buffer, &actualSize );
 	if ( result != KERN_SUCCESS ) {
 		// read error, abort
 		free( buffer );
@@ -212,14 +205,14 @@ NSData *VMReadData( pid_t process, vm_address_t address, vm_size_t size )
 	return [[[NSData alloc] initWithBytesNoCopy:buffer length:actualSize freeWhenDone:YES] autorelease];
 }
 
-BOOL VMReadBytes( pid_t process, vm_address_t address, void *bytes, vm_size_t *size )
+BOOL VMReadBytes( pid_t process, mach_vm_address_t address, void *bytes, mach_vm_size_t *size )
 {
 	vm_map_t task = _VMTaskFromPID( process );
 	kern_return_t result;
-	vm_size_t staticsize = *size;
+	mach_vm_size_t staticsize = *size;
 	
 	// perform the read
-	result = vm_read_overwrite( task, address, staticsize, (vm_address_t)bytes, size );
+	result = mach_vm_read_overwrite( task, address, staticsize, (vm_offset_t)bytes, size );
 	if ( result != KERN_SUCCESS ) {
 		return NO;
 	}
@@ -227,36 +220,36 @@ BOOL VMReadBytes( pid_t process, vm_address_t address, void *bytes, vm_size_t *s
 	return YES;
 }
 
-BOOL VMWriteData( pid_t process, vm_address_t address, NSData *data )
+BOOL VMWriteData( pid_t process, mach_vm_address_t address, NSData *data )
 {
 	return VMWriteBytes( process, address, [data bytes], [data length] );
 }
 
-BOOL VMWriteBytes( pid_t process, vm_address_t address, const void *bytes, vm_size_t size )
+BOOL VMWriteBytes( pid_t process, mach_vm_address_t address, const void *bytes, mach_vm_size_t size )
 {
 	vm_map_t task = _VMTaskFromPID( process );
 	kern_return_t result;
 	
 	// attempt to write the bytes and return success/failure
-	result = vm_write( task, address, (vm_address_t)bytes, size );
+	result = mach_vm_write( task, address, (vm_offset_t)bytes, size );
 	return (result == KERN_SUCCESS);
 }
 
 
-unsigned _VMAttributesFromAddress( pid_t process, vm_address_t address )
+unsigned _VMAttributesFromAddress( pid_t process, mach_vm_address_t address )
 {
 	vm_map_t task = _VMTaskFromPID( process );
 	unsigned attribs = 0;
 	
 	kern_return_t result;
 	
-	vm_size_t size = 0;
-	vm_region_basic_info_data_t info;
-	mach_msg_type_number_t infoCnt = 8;
+	mach_vm_size_t size = 0;
+	vm_region_basic_info_data_64_t info;
+	mach_msg_type_number_t infoCnt = VM_REGION_BASIC_INFO_COUNT_64;
 	mach_port_t object_name = 0;
 	
 	// get the next region
-	result = vm_region( task, &address, &size, VM_REGION_BASIC_INFO, (vm_region_info_t)(&info), &infoCnt, &object_name );
+	result = mach_vm_region( task, &address, &size, VM_REGION_BASIC_INFO_64, (vm_region_info_t)(&info), &infoCnt, &object_name );
 	
 	if ( result == KERN_SUCCESS ) {
 		// get the attributes

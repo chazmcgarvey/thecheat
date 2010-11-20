@@ -1,22 +1,13 @@
 
-// **********************************************************************
-// The Cheat - A universal game cheater for Mac OS X
-// (C) 2003-2005 Chaz McGarvey (BrokenZipper)
-// 
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 1, or (at your option)
-// any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-// 
+/*
+ * The Cheat - The legendary universal game trainer for Mac OS X.
+ * http://www.dogcows.com/chaz/wiki/TheCheat
+ *
+ * Copyright (c) 2003-2010, Charles McGarvey et al.
+ *
+ * Distributable under the terms and conditions of the 2-clause BSD
+ * license; see the file COPYING for the legal text of the license.
+ */
 
 #import "LocalCheater.h"
 
@@ -150,30 +141,40 @@ int _MemoryDumpTask( ThreadedTask *task, unsigned iteration );
 - (void)getProcessList
 {
 	NSWorkspace *workspace = [NSWorkspace sharedWorkspace];
-	NSArray *launchedApps = [workspace launchedApplications];
-	unsigned i, len = [launchedApps count];
+//	NSArray *launchedApps = [workspace launchedApplications];
+//	unsigned i, len = [launchedApps count];
+	ProcessSerialNumber psn = {0, kNoProcess};
 	
 	if ( !_processes ) {
-		_processes = [[NSMutableArray alloc] initWithCapacity:len];
+		//_processes = [[NSMutableArray alloc] initWithCapacity:len];
+		_processes = [[NSMutableArray alloc] initWithCapacity:1];
 	}
 	
 	// compile process array
-	for ( i = 0; i < len; i++ ) {
-		NSDictionary *application = [launchedApps objectAtIndex:i];
+//	for ( i = 0; i < len; i++ ) {
+	while(/*procNotFound != */!GetNextProcess(&psn)) {
+//		NSDictionary *application = [launchedApps objectAtIndex:i];
+		NSDictionary *application = (NSDictionary *)ProcessInformationCopyDictionary(&psn, kProcessDictionaryIncludeAllInformationMask);
+		void *bundlePath = [application objectForKey:@"BundlePath"];
 		
 		// don't allow The Cheat to be cheated
-		if ( [[application objectForKey:@"NSApplicationBundleIdentifier"] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]] ) {
+//		if ( [[application objectForKey:@"NSApplicationBundleIdentifier"] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]] ) {
+		if ( [[application objectForKey:(NSString *)kCFBundleIdentifierKey] isEqualToString:[[NSBundle mainBundle] bundleIdentifier]] ) {
 			continue;
 		}
 		
-		Process *process = [[Process alloc] initWithName:[application objectForKey:@"NSApplicationName"]
+		/*Process *process = [[Process alloc] initWithName:[application objectForKey:@"NSApplicationName"]]
 												 version:ApplicationVersion( [application objectForKey:@"NSApplicationPath"] )
 													icon:[workspace iconForFile:[application objectForKey:@"NSApplicationPath"]]
-													 pid:[[application objectForKey:@"NSApplicationProcessIdentifier"] intValue]];
+													 pid:[[application objectForKey:@"NSApplicationProcessIdentifier"] intValue]];*/
+		Process *process = [[Process alloc] initWithName:[application objectForKey:(NSString *)kCFBundleNameKey]
+												 version:ApplicationVersion( bundlePath ? bundlePath: [application objectForKey:(NSString *)kCFBundleExecutableKey] )
+													icon:[workspace iconForFile:bundlePath ? bundlePath: [application objectForKey:(NSString *)kCFBundleExecutableKey]]
+													 pid:[[application objectForKey:@"pid"] intValue]];
 		[_processes addObject:process];
 		[process release];
 	}
-	
+
 	// return process list
 	[_delegate cheater:self didFindProcesses:[NSArray arrayWithArray:_processes]];
 }
@@ -743,7 +744,7 @@ int _MemoryDumpTask( ThreadedTask *task, unsigned iteration )
 {
 	unsigned i, top;
 	char value[TC_MAX_VAR_SIZE];
-	vm_size_t size;
+	mach_vm_size_t size;
 	
 	top = [_watchVariables count];
 	for ( i = 0; i < top; i++ ) {

@@ -1,26 +1,17 @@
 
-// **********************************************************************
-// The Cheat - A universal game cheater for Mac OS X
-// (C) 2003-2005 Chaz McGarvey (BrokenZipper)
-// 
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 1, or (at your option)
-// any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-// 
+/*
+ * The Cheat - The legendary universal game trainer for Mac OS X.
+ * http://www.dogcows.com/chaz/wiki/TheCheat
+ *
+ * Copyright (c) 2003-2010, Charles McGarvey et al.
+ *
+ * Distributable under the terms and conditions of the 2-clause BSD
+ * license; see the file COPYING for the legal text of the license.
+ */
 
 #import "Process.h"
 
-#ifdef __i386__
+#if defined(__i386__) || defined(__x86_64__)
 	#import <sys/types.h>
 	#import <sys/sysctl.h>
 #endif
@@ -118,7 +109,11 @@
 	return NO;
 }
 
-- (unsigned)hash
+#if MAC_OS_X_VERSION_10_5 <= MAC_OS_X_VERSION_MAX_ALLOWED
+- (NSUInteger)hash
+#else
+- (unsigned int)hash
+#endif
 {
 	return [[NSString stringWithFormat:@"%@%@%u", _name, _version, _pid] hash];
 }
@@ -136,7 +131,7 @@
 
 #pragma mark Detecting Emulation
 
-#ifdef __i386__
+#if defined(__i386__) || defined(__x86_64__)
 // http://developer.apple.com/documentation/MacOSX/Conceptual/universal_binary/universal_binary_exec_a/universal_binary_exec_a.html
 static int sysctlbyname_with_pid (const char *name, pid_t pid,
 								  void *oldp, size_t *oldlenp,
@@ -189,7 +184,7 @@ static int is_pid_native (pid_t pid)
 - (BOOL)isEmulated
 {
 	BOOL isEmulated = NO;
-#ifdef __i386__
+#if defined(__i386__) || defined(__x86_64__)
 	if (is_pid_native(_pid) == 0)
 	{
 		isEmulated = YES;

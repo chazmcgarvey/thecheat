@@ -3,7 +3,7 @@
 // VMRegion 0.1
 // Virtual Memory Wrapper
 // 
-// Copyright (c) 2004, Chaz McGarvey
+// Copyright (c) 2004, Charles McGarvey
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification, are
@@ -16,10 +16,6 @@
 // list of conditions and the following disclaimer in the documentation and/or other
 // materials provided with the distribution.
 // 
-// 3. Neither the name of the BrokenZipper nor the names of its contributors may be
-// used to endorse or promote products derived from this software without specific
-// prior written permission.
-// 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
 // EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
 // OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
@@ -31,13 +27,10 @@
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 // DAMAGE.
 // 
-// Web:   http://www.brokenzipper.com/
-// Email: chaz@brokenzipper.com
-// 
 
 #import <Cocoa/Cocoa.h>
 
-#include <mach/vm_region.h>
+#include <mach/mach_vm.h>
 #include <mach/vm_map.h>
 
 
@@ -77,8 +70,8 @@ typedef struct _VMRegion
 	// process information
 	pid_t _process;
 	// region information
-	vm_address_t _address;
-	vm_size_t _size;
+	mach_vm_address_t _address;
+	mach_vm_size_t _size;
 	unsigned _attributes;
 } VMRegion;
 
@@ -108,17 +101,17 @@ VMREGION_STATIC_INLINE BOOL VMContinueProcess( pid_t process ) { return (kill( p
 
 // lower-level reading/writing functions
 // the returned NSData object should be retained by the caller.
-NSData *VMReadData( pid_t process, vm_address_t address, vm_size_t size );
-BOOL VMReadBytes( pid_t process, vm_address_t address, void *bytes, vm_size_t *size ); // size is # bytes read after call
-BOOL VMWriteData( pid_t process, vm_address_t address, NSData *data ); // returns YES on success, NO on failure
-BOOL VMWriteBytes( pid_t process, vm_address_t address, const void *bytes, vm_size_t size );
+NSData *VMReadData( pid_t process, mach_vm_address_t address, mach_vm_size_t size );
+BOOL VMReadBytes( pid_t process, mach_vm_address_t address, void *bytes, mach_vm_size_t *size ); // size is # bytes read after call
+BOOL VMWriteData( pid_t process, mach_vm_address_t address, NSData *data ); // returns YES on success, NO on failure
+BOOL VMWriteBytes( pid_t process, mach_vm_address_t address, const void *bytes, mach_vm_size_t size );
 
 
 #pragma mark -
 #pragma mark Exported VM Functions
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-VMREGION_EXPORT VMRegion VMMakeRegion( pid_t process, vm_address_t address, vm_size_t size );
+VMREGION_EXPORT VMRegion VMMakeRegion( pid_t process, mach_vm_address_t address, mach_vm_size_t size );
 
 VMREGION_EXPORT BOOL VMRegionSetData( VMRegion region, NSData *data );
 
@@ -129,17 +122,17 @@ VMREGION_EXPORT NSString *VMStringFromRegion( VMRegion region );
 #pragma mark Imported VM Functions
 /*%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%*/
 
-VMREGION_STATIC_INLINE vm_address_t VMRegionProcess( VMRegion region )
+VMREGION_STATIC_INLINE mach_vm_address_t VMRegionProcess( VMRegion region )
 {
 	return region._process;
 }
 
-VMREGION_STATIC_INLINE vm_address_t VMRegionAddress( VMRegion region )
+VMREGION_STATIC_INLINE mach_vm_address_t VMRegionAddress( VMRegion region )
 {
 	return region._address;
 }
 
-VMREGION_STATIC_INLINE vm_size_t VMRegionSize( VMRegion region )
+VMREGION_STATIC_INLINE mach_vm_size_t VMRegionSize( VMRegion region )
 {
 	return region._size;
 }
@@ -170,7 +163,7 @@ VMREGION_STATIC_INLINE NSData *VMRegionData( VMRegion region )
 	return VMReadData( region._process, region._address, region._size );
 }
 
-VMREGION_STATIC_INLINE BOOL VMRegionBytes( VMRegion region, void *bytes, vm_size_t *size )
+VMREGION_STATIC_INLINE BOOL VMRegionBytes( VMRegion region, void *bytes, mach_vm_size_t *size )
 {
 	*size = region._size;
 	return VMReadBytes( region._process, region._address, bytes, size );

@@ -1,22 +1,13 @@
 
-// **********************************************************************
-// The Cheat - A universal game cheater for Mac OS X
-// (C) 2003-2005 Chaz McGarvey (BrokenZipper)
-// 
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 1, or (at your option)
-// any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-// 
+/*
+ * The Cheat - The legendary universal game trainer for Mac OS X.
+ * http://www.dogcows.com/chaz/wiki/TheCheat
+ *
+ * Copyright (c) 2003-2010, Charles McGarvey et al.
+ *
+ * Distributable under the terms and conditions of the 2-clause BSD
+ * license; see the file COPYING for the legal text of the license.
+ */
 
 #import "Variable.h"
 
@@ -274,7 +265,8 @@
 
 - (NSString *)addressString
 {
-	return [NSString stringWithFormat:@"%0.8X", _address];
+//		return [NSString stringWithFormat:@"%0.8X", _address];
+	return [NSString stringWithFormat:(_address & 0xffffffff00000000ULL) ? @"%0.16qX": @"%0.8X", _address];
 }
 
 - (BOOL)setAddressString:(NSString *)string
@@ -282,7 +274,11 @@
 	NSScanner *scanner = [NSScanner scannerWithString:string];
 	TCAddress address;
 	
+#if MAC_OS_X_VERSION_10_5 <= MAC_OS_X_VERSION_MAX_ALLOWED
+	if ( [scanner scanHexLongLong:(unsigned long long *)(&address)] ) {
+#else
 	if ( [scanner scanHexInt:(unsigned *)(&address)] ) {
+#endif
 		[self setAddress:address];
 		return YES;
 	}
@@ -368,7 +364,10 @@
 		case TCInt32:
 		{
 			SInt32 value;
-			if ( [scanner scanInt:(int *)(&value)] ) {
+//			if ( [scanner scanInt:(int *)(&value)] ) {
+			int integer;
+			if ( [scanner scanInt:&integer] ) {
+				value = integer;
 				[self setValue:&value];
 			}
 			break;
@@ -476,12 +475,20 @@ void bigEndianValue(void *buffer, Variable *variable)
 }
 
 
+#if MAC_OS_X_VERSION_10_5 <= MAC_OS_X_VERSION_MAX_ALLOWED
+- (NSInteger)tag
+#else
 - (int)tag
+#endif
 {
 	return _tag;
 }
 
+#if MAC_OS_X_VERSION_10_5 <= MAC_OS_X_VERSION_MAX_ALLOWED
+- (void)setTag:(NSInteger)tag
+#else
 - (void)setTag:(int)tag
+#endif
 {
 	_tag = tag;
 }

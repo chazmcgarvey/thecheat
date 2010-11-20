@@ -1,22 +1,13 @@
 
-// **********************************************************************
-// The Cheat - A universal game cheater for Mac OS X
-// (C) 2003-2005 Chaz McGarvey (BrokenZipper)
-// 
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 1, or (at your option)
-// any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-// 
+/*
+ * The Cheat - The legendary universal game trainer for Mac OS X.
+ * http://www.dogcows.com/chaz/wiki/TheCheat
+ *
+ * Copyright (c) 2003-2010, Charles McGarvey et al.
+ *
+ * Distributable under the terms and conditions of the 2-clause BSD
+ * license; see the file COPYING for the legal text of the license.
+ */
 
 #import <Cocoa/Cocoa.h>
 #import <Foundation/foundation.h>
@@ -27,6 +18,11 @@
 #include <sys/uio.h>
 #include <unistd.h>
 
+
+/*
+ * I think this function was ripped from the iHaxGamez project, so it
+ * remains licensed under the GPL.
+ */
 void authMe(char * FullPathToMe)
 {
 	// get authorization as root
@@ -77,6 +73,10 @@ void authMe(char * FullPathToMe)
 	}
 }
 
+/*
+ * I think this function was ripped from the iHaxGamez project, so it
+ * remains licensed under the GPL.
+ */
 bool checkExecutablePermissions(void)
 {
 	NSDictionary	*applicationAttributes = [[NSFileManager defaultManager] fileAttributesAtPath:[[NSBundle mainBundle] executablePath] traverseLink: YES];
@@ -85,6 +85,10 @@ bool checkExecutablePermissions(void)
 	return ([applicationAttributes filePosixPermissions] == 1517 && [[applicationAttributes fileGroupOwnerAccountName] isEqualToString: @"procmod"]);
 }
 
+/*
+ * I think this function was ripped from the iHaxGamez project, so it
+ * remains licensed under the GPL.
+ */
 bool amIWorthy(void)
 {
 	// running as root?

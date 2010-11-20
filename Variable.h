@@ -1,22 +1,13 @@
 
-// **********************************************************************
-// The Cheat - A universal game cheater for Mac OS X
-// (C) 2003-2005 Chaz McGarvey (BrokenZipper)
-// 
-// This program is free software; you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation; either version 1, or (at your option)
-// any later version.
-// 
-// This program is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-// GNU General Public License for more details.
-// 
-// You should have received a copy of the GNU General Public License
-// along with this program; if not, write to the Free Software
-// Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
-// 
+/*
+ * The Cheat - The legendary universal game trainer for Mac OS X.
+ * http://www.dogcows.com/chaz/wiki/TheCheat
+ *
+ * Copyright (c) 2003-2010, Charles McGarvey et al.
+ *
+ * Distributable under the terms and conditions of the 2-clause BSD
+ * license; see the file COPYING for the legal text of the license.
+ */
 
 #import <Cocoa/Cocoa.h>
 
@@ -34,8 +25,12 @@
 	BOOL _isValueValid;
 	BOOL _enabled;
 	
+#if MAC_OS_X_VERSION_10_5 <= MAC_OS_X_VERSION_MAX_ALLOWED
+	NSInteger _tag;
+#else
 	int _tag;
-	
+#endif
+
 	Process *process;
 	
 	@public;
@@ -43,7 +38,11 @@
 	// do not change these variables directly or things will be screwed.
 	TCVariableType _type;
 	TCIntegerSign _integerSign;
-	unsigned _size;
+#if MAC_OS_X_VERSION_10_5 <= MAC_OS_X_VERSION_MAX_ALLOWED
+	NSUInteger _size;
+#else
+	unsigned int _size;
+#endif
 	void *_value;
 	BOOL _isEmulated;
 }
@@ -97,7 +96,12 @@ void bigEndianValue(void *buffer, Variable *variable);
 - (BOOL)isEnabled;
 - (void)setEnabled:(BOOL)enabled;
 
+#if MAC_OS_X_VERSION_10_5 <= MAC_OS_X_VERSION_MAX_ALLOWED
+- (NSInteger)tag;
+- (void)setTag:(NSInteger)tag;
+#else
 - (int)tag;
 - (void)setTag:(int)tag;
+#endif
 
 @end

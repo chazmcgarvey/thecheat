@@ -3,7 +3,7 @@
 // ThreadedTask 0.3
 // Perform a long task without blocking the main thread.
 // 
-// Copyright (c) 2004-2005, Chaz McGarvey
+// Copyright (c) 2004-2005, Charles McGarvey
 // All rights reserved.
 // 
 // Redistribution and use in source and binary forms, with or without modification, are
@@ -16,10 +16,6 @@
 // list of conditions and the following disclaimer in the documentation and/or other
 // materials provided with the distribution.
 // 
-// 3. Neither the name of the BrokenZipper nor the names of its contributors may be
-// used to endorse or promote products derived from this software without specific
-// prior written permission.
-// 
 // THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY
 // EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
 // OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT
@@ -30,9 +26,6 @@
 // CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 // ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH
 // DAMAGE.
-// 
-// Web:   http://www.brokenzipper.com/
-// Email: chaz@brokenzipper.com
 // 
 
 #import "ThreadedTask.h"
@@ -298,8 +291,12 @@
 	NSAutoreleasePool *pool;
 
 	unsigned iteration;
+#if MAC_OS_X_VERSION_10_5 <= MAC_OS_X_VERSION_MAX_ALLOWED
+	NSInteger returnCode;
+#else
 	int returnCode;
-	
+#endif
+
 	// create the ever-so-important pool
     pool = [[NSAutoreleasePool alloc] init];
 	
@@ -317,7 +314,11 @@
 			
 			// do the actual work
 			loopPool = [[NSAutoreleasePool alloc] init];
+#if MAC_OS_X_VERSION_10_5 <= MAC_OS_X_VERSION_MAX_ALLOWED
+			returnCode = (NSInteger)objc_msgSend( _target, _selector, self, iteration );
+#else
 			returnCode = (int)objc_msgSend( _target, _selector, self, iteration );
+#endif
 			[loopPool release];
 			
 			iteration++;
