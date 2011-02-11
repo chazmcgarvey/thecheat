@@ -1,0 +1,27 @@
+
+Hello cheaters,
+
+This is the epic universal game trainer for Mac OS X.  It lets you search
+and replace variables in other running processes.  With practice, you can
+use this software to make interesting things happen in games and other
+programs.
+
+This source code is licensed under the terms and conditions of the 2-clause
+BSD license.  See the file COPYING for the legal text.
+
+The Cheat is now maintained only by people like you, who make changes and
+decide to share a patch here or there.  I maintain the source repository
+for this purpose, but I no longer have a Mac and have not been able to make
+any code changes myself for many years.  If you want to share your changes
+with the rest of the world, the following methods are acceptable:
+
+- If you use git, tell me where to pull from.
+- If not, just send your patches via email attachment.
+- You can always just fork it.
+
+Refer to the project page <http://www.dogcows.com/chaz/wiki/TheCheat> for
+the contact information of the maintainer.
+
+Regards,
+Charles McGarvey
+
