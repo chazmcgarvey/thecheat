@@ -195,7 +195,7 @@
 
 - (NSArray *)selectedRows
 {
-	return [[self selectedRowEnumerator] allObjects];
+	return [[self selectedRowIndexes] allObjects];
 }
 
 

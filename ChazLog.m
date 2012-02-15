@@ -49,7 +49,7 @@ void ChazDebugSetup()
 	FILE *file;
 	
 	// look for debug file
-	file = fopen( [filepath lossyCString], "r+" );
+	file = fopen( [filepath cStringUsingEncoding:NSUTF8StringEncoding], "r+" );
 	
 	if ( !file ) {
 		// there is no debug file or we don't have permissions
@@ -58,7 +58,7 @@ void ChazDebugSetup()
 	
 	fclose( file );
 	
-	_gDebugFile = fopen( [filepath lossyCString], "w" );
+	_gDebugFile = fopen( [filepath cStringUsingEncoding:NSUTF8StringEncoding], "w" );
 	
 	ChazDebug( @"Debug log found (obviously).  Entering debug mode." );
 }
@@ -150,7 +150,7 @@ void _ChazPrint( FILE *output, NSString *format, va_list args )
 	
 	fprintf( output, "[%s] %s\n", [[[NSDate date] descriptionWithCalendarFormat:@"%Y-%m-%d %H:%M:%S.%F"
 																	   timeZone:nil
-																		 locale:nil] lossyCString], [string lossyCString] );
+																		 locale:nil] cStringUsingEncoding:NSUTF8StringEncoding], [string cStringUsingEncoding:NSUTF8StringEncoding] );
 	fflush( output );
 	
 	[string release];

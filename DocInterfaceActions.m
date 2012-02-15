@@ -52,7 +52,8 @@
 
 - (IBAction)ibSetRemoteCheater:(id)sender
 {
-	ChazLog( @"Selected %@", sender );
+	int timeout=5;
+    ChazLog( @"Selected %@", sender );
 	
 	if ( ![self shouldConnectWithServer:sender] ) {
 		return;
@@ -62,7 +63,7 @@
 	
 	_resolvingService = [[sender representedObject] retain];
 	[_resolvingService setDelegate:self];
-	[_resolvingService resolve];
+	[_resolvingService resolveWithTimeout:timeout];
 }
 
 - (void)netServiceDidResolveAddress:(NSNetService *)sender
@@ -292,25 +293,11 @@
 		[self switchToCheatMode];
 		
 		int rowIndex = [_cheatData variableCount]-1;
-		if ( MacOSXVersion() >= 0x1030 ) {
-			[ibCheatVariableTable selectRowIndexes:[NSIndexSet indexSetWithIndex:rowIndex] byExtendingSelection:NO];
-		}
-		else {
-			[ibCheatVariableTable selectRow:rowIndex byExtendingSelection:NO];
-		}
+        [ibCheatVariableTable selectRowIndexes:[NSIndexSet indexSetWithIndex:rowIndex] byExtendingSelection:NO];
 		// start editing the last added variable
 		if ( [[NSUserDefaults standardUserDefaults] boolForKey:TCAutoStartEditingVarsPref] ) {
 			if ( top > 1 ) {
-				// edit multiple
-				if ( MacOSXVersion() >= 0x1030 ) {
-					[ibCheatVariableTable selectRowIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(rowIndex-top+1,top-1)]
-									  byExtendingSelection:YES];
-				}
-				else {
-					for ( i = 1; i < top; i++ ) {
-						[ibCheatVariableTable selectRow:rowIndex-i byExtendingSelection:YES];
-					}
-				}
+                [ibCheatVariableTable selectRowIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(rowIndex-top+1,top-1)] byExtendingSelection:YES];
 				[ibCheatVariableTable scrollRowToVisible:rowIndex];
 				[self ibRunEditVariablesSheet:nil];
 			}
@@ -547,12 +534,7 @@
 		[self switchToCheatMode];
 		
 		int row = [_cheatData variableCount]-1;
-		if ( MacOSXVersion() >= 0x1030 ) {
-			[ibCheatVariableTable selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
-		}
-		else {
-			[ibCheatVariableTable selectRow:row byExtendingSelection:NO];
-		}
+        [ibCheatVariableTable selectRowIndexes:[NSIndexSet indexSetWithIndex:row] byExtendingSelection:NO];
 		// start editing new variable
 		if ( [[NSUserDefaults standardUserDefaults] boolForKey:TCAutoStartEditingVarsPref] ) {
 			[ibCheatVariableTable editColumn:[ibCheatVariableTable columnWithIdentifier:@"address"] row:row withEvent:nil select:YES];

@@ -149,7 +149,7 @@
 	// reselect the last item if the selection is now invalid
 	len = [[NSApp cheatServer] childCount] - 1;
 	if ( [aTableView selectedRow] > len ) {
-		[aTableView selectRow:len byExtendingSelection:NO];
+		[aTableView selectRowIndexes:[NSIndexSet indexSetWithIndex:len] byExtendingSelection:NO];
 	}
 	[aTableView reloadData];
 }

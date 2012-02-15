@@ -454,7 +454,7 @@ Process static *_tc_target = nil;
 
 - (BOOL)isLoadedFromFile
 {
-	return ([self fileName] != nil);
+	return ([self fileURL] != nil);
 }
 
 
@@ -1010,12 +1010,7 @@ Process static *_tc_target = nil;
 	
 	lastRow = [_cheatData variableCount]-1;
 	[tableView reloadData];
-	if ( MacOSXVersion() >= 0x1030 ) {
-		[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:lastRow] byExtendingSelection:NO];
-	}
-	else {
-		[tableView selectRow:lastRow byExtendingSelection:NO];
-	}
+	[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:lastRow] byExtendingSelection:NO];
 	[tableView scrollRowToVisible:lastRow];
 	
 	[self setDocumentChanged];
@@ -1034,12 +1029,8 @@ Process static *_tc_target = nil;
 		// reselect the last item if the selection is now invalid
 		len = [_cheatData variableCount] - 1;
 		if ( [tableView selectedRow] > len ) {
-			if ( MacOSXVersion() >= 0x1030 ) {
+            
 				[tableView selectRowIndexes:[NSIndexSet indexSetWithIndex:len] byExtendingSelection:NO];
-			}
-			else {
-				[tableView selectRow:len byExtendingSelection:NO];
-			}
 		}
 		[tableView reloadData];
 		

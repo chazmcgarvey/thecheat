@@ -184,7 +184,7 @@
 	}
 	
 	// see if the version information for this app is in another file
-	if ( appRedirect = [appDictionary objectForKey:@"Redirect"] ) {
+	if ( (appRedirect = [appDictionary objectForKey:@"Redirect"]) ) {
 		// recursively follow the redirection
 		[[ChazUpdate alloc] initWithURL:appRedirect name:_name verbose:_verbose];
 		[self kill];

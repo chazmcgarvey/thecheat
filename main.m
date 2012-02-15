@@ -106,18 +106,7 @@ int main( int argc, char *argv[] )
 	
 	ChazDebugSetup();
 	ChazMapLogToDebug();
-	
-#ifdef __ppc__
-	// PPC machines whose operating system is below leopard do not need authorization
-	SInt32 osxMajorVersion;
-	Gestalt(gestaltSystemVersionMinor, &osxMajorVersion);
-	if (osxMajorVersion < 5)
-	{
-		[pool release];
-		return NSApplicationMain(argc,  (const char **) argv);
-	}
-#endif
-	
+		
 	if (amIWorthy())
 	{
 #ifndef _DEBUG

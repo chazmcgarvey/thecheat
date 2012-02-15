@@ -112,10 +112,11 @@
 
 - (IBAction)newSearchWindow:(id)sender
 {
-	NSDocumentController	*controller = [NSDocumentController sharedDocumentController];
-	CheatDocument			*doc = [controller makeUntitledDocumentOfType:@"Cheat Document"];
+	NSError *error = nil;
+    NSDocumentController	*controller = [NSDocumentController sharedDocumentController];
+	CheatDocument			*doc = [controller makeUntitledDocumentOfType:@"Cheat Document" error:&error];
 	if ( !doc ) {
-		ChazLog( @"nil document" );
+		ChazLog( @"nil document, error=%@", error);
 	}
 	[doc setMode:TCSearchMode];
 	[controller addDocument:doc];
@@ -125,10 +126,11 @@
 
 - (IBAction)newBlankCheatWindow:(id)sender
 {
+    NSError *error = nil;
 	NSDocumentController	*controller = [NSDocumentController sharedDocumentController];
-	CheatDocument			*doc = [controller makeUntitledDocumentOfType:@"Cheat Document"];
+	CheatDocument			*doc = [controller makeUntitledDocumentOfType:@"Cheat Document" error:&error];
 	if ( !doc ) {
-		ChazLog( @"nil document" );
+		ChazLog( @"nil document, error=%@", error);
 	}
 	[doc setMode:TCCheatMode];
 	[controller addDocument:doc];

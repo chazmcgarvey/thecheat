@@ -105,7 +105,7 @@
 		[_cheater setTarget:selectThis];
 	}
 	// otherwise, select the global target
-	else if ( selectThis = [CheatDocument globalTarget] ) {
+	else if ( (selectThis = [CheatDocument globalTarget]) ) {
 		ChazLog( @"setting global target" );
 		[_cheater setTarget:selectThis];
 	}
@@ -282,13 +282,10 @@
 		_status = TCIdleStatus;
 		
 		panel = [NSSavePanel savePanel];
-		[panel setRequiredFileType:@"dump"];
+		[panel setAllowedFileTypes:[NSArray arrayWithObjects: @"dump", nil]];
 		[panel setExtensionHidden:NO];
 		[panel setCanSelectHiddenExtension:YES];
-		if ( MacOSXVersion() >= 0x1030 ) {
-			[panel setMessage:@"Dump files are huge!  Exercise patience while saving."];
-		}
-		
+        [panel setMessage:@"Dump files are huge!  Exercise patience while saving."];
 		[panel beginSheetForDirectory:nil
 								 file:[NSString stringWithFormat:[NSString stringWithFormat:@"%@.dump", [_process name]]]
 					   modalForWindow:ibWindow

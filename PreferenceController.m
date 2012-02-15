@@ -56,9 +56,7 @@
 	NSWindow *window = [self window];
 	[self switchToView:ibGeneralView];
 	[window setTitle:@"General"];
-	if ( MacOSXVersion() >= 0x1030 ) {
-		[_toolbar setSelectedItemIdentifier:@"General"];
-	}
+    [_toolbar setSelectedItemIdentifier:@"General"];
 }
 
 - (void)chooseServer:(id)object
@@ -66,9 +64,7 @@
 	NSWindow *window = [self window];
 	[self switchToView:ibServerView];
 	[window setTitle:@"Server"];
-	if ( MacOSXVersion() >= 0x1030 ) {
-		[_toolbar setSelectedItemIdentifier:@"Server"];
-	}
+    [_toolbar setSelectedItemIdentifier:@"Server"];
 }
 
 - (void)chooseUpdate:(id)object
@@ -76,9 +72,7 @@
 	NSWindow *window = [self window];
 	[self switchToView:ibUpdateCheckView];
 	[window setTitle:@"Update Check"];
-	if ( MacOSXVersion() >= 0x1030 ) {
-		[_toolbar setSelectedItemIdentifier:@"Update Check"];
-	}
+    [_toolbar setSelectedItemIdentifier:@"Update Check"];
 }
 
 - (void)switchToView:(NSView *)view

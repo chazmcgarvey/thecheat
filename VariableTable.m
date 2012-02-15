@@ -31,7 +31,8 @@
 	TrackerScroller *scroller = [[TrackerScroller alloc] initWithFrame:[oldScroller frame]];
 	
 	[scroller setControlSize:[oldScroller controlSize]];	
-	[scroller setFloatValue:[oldScroller floatValue] knobProportion:[oldScroller knobProportion]];
+	[scroller setDoubleValue:[oldScroller floatValue]];
+    [scroller setKnobProportion:[oldScroller knobProportion]];
 	[scroller setControlTint:[oldScroller controlTint]];
 	
 	// set the new scroller

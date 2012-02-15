@@ -81,7 +81,7 @@
 
 - (id)initWithTarget:(id)target selector:(SEL)selector context:(id)context delegate:(id)delegate
 {
-	if ( self = [self _initWithContext:context delegate:delegate] ) {
+	if ( (self = [self _initWithContext:context delegate:delegate]) ) {
 		// set initial values
 		[self setTarget:target selector:selector];
 	}
@@ -95,7 +95,7 @@
 
 - (id)initWithFunction:(int (*)(ThreadedTask *, unsigned))function context:(id)context delegate:(id)delegate
 {
-	if ( self = [self _initWithContext:context delegate:delegate] ) {
+	if ( (self = [self _initWithContext:context delegate:delegate]) ) {
 		// set initial values
 		[self setFunction:function];
 	}

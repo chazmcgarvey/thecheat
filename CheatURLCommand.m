@@ -18,7 +18,7 @@
 - (id)performDefaultImplementation
 {
 	NSDocumentController	*controller = [NSDocumentController sharedDocumentController];
-	CheatDocument			*doc = [controller makeUntitledDocumentOfType:@"Cheat Document"];
+	CheatDocument			*doc = [controller makeUntitledDocumentOfType:@"Cheat Document" error:nil];
 	if ( !doc ) {
 		ChazLog( @"nil document" );
 	}

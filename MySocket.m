@@ -222,7 +222,8 @@ struct _mySocketGlobals {
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons( (short)port );
 	addr.sin_addr.s_addr = INADDR_ANY;
-	memset( &(addr.sin_zero), NULL, 8 );
+    // Use 0 replace NULL
+	memset( &(addr.sin_zero), 0, 8 );
 	
 	err = bind( _sockfd, (struct sockaddr *)(&addr), sizeof(addr) );
 	if ( err == -1 ) {
@@ -394,7 +395,7 @@ struct _mySocketGlobals {
 	if ( err == -1 ) {
 		return @"";
 	}
-	return [NSString stringWithCString:host];
+	return [NSString stringWithCString:host encoding:NSUTF8StringEncoding];
 }
 
 - (int)localPort
@@ -406,20 +407,20 @@ struct _mySocketGlobals {
 {
 	int err;
 	struct sockaddr_in addr;
-	int len = sizeof(addr);
+	unsigned int len = sizeof(addr);
 	
 	err = getpeername( _sockfd, (struct sockaddr *)(&addr), &len );
 	if ( err == -1 ) {
 		return @"Unknown";
 	}
-	return [NSString stringWithCString:inet_ntoa(addr.sin_addr)];
+	return [NSString stringWithCString:inet_ntoa(addr.sin_addr) encoding:NSUTF8StringEncoding];
 }
 
 - (int)remotePort
 {
 	int err;
 	struct sockaddr_in addr;
-	int len = sizeof(addr);
+	unsigned int len = sizeof(addr);
 	
 	err = getpeername( _sockfd, (struct sockaddr *)(&addr), &len );
 	if ( err == -1 ) {
@@ -446,7 +447,7 @@ struct _mySocketGlobals {
 	struct sockaddr_in addr;
 	
 	// resolve the host
-	h = gethostbyname( [host lossyCString] );
+	h = gethostbyname( [host cStringUsingEncoding:NSUTF8StringEncoding] );
 	if ( h == NULL ) {
 		// host not found
 		return nil;
@@ -456,7 +457,8 @@ struct _mySocketGlobals {
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons( (short)port );
 	memcpy( &(addr.sin_addr), h->h_addr, sizeof(struct in_addr) );
-	memset( &(addr.sin_zero), NULL, 8 );
+    // Use 0 replace NULL
+	memset( &(addr.sin_zero), 0, 8 );
 	
 	return [NSData dataWithBytes:&addr length:sizeof(addr)];
 }
@@ -803,7 +805,7 @@ DONE:;
 	MySocket *newSocket;
 	int newsockfd;
 	struct sockaddr addr;
-	int addrlen = sizeof(addr);
+	unsigned int addrlen = sizeof(addr);
 	
 	newsockfd = accept( _sockfd, &addr, &addrlen );
 	if ( newsockfd >= 0 ) {
@@ -866,7 +868,7 @@ DONE:;
 	[_writeLock lock];
 	if ( [_writeQueue count] > 0 ) {
 		int buflen = 0;
-		int len = sizeof(buflen);
+		unsigned int len = sizeof(buflen);
 		int err;
 		err = getsockopt( _sockfd, SOL_SOCKET, SO_SNDBUF, &buflen, &len );
 		// write data
@@ -1013,7 +1015,7 @@ DONE:;
 	NSMutableData *buffer;
 	unsigned packetLen = *len;
 	
-	if ( buffer = _unclaimedData ) {
+	if ( (buffer = _unclaimedData) ) {
 		// claim the bytes
 		int unclaimedLen = [_unclaimedData length];
 		if ( unclaimedLen > packetLen ) {

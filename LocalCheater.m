@@ -420,13 +420,13 @@ int _MemoryDumpTask( ThreadedTask *task, unsigned iteration )
 	TCArray variables;
 	TCArray values;
 	
-	if ( searchContext = [_searchResults lastObject] ) {
+	if ( (searchContext = [_searchResults lastObject]) ) {
 		[_savedResults addObject:searchContext];
 		[_searchResults removeLastObject];
 		
 		[self stopWatchingVariables];
 
-		if ( searchContext = [_searchResults lastObject] ) {
+		if ( (searchContext = [_searchResults lastObject]) ) {
 			if ( _shouldCopy ) {
 				variables = TCArrayCopyElements( searchContext->addresses, _returnLimit );
 				values = TCArrayCopyElements( searchContext->values, _returnLimit );
@@ -452,7 +452,7 @@ int _MemoryDumpTask( ThreadedTask *task, unsigned iteration )
 	
 	[self stopWatchingVariables];
 	
-	if ( searchContext = [_savedResults lastObject] ) {
+	if ( (searchContext = [_savedResults lastObject]) ) {
 		[_searchResults addObject:searchContext];
 		[_savedResults removeLastObject];
 		
@@ -486,7 +486,7 @@ int _MemoryDumpTask( ThreadedTask *task, unsigned iteration )
 		return;
 	}
 	
-	if ( context = [_searchResults lastObject] ) {
+	if ( (context = [_searchResults lastObject]) ) {
 		TCArray addresses = context->addresses;
 		TCArray values = context->values;
 		// check the index & count

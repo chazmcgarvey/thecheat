@@ -274,11 +274,7 @@
 	NSScanner *scanner = [NSScanner scannerWithString:string];
 	TCAddress address;
 	
-#if MAC_OS_X_VERSION_10_5 <= MAC_OS_X_VERSION_MAX_ALLOWED
 	if ( [scanner scanHexLongLong:(unsigned long long *)(&address)] ) {
-#else
-	if ( [scanner scanHexInt:(unsigned *)(&address)] ) {
-#endif
 		[self setAddress:address];
 		return YES;
 	}
@@ -324,7 +320,7 @@
 	switch ( _type ) {
 		case TCDouble: return [NSString stringWithFormat:@"%.1lf", *(double *)[self value]];
 		case TCFloat: return [NSString stringWithFormat:@"%.1f", *(float *)[self value]];
-		case TCString: return [NSString stringWithCString:[self value] length:[self valueSize]];
+		case TCString: return [[[NSString alloc] initWithBytes:[self value] length:[self valueSize] encoding:NSUTF8StringEncoding] autorelease];
 	}
 	if ( _integerSign == TCUnsigned ) {
 		switch ( _type ) {
@@ -394,7 +390,7 @@
 		}
 		case TCString:
 		{
-			char *str = (char *)[string lossyCString];
+			char *str = (char *)[string cStringUsingEncoding:NSUTF8StringEncoding];
 			unsigned len = strlen( str );
 			[self setValue:str size:len];
 			break;
@@ -474,21 +470,13 @@ void bigEndianValue(void *buffer, Variable *variable)
 	_enabled = enabled;
 }
 
-
-#if MAC_OS_X_VERSION_10_5 <= MAC_OS_X_VERSION_MAX_ALLOWED
 - (NSInteger)tag
-#else
-- (int)tag
-#endif
 {
 	return _tag;
 }
 
-#if MAC_OS_X_VERSION_10_5 <= MAC_OS_X_VERSION_MAX_ALLOWED
+
 - (void)setTag:(NSInteger)tag
-#else
-- (void)setTag:(int)tag
-#endif
 {
 	_tag = tag;
 }
